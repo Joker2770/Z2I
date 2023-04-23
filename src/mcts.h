@@ -36,8 +36,9 @@ SOFTWARE.
 #include <onnx.h>
 #include <thread_pool.h>
 
-class TreeNode {
- public:
+class TreeNode
+{
+public:
   // friend class can access private variables
   friend class MCTS;
 
@@ -49,14 +50,14 @@ class TreeNode {
 
   unsigned int select(double c_puct, double c_virtual_loss);
   void expand(const std::vector<double> &action_priors);
-  //void expand(const std::vector<double>& action_priors, std::vector<int>& legal_moves);
+  // void expand(const std::vector<double>& action_priors, std::vector<int>& legal_moves);
   void backup(double leaf_value);
 
   double get_value(double c_puct, double c_virtual_loss,
                    unsigned int sum_n_visited) const;
   inline bool get_is_leaf() const { return this->is_leaf; }
 
- private:
+private:
   // store tree
   TreeNode *parent;
   std::vector<TreeNode *> children;
@@ -69,8 +70,9 @@ class TreeNode {
   std::atomic<int> virtual_loss;
 };
 
-class MCTS {
- public:
+class MCTS
+{
+public:
   MCTS(NeuralNetwork *neural_network, unsigned int thread_num, double c_puct,
        unsigned int num_mcts_sims, double c_virtual_loss,
        unsigned int action_size);
@@ -81,7 +83,7 @@ class MCTS {
   void update_with_move(int last_move);
   unsigned int action_size;
 
- private:
+private:
   std::default_random_engine rnd_eng;
   std::uniform_real_distribution<double> rnd_dis;
   void simulate(std::shared_ptr<Gomoku> game);
@@ -92,7 +94,6 @@ class MCTS {
   std::unique_ptr<ThreadPool> thread_pool;
   NeuralNetwork *neural_network;
 
-  
   unsigned int num_mcts_sims;
   double c_puct;
   double c_virtual_loss;

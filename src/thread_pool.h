@@ -34,17 +34,21 @@ SOFTWARE.
 #include <functional>
 #include <stdexcept>
 
-class ThreadPool {
+class ThreadPool
+{
 public:
   using task_type = std::function<void()>;
 
-  inline ThreadPool(unsigned short thread_num = 4) {
+  inline ThreadPool(unsigned short thread_num = 4)
+  {
     this->run.store(true);
     this->idl_thread_num = thread_num;
 
-    for (unsigned int i = 0; i < thread_num; ++i) {
+    for (unsigned int i = 0; i < thread_num; ++i)
+    {
       // thread type implicit conversion
-      pool.emplace_back([this] {
+      pool.emplace_back([this]
+                        {
         while (this->run) {
           std::function<void()> task;
 
@@ -68,23 +72,25 @@ public:
           this->idl_thread_num--;
           task();
           this->idl_thread_num++;
-        }
-      });
+        } });
     }
   }
 
-  inline ~ThreadPool() {
+  inline ~ThreadPool()
+  {
     // clean thread pool
     this->run.store(false);
     this->cv.notify_all(); // wake all thread
 
-    for (std::thread &thread : pool) {
+    for (std::thread &thread : pool)
+    {
       thread.join();
     }
   }
 
   template <class F, class... Args>
-  auto commit(F &&f, Args &&... args) -> std::future<decltype(f(args...))> {
+  auto commit(F &&f, Args &&...args) -> std::future<decltype(f(args...))>
+  {
     // commit a task, return std::future
     // example: .commit(std::bind(&Dog::sayHello, &dog));
 
@@ -101,7 +107,8 @@ public:
 
     {
       std::lock_guard<std::mutex> lock(this->lock);
-      tasks.emplace([task_ptr]() { (*task_ptr)(); });
+      tasks.emplace([task_ptr]()
+                    { (*task_ptr)(); });
     }
 
     // wake a thread

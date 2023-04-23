@@ -1,20 +1,45 @@
+/**
+MIT License
+
+Copyright (c) 2022 Augustusmyc
+Copyright (c) 2023 Joker2770
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+#include "mcts.h"
+#include "onnx.h"
+#include "play.h"
+#include "common.h"
+
 #include <iostream>
 #include <fstream>
-#include <sstream> 
-
-#include <mcts.h>
-
-#include <onnx.h>
-#include <play.h>
-#include <common.h>
+#include <sstream>
 
 using namespace std;
 
-void generate_data_for_train(int current_weight, int start_batch_id) {
+void generate_data_for_train(int current_weight, int start_batch_id)
+{
     string path = "./weights/" + to_string(current_weight) + ".onnx";
 
-    NeuralNetwork* model = new NeuralNetwork(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
-    SelfPlay* sp = new SelfPlay(model);
+    NeuralNetwork *model = new NeuralNetwork(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
+    SelfPlay *sp = new SelfPlay(model);
     sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
 }
 
@@ -53,50 +78,58 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
         win_table[2]++;
 }
 
-vector<int> eval(int weight_a, int weight_b, unsigned int game_num,int a_sims,int b_sims) {
-    int win_table[3] = { 0,0,0 };
+vector<int> eval(int weight_a, int weight_b, unsigned int game_num, int a_sims, int b_sims)
+{
+    int win_table[3] = {0, 0, 0};
 
     ThreadPool *thread_pool = new ThreadPool(game_num);
-    NeuralNetwork* nn_a = nullptr;
-    NeuralNetwork* nn_b = nullptr;
+    NeuralNetwork *nn_a = nullptr;
+    NeuralNetwork *nn_b = nullptr;
 
-    if (weight_a >= 0) {
+    if (weight_a >= 0)
+    {
         string path = "./weights/" + to_string(weight_a) + ".onnx";
         nn_a = new NeuralNetwork(path, game_num * a_sims);
         cout << "NeuralNetwork A load: " << weight_a << endl;
     }
-    else {
+    else
+    {
         cout << "NeuralNetwork A applies random policy!" << endl;
     }
 
-    if (weight_b >= 0) {
+    if (weight_b >= 0)
+    {
         string path = "./weights/" + to_string(weight_b) + ".onnx";
         nn_b = new NeuralNetwork(path, game_num * b_sims);
         cout << "NeuralNetwork B load: " << weight_b << endl;
     }
-    else {
+    else
+    {
         cout << "NeuralNetwork B applies random policy!" << endl;
     }
 
     std::vector<std::future<void>> futures;
-    //NeuralNetwork* a = new NeuralNetwork(NUM_MCT_THREADS * NUM_MCT_SIMS);
-    for (unsigned int i = 0; i < game_num; i++) {
-        auto future = thread_pool->commit(std::bind(play_for_eval, nn_a, nn_b, false, win_table,false, a_sims, b_sims));
+    // NeuralNetwork* a = new NeuralNetwork(NUM_MCT_THREADS * NUM_MCT_SIMS);
+    for (unsigned int i = 0; i < game_num; i++)
+    {
+        auto future = thread_pool->commit(std::bind(play_for_eval, nn_a, nn_b, false, win_table, false, a_sims, b_sims));
         futures.emplace_back(std::move(future));
     }
-    for (unsigned int i = 0; i < futures.size(); i++) {
+    for (unsigned int i = 0; i < futures.size(); i++)
+    {
         futures[i].wait();
-        if (nn_a != nullptr){
+        if (nn_a != nullptr)
+        {
             nn_a->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
         }
-        if (nn_b != nullptr){
+        if (nn_b != nullptr)
+        {
             nn_b->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
         }
-
     }
-    //cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;
+    // cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;
 
-    return { win_table[0], win_table[1],win_table[2] };
+    return {win_table[0], win_table[1], win_table[2]};
 }
 
 int main(int argc, char *argv[])
@@ -104,7 +137,7 @@ int main(int argc, char *argv[])
     if (strcmp(argv[1], "prepare") == 0)
     {
         cout << "Prepare for training." << endl;
-        //system("mkdir weights");
+        // system("mkdir weights");
 #ifdef _WIN32
         system("mkdir .\\weights");
         system("mkdir .\\data");
@@ -122,16 +155,19 @@ int main(int argc, char *argv[])
         random_mcts_logger_writer.close();
 
         cout << "Next: Generate initial weight by python." << endl;
-        //system("python ..\\python\\learner.py");
-    }else if (strcmp(argv[1], "generate") == 0) {
-        cout << "generate " << atoi(argv[2])  << "-th batch."<< endl;
+        // system("python ..\\python\\learner.py");
+    }
+    else if (strcmp(argv[1], "generate") == 0)
+    {
+        cout << "generate " << atoi(argv[2]) << "-th batch." << endl;
         int current_weight;
         int best_weight;
 
         ifstream logger_reader("current_and_best_weight.txt");
         logger_reader >> current_weight;
-        //logger_reader >> best_weight;
-        if (current_weight < 0) {
+        // logger_reader >> best_weight;
+        if (current_weight < 0)
+        {
             cout << "LOAD error,check current_and_best_weight.txt" << endl;
             return -1;
         }
@@ -139,8 +175,10 @@ int main(int argc, char *argv[])
         logger_reader.close();
         cout << "Generating... current_weight = " << current_weight << endl;
         generate_data_for_train(current_weight, atoi(argv[2]) * NUM_TRAIN_THREADS);
-    }else if (strcmp(argv[1], "eval_with_winner") == 0) {
-	   int current_weight;
+    }
+    else if (strcmp(argv[1], "eval_with_winner") == 0)
+    {
+        int current_weight;
         int best_weight;
 
         ifstream weight_logger_reader("current_and_best_weight.txt");
@@ -153,8 +191,9 @@ int main(int argc, char *argv[])
         auto result = eval(current_weight, best_weight, game_num, NUM_MCT_SIMS, NUM_MCT_SIMS);
         string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
 
-        float win_ratio = result[0] / (result[1]+0.01);
-        if (win_ratio > 1.2 ) {
+        float win_ratio = result[0] / (result[1] + 0.01);
+        if (win_ratio > 1.2)
+        {
             result_log_info += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
             ofstream weight_logger_writer("current_and_best_weight.txt");
             weight_logger_writer << current_weight << " " << current_weight;
@@ -166,14 +205,15 @@ int main(int argc, char *argv[])
         // detail_logger_writer << result_log_info << result_log_info2;
         detail_logger_writer << result_log_info;
         detail_logger_writer.close();
-        
-    }else if (strcmp(argv[1], "eval_with_random") == 0) {
-    	   int current_weight;
+    }
+    else if (strcmp(argv[1], "eval_with_random") == 0)
+    {
+        int current_weight;
         int best_weight;
 
         ifstream weight_logger_reader("current_and_best_weight.txt");
         weight_logger_reader >> current_weight;
-        //weight_logger_reader >> best_weight;
+        // weight_logger_reader >> best_weight;
 
         int game_num = atoi(argv[2]);
 
@@ -184,31 +224,34 @@ int main(int argc, char *argv[])
         int nn_mcts_simulation = NUM_MCT_SIMS / 16; // can not be too small !!
 
         vector<int> result_random_mcts = eval(current_weight, -1, game_num, nn_mcts_simulation, random_mcts_simulation);
-        
-        
-        string result_log_info2 = to_string(current_weight) + "-th weight with mcts ["+ to_string(nn_mcts_simulation) + "] win: " + to_string(result_random_mcts[0]) + "  Random mcts ["+to_string(random_mcts_simulation)+ "] win: " + to_string(result_random_mcts[1]) + "  tie: " + to_string(result_random_mcts[2]) + "\n";
-        if (result_random_mcts[0] == game_num) {
-        		if(random_mcts_simulation < 8000){
-        			random_mcts_simulation += 100;
-             		result_log_info2 += "add random mcts number to: " + to_string(random_mcts_simulation) + "\n";
-             		ofstream random_mcts_logger_writer("random_mcts_number.txt");
-	               random_mcts_logger_writer << random_mcts_simulation;
-	               random_mcts_logger_writer.close();
-        			}    
 
-             ///////////////
-		  result_log_info2 += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
+        string result_log_info2 = to_string(current_weight) + "-th weight with mcts [" + to_string(nn_mcts_simulation) + "] win: " + to_string(result_random_mcts[0]) + "  Random mcts [" + to_string(random_mcts_simulation) + "] win: " + to_string(result_random_mcts[1]) + "  tie: " + to_string(result_random_mcts[2]) + "\n";
+        if (result_random_mcts[0] == game_num)
+        {
+            if (random_mcts_simulation < 8000)
+            {
+                random_mcts_simulation += 100;
+                result_log_info2 += "add random mcts number to: " + to_string(random_mcts_simulation) + "\n";
+                ofstream random_mcts_logger_writer("random_mcts_number.txt");
+                random_mcts_logger_writer << random_mcts_simulation;
+                random_mcts_logger_writer.close();
+            }
+
+            ///////////////
+            result_log_info2 += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
             ofstream weight_logger_writer("current_and_best_weight.txt");
             weight_logger_writer << current_weight << " " << current_weight;
             weight_logger_writer.close();
-             //////////////
-         }
-         cout << result_log_info2;
+            //////////////
+        }
+        cout << result_log_info2;
 
         ofstream detail_logger_writer("logger.txt", ios::app);
         detail_logger_writer << result_log_info2;
         detail_logger_writer.close();
-    }else{
+    }
+    else
+    {
         cout << "Do nothing...check your input!!" << endl;
     }
 }

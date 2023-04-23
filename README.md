@@ -1,24 +1,24 @@
 # Z2I
 
-# Supported Games
+## Supported Games
 Currently only Gomoku and similar games such as Tic-Tac-Toe. 
 
 Welcome other game implementions if you want to become the contributor!
 
 
-# Supported OS System
+## Supported OS System
 linux/Windows (tested on Ubuntu 20 + GPU and Windows 10 + GPU or CPU)
 
 
-# Supported Enviroment
+## Supported Enviroment
 Both GPU and CPU (GPU test on Tesla V100 + Cuda 11 / CPU test on Intel i7)
 
 
-# Language
+## Language
 C++ (for speed!) and python. The model is trained by pytorch (Python) and onnxruntime (C++,for selfplay), and inferenced by onnxruntime (C++).
 
 
-# Dependence
+## Dependence
 gcc (linux) or visual studio 19 (windows)
 
 cmake 3.13+
@@ -28,7 +28,7 @@ pytorch (tested on 1.11)
 onnxruntime-gpu (tested on 1.11)
 
 
-# Installation
+## Installation
 Download and install miniconda / python
 and "pip install" all the dependent packages such as pytorch
 
@@ -39,30 +39,31 @@ Download onnxruntime: https://github.com/microsoft/onnxruntime/releases/tag/v1.1
 CMakefiles.txt:  convert the onnxruntime path to your own path
 
 
-
-mkdir -p build/test
-
-copy *.sh to ./build/test/
-
+```shell
+mkdir build
+cp *.sh ./build/
 cd ./build
+cmake ..    # (or "cmake -A x64 ..")
+cmake --build . --config Release   # (or open .sln file through visual Studio 19 and generate for win10)
+```
 
-cmake ..    (or "cmake -A x64 ..")
+## Train (Linux)
 
-cmake --build . --config Release   (or open .sln file through visual Studio 19 and generate for win10)
-
-
-# Train (Linux)
-cd ./build/test
-
-bash train_net.sh
+```shell
+cd ./build/
+bash train.sh
+...
+```
 
 If you want to train the model on windows 10, convert "train.sh" to "train.bat" and change corresponding commands.
 
 
-# Human play with AI (inference)
+## Human play with AI (inference)
 run mcts_test, for example in linux:
 
+```shell
 ./mcts_test ./weights/1000.onnx 1
+```
 
 Here 1(or 0) = AI play with black(or white) pieces. 
 

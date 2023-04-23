@@ -1,12 +1,8 @@
 project(AlphaZeroGomoku)
-
-set(CMAKE_BUILD_TYPE Release)
-
 cmake_minimum_required(VERSION 3.13)
 
-
 if(CMAKE_COMPILER_IS_GNUCC)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++2a -pthread")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
     set(ONNXRUNTIME_ROOTDIR "/mnt/d/Linker/onnxruntime-linux-x64-1.11.1")
 else()
     set(ONNXRUNTIME_ROOTDIR "E:/Projects/onnxruntime-win-x64-1.11.1")
@@ -29,13 +25,16 @@ link_directories("${ONNXRUNTIME_ROOTDIR}/lib")
 # add sources
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
 
-add_library(test_lib ${SOURCES})
+add_library(Z2I_lib ${SOURCES})
+add_executable(train_eval_net ${CMAKE_SOURCE_DIR}/src/eval/train_eval_net.cpp)
+target_link_libraries(train_eval_net Z2I_lib)
+target_link_libraries(train_eval_net onnxruntime)
 
 add_subdirectory(test)
 
 if (MSVC)
  file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
- add_custom_command(TARGET test_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+ add_custom_command(TARGET Z2I_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${ONNX_DLLS} ${CMAKE_CURRENT_BINARY_DIR}/Release)
 endif (MSVC)
 

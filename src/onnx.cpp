@@ -23,11 +23,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-//#pragma once
+#include "common.h"
+#include "onnx.h"
+
 #include <iostream>
-#include <common.h>
 #include <random>
-#include <onnx.h>
 #include <onnxruntime_cxx_api.h>
 #include <future>
 #include <memory>
@@ -54,28 +54,27 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // OrtTensorRTProviderOptionsV2* tensorrt_options;
   Ort::SessionOptions *session_options = new Ort::SessionOptions();
   // auto share_session_options = std::make_shared<Ort::SessionOptions>(session_options);
-  //session_options->SetIntraOpNumThreads(1); // TODO:study the parameter
-  //session_options->SetInterOpNumThreads(1); // TODO:study the parameter
+  // session_options->SetIntraOpNumThreads(1); // TODO:study the parameter
+  // session_options->SetInterOpNumThreads(1); // TODO:study the parameter
 
   session_options->SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
-  
 #ifdef _WIN32
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-    const wchar_t* model_path_w = converter.from_bytes(model_path).c_str();
-    //No CUDA
-    shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path_w, *session_options));
+  const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
+  // No CUDA
+  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path_w, *session_options));
 #else
 #ifdef USE_GPU
-    auto ret = OrtSessionOptionsAppendExecutionProvider_CUDA(*session_options, 0); // TODO: update the old API...
-    std::cout << "CUDA id = " << ret <<std::endl;
+  auto ret = OrtSessionOptionsAppendExecutionProvider_CUDA(*session_options, 0); // TODO: update the old API...
+  std::cout << "CUDA id = " << ret << std::endl;
 #endif
-    // Ort::Session session = Ort::Session(env, model_path.c_str(), *session_options);
-    shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), *session_options));
+  // Ort::Session session = Ort::Session(env, model_path.c_str(), *session_options);
+  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), *session_options));
 #endif
-  //sess = &session;
+  // sess = &session;
 
-  size_t input_tensor_size = CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE; 
+  size_t input_tensor_size = CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE;
   // simplify ... using known dim values to calculate size
   // use OrtGetTensorShapeElementCount() to get official size!
 
@@ -88,7 +87,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // simplify... this model has only 1 input node {?, 3, 15, 15}.
   // Otherwise need vector<vector<>>
 
-  //printf("Number of inputs = %zu\n", num_input_nodes);
+  // printf("Number of inputs = %zu\n", num_input_nodes);
 
   // iterate over all input nodes
   for (int i = 0; i < num_input_nodes; i++)
@@ -129,8 +128,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // auto output_tensors = session.Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
   // assert(output_tensors.size() == 2 && output_tensors[1].IsTensor());
   // std::cout<<"ok!!"<<std::endl;
-/////////////
-
+  /////////////
 
   // run infer thread
   this->loop = std::make_unique<std::thread>([this]
@@ -145,8 +143,8 @@ NeuralNetwork::~NeuralNetwork()
   this->running = false;
   this->loop->join();
   // release buffers allocated by ORT alloctor
-  for(const char* node_name : input_node_names)
-    allocator.Free(const_cast<void*>(reinterpret_cast<const void*>(node_name)));
+  for (const char *node_name : input_node_names)
+    allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
 }
 
 std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
@@ -174,7 +172,7 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
   int second = 0;
   if (cur_player == BLACK)
   {
-    second = 1; //Black currently play = All black positions occupy the 0-th dimension in board
+    second = 1; // Black currently play = All black positions occupy the 0-th dimension in board
   }
   else
   {
@@ -196,7 +194,8 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
         break;
       }
     }
-    if(last_move >=0){
+    if (last_move >= 0)
+    {
       input_tensor_values[2 * BORAD_SIZE * BORAD_SIZE + last_move] = 1;
     }
   }
@@ -277,13 +276,10 @@ void NeuralNetwork::infer()
     return;
   }
 
-
   // set promise value
   this->input_node_dims[0] = promises.size();
 
-  //std::cout<<"promises size  = "<<promises.size()<<std::endl;
-
-
+  // std::cout<<"promises size  = "<<promises.size()<<std::endl;
 
   size_t input_tensor_size = input_node_dims[0] * CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE;
   std::vector<float> state_all(0);
@@ -299,7 +295,7 @@ void NeuralNetwork::infer()
   assert(input_tensor.IsTensor());
 
   auto output_tensors = shared_session->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
-  
+
   assert(output_tensors.size() == 2 && output_tensors[0].IsTensor() && output_tensors[1].IsTensor());
 
   float *V = output_tensors[0].GetTensorMutableData<float>();
@@ -310,17 +306,17 @@ void NeuralNetwork::infer()
 
     // Get pointer to output tensor float values
 
-    std::vector<double> prob(P + i * BORAD_SIZE * BORAD_SIZE, P + (i+1)*BORAD_SIZE * BORAD_SIZE);
+    std::vector<double> prob(P + i * BORAD_SIZE * BORAD_SIZE, P + (i + 1) * BORAD_SIZE * BORAD_SIZE);
     std::vector<double> value{V[i]};
-    //assert(prob.size() == BORAD_SIZE * BORAD_SIZE);
+    // assert(prob.size() == BORAD_SIZE * BORAD_SIZE);
 
     for (int j = 0; j < BORAD_SIZE * BORAD_SIZE; j++)
     {
       prob[j] = std::exp(prob[j]);
       // printf("prob [%d] =  %f\n", j, prob[j]);
     }
-    //printf("value [%d] =  %f\n", 0, V[0]);
-    // printf("value [%d] =  %f\n", 1, V[1]);
+    // printf("value [%d] =  %f\n", 0, V[0]);
+    //  printf("value [%d] =  %f\n", 1, V[1]);
 
     // printf("prob [%d] =  %f\n", 0, P[0]);
     // printf("prob [%d] =  %f\n", 1, P[1]);
