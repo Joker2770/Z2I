@@ -34,7 +34,7 @@ add_subdirectory(test)
 
 if (MSVC)
  file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
- add_custom_command(TARGET Z2I_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+ add_custom_command(TARGET Z2I_lib train_eval_net POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${ONNX_DLLS} ${CMAKE_CURRENT_BINARY_DIR}/Release)
 endif (MSVC)
 

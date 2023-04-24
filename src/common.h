@@ -63,9 +63,9 @@ SOFTWARE.
 #endif
 
 #define BLACK 1
-#define WHITE -BLACK
+#define WHITE (-BLACK)
 
-#define BUFFER_LEN BORAD_SIZE *BORAD_SIZE + 1
+#define BUFFER_LEN (BORAD_SIZE * BORAD_SIZE + 1)
 #define v_buff_type std::vector<int>
 #define p_buff_type std::vector<std::vector<float>>
 #define board_type std::vector<std::vector<int>>
