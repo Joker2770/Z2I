@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+#include <onnxruntime_cxx_api.h>
 #include <assert.h>
 #include <vector>
 #include <iostream>
-#include <onnxruntime_cxx_api.h>
 #include <codecvt>
 using namespace std;
 // #ifdef HAVE_TENSORRT_PROVIDER_FACTORY_H
@@ -69,8 +69,14 @@ void run_ort_trt() {
   //session_options->SetIntraOpNumThreads(4);
 
   session_options->SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
-  
-  
+
+#ifdef USE_CUDA
+  void enable_cuda(OrtSessionOptions * session_options)
+  {
+    ORT_ABORT_ON_ERROR(OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0));
+  }
+#endif
+
 #ifdef _WIN32
   string model_path_s = "E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
@@ -80,8 +86,6 @@ void run_ort_trt() {
 #else
   string model_path_s = "/data/AlphaZero-Onnx/python/mymodel.onnx";
   const char* model_path = model_path_s.c_str();
-  auto cudaRet = OrtSessionOptionsAppendExecutionProvider_CUDA(*session_options, 0);
-  cout<<"cuda id = " << cudaRet << endl;
   auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, *session_options));
 #endif
 

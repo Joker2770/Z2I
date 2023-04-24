@@ -77,6 +77,12 @@ int main(int argc, char* argv[]) {
   g->execute_move(action);
   g->render();
 
+  if (nullptr != module)
+  {
+    delete module;
+    module = nullptr;
+  }
+
   return 0;
 }
 

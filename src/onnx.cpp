@@ -26,9 +26,9 @@ SOFTWARE.
 #include "common.h"
 #include "onnx.h"
 
+#include <onnxruntime_cxx_api.h>
 #include <iostream>
 #include <random>
-#include <onnxruntime_cxx_api.h>
 #include <future>
 #include <memory>
 #include <queue>
@@ -59,16 +59,19 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 
   session_options->SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
+#ifdef USE_CUDA
+  void enable_cuda(OrtSessionOptions * session_options)
+  {
+    ORT_ABORT_ON_ERROR(OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0));
+  }
+#endif
+
 #ifdef _WIN32
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
   const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
   // No CUDA
   shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path_w, *session_options));
 #else
-#ifdef USE_GPU
-  auto ret = OrtSessionOptionsAppendExecutionProvider_CUDA(*session_options, 0); // TODO: update the old API...
-  std::cout << "CUDA id = " << ret << std::endl;
-#endif
   // Ort::Session session = Ort::Session(env, model_path.c_str(), *session_options);
   shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), *session_options));
 #endif

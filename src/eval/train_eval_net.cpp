@@ -161,7 +161,6 @@ int main(int argc, char *argv[])
     {
         cout << "generate " << atoi(argv[2]) << "-th batch." << endl;
         int current_weight;
-        int best_weight;
 
         ifstream logger_reader("current_and_best_weight.txt");
         logger_reader >> current_weight;
@@ -191,7 +190,7 @@ int main(int argc, char *argv[])
         auto result = eval(current_weight, best_weight, game_num, NUM_MCT_SIMS, NUM_MCT_SIMS);
         string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
 
-        float win_ratio = result[0] / (result[1] + 0.01);
+        double win_ratio = result[0] / (result[1] + 0.01);
         if (win_ratio > 1.2)
         {
             result_log_info += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
@@ -209,7 +208,6 @@ int main(int argc, char *argv[])
     else if (strcmp(argv[1], "eval_with_random") == 0)
     {
         int current_weight;
-        int best_weight;
 
         ifstream weight_logger_reader("current_and_best_weight.txt");
         weight_logger_reader >> current_weight;

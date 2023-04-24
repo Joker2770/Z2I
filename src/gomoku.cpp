@@ -215,7 +215,7 @@ void Gomoku::render()
   // std::vector<char> line[row_size + 1];
   char *line = new char[row_size + 1];
   char *line2 = new char[row_size + 1];
-  for (int i = 0; i < row_size; i++)
+  for (size_t i = 0; i < row_size; i++)
   {
     if (i % (cell_size + 1) == 0)
       line[i] = '+';

@@ -5,7 +5,7 @@ if(CMAKE_COMPILER_IS_GNUCC)
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
     set(ONNXRUNTIME_ROOTDIR "/mnt/d/Linker/onnxruntime-linux-x64-1.11.1")
 else()
-    set(ONNXRUNTIME_ROOTDIR "E:/Projects/onnxruntime-win-x64-1.11.1")
+    set(ONNXRUNTIME_ROOTDIR "D:/Linker/onnxruntime-win-x86-1.11.1")
 endif()
 
 # tensorrt_provider_factory.h contains old APIs of the tensorrt execution provider
@@ -16,11 +16,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
-                "${ONNXRUNTIME_ROOTDIR}/include/onnxruntime/core/session"
                 "${CMAKE_SOURCE_DIR}/src"
 )
 link_directories("${ONNXRUNTIME_ROOTDIR}/lib")
-
 
 # add sources
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
@@ -34,8 +32,8 @@ add_subdirectory(test)
 
 if (MSVC)
  file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
- add_custom_command(TARGET Z2I_lib train_eval_net POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${ONNX_DLLS} ${CMAKE_CURRENT_BINARY_DIR}/Release)
+ add_custom_command(TARGET Z2I_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    ${ONNX_DLLS} ${CMAKE_CURRENT_BINARY_DIR})
 endif (MSVC)
 
 # ADD_EXECUTABLE(AlphaZeroInference  main.cpp)
