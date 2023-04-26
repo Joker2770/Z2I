@@ -112,7 +112,8 @@ unsigned int TreeNode::select(double c_puct, double c_virtual_loss)
   }
 
   // add vitural loss
-  best_node->virtual_loss++;
+  if (nullptr != best_node)
+    best_node->virtual_loss++;
 
   return best_move;
 }

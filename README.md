@@ -1,5 +1,7 @@
 # Z2I
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/a0c92665548344f49f92e0d999eb5c05)](https://app.codacy.com/gh/Joker2770/Z2I/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 The `pbrain-Z2I` is just a gomoku engine which use the [protocal of gomocup](lastovicka.github.io/protocl2en.htm). A GUI named [qpiskvork](https://github.com/Joker2770/qpiskvork) can load this engine.
 
 ## Supported Games

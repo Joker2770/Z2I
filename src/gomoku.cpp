@@ -270,7 +270,8 @@ void Gomoku::render()
   {
     offset += snprintf(column_no + offset, row_size - offset, "  %-2d", i); // snprintf -> sprintf_s
   }
-  out << column_no;
+  if (nullptr != column_no)
+    out << column_no;
   puts(out.str().c_str());
 
   if (nullptr != line)
