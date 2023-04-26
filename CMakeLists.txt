@@ -36,17 +36,18 @@ target_link_libraries(pbrain-Z2I onnxruntime)
 
 add_subdirectory(test)
 
-if (MSVC)
- file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
- add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
-endif (MSVC)
+if(MSVC)
+    file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
+elseif(UNIX)
+    file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/lib*.so*")
+endif()
 
-if (UNIX)
- file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/lib*.so*")
- add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+if(DEFINED ONNX_DLLS)
+    add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
-endif (UNIX)
+else()
+    message("ONNX_DLLS does not exist or is empty.")
+endif()
 
 # ADD_EXECUTABLE(AlphaZeroInference  main.cpp)
 

@@ -42,7 +42,7 @@ using namespace std;
 
 bool isNumericString(const char *str, unsigned int i_len)
 {
-    for (int i = 0; i < i_len; i++)
+    for (unsigned int i = 0; i < i_len; i++)
     {
         if (!isdigit(str[i]))
         {

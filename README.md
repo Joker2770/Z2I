@@ -45,7 +45,7 @@ CMakefiles.txt:  convert the onnxruntime path to your own path
 
 ```shell
 mkdir build
-cp *.sh ./build/
+cp ./scripts/*.sh ./build/
 cd ./build
 cmake ..    # (or "cmake -A x64 ..")
 cmake --build . --config Release   # (or open .sln file through visual Studio 19 and generate for win10)

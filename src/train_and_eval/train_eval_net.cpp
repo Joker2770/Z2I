@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
         }
         // logger_reader >> temp[1];
         logger_reader.close();
-        cout << "Generating... current_weight = " << current_weight << endl;
+        cout << "Generating... current_weight = " << current_weight << " start batch id: " << argv[2] << endl;
         generate_data_for_train(current_weight, atoi(argv[2]) * NUM_TRAIN_THREADS);
     }
     else if (strcmp(argv[1], "eval_with_winner") == 0)
