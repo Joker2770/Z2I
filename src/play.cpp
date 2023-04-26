@@ -143,6 +143,12 @@ void SelfPlay::play(unsigned int saved_id)
 
     bestand.close();
 
+    if (nullptr != mcts)
+    {
+        delete mcts;
+        mcts = nullptr;
+    }
+
     // just validation
     // ifstream inlezen;
     // int new_step;

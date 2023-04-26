@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include "gomoku.h"
 #include "common.h"
-#include "onnx.h"
+#include "../src/onnx.h"
 
 #include <iostream>
 #include <onnxruntime_cxx_api.h>

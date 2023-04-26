@@ -23,9 +23,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "mcts.h"
-#include "common.h"
-#include "onnx.h"
+#include "../src/mcts.h"
+#include "../src/common.h"
+#include "../src/onnx.h"
 
 #include <iostream>
 
@@ -125,6 +125,12 @@ int main(int argc, char* argv[]) {
     // m.update_with_move(-1);
   }
   std::cout << "winner num = " << game_state.second << std::endl;
+  if (nullptr != module)
+  {
+      delete module;
+      module = nullptr;
+  }
+
   return 0;
 }
 

@@ -23,10 +23,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "mcts.h"
-#include "onnx.h"
-#include "play.h"
-#include "common.h"
+#include "../onnx.h"
+#include "../play.h"
+#include "../common.h"
+#include "../mcts.h"
 
 #include <iostream>
 #include <fstream>
@@ -41,6 +41,17 @@ void generate_data_for_train(int current_weight, int start_batch_id)
     NeuralNetwork *model = new NeuralNetwork(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
     SelfPlay *sp = new SelfPlay(model);
     sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
+
+    if (nullptr != model)
+    {
+        delete model;
+        model = nullptr;
+    }
+    if (nullptr != sp)
+    {
+        delete sp;
+        sp = nullptr;
+    }
 }
 
 void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_table, bool do_render, const int a_mct_sims, const int b_mct_sims)
@@ -128,6 +139,22 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, int a_sims, 
         }
     }
     // cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;
+
+    if (nullptr != nn_a)
+    {
+        delete nn_a;
+        nn_a = nullptr;
+    }
+    if (nullptr != nn_b)
+    {
+        delete nn_b;
+        nn_b = nullptr;
+    }
+    if (nullptr != thread_pool)
+    {
+        delete thread_pool;
+        thread_pool = nullptr;
+    }
 
     return {win_table[0], win_table[1], win_table[2]};
 }

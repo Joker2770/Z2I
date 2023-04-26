@@ -1,7 +1,6 @@
 /**
 MIT License
 
-Copyright (c) 2022 Augustusmyc
 Copyright (c) 2023 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -32,10 +31,9 @@ SOFTWARE.
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  auto g = std::make_shared<Gomoku>(BORAD_SIZE, N_IN_ROW, BLACK);
+  Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
   
   NeuralNetwork* module = nullptr;
-  bool ai_black = true;
   if (argc <= 1) {
       //cout << "Do not load weights. AI color = BLACK." << endl;
       
@@ -55,32 +53,40 @@ int main(int argc, char* argv[]) {
   }
   //module->save_weights("net.pt");
   
-  MCTS m(module, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+  MCTS *m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
   std::cout << "Running..." << std::endl;
 
-  g->execute_move(21);
-  g->execute_move(2);
-  g->execute_move(35);
   g->execute_move(112);
-  g->execute_move(11);
-  g->execute_move(126);
-  g->execute_move(99);
-  g->execute_move(140);
+  g->execute_move(127);
+  g->execute_move(128);
+  g->execute_move(144);
+  g->execute_move(96);
+  g->execute_move(97);
   g->render();
   std::cout << "Thinking..." << std::endl;
-  std::vector<double> p = m.get_action_probs(g.get());
+  std::vector<double> p = m->get_action_probs(g);
   std::cout << "Get action probs..." << std::endl;
-  int action = m.get_best_action_from_prob(p);
-  std::cout << "Get best action from prob..." << std::endl;
-  m.update_with_move(action);
+  int action = m->get_best_action_from_prob(p);
+  std::cout << "Get best action from prob: " << action << std::endl;
+  m->update_with_move(action);
   g->execute_move(action);
   g->render();
 
   if (nullptr != module)
   {
-    delete module;
-    module = nullptr;
+      delete module;
+      module = nullptr;
+  }
+  if (nullptr != m)
+  {
+      delete m;
+      m = nullptr;
+  }
+  if (nullptr != g)
+  {
+      delete g;
+      g = nullptr;
   }
 
   return 0;

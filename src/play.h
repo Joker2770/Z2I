@@ -24,17 +24,18 @@ SOFTWARE.
 */
 
 #pragma once
+
+#include "onnx.h"
+#include "thread_pool.h"
+#include "gomoku.h"
+#include "common.h"
+
 #include <future>
 #include <memory>
 #include <queue>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include <onnx.h>
-#include <thread_pool.h>
-#include <gomoku.h>
-#include <common.h>
 
 class SelfPlay
 {

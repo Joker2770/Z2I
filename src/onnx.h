@@ -24,6 +24,11 @@ SOFTWARE.
 */
 
 #pragma once
+
+#include "gomoku.h"
+#include "common.h"
+
+#include <onnxruntime_cxx_api.h>
 #include <future>
 #include <memory>
 #include <queue>
@@ -31,11 +36,7 @@ SOFTWARE.
 #include <utility>
 #include <vector>
 
-#include <gomoku.h>
-#include <common.h>
-
 #include <iostream>
-#include <onnxruntime_cxx_api.h>
 
 // using namespace customType;
 
@@ -61,6 +62,7 @@ private:
   Ort::Env env;
   Ort::MemoryInfo memory_info;
   Ort::AllocatorWithDefaultOptions allocator;
+  Ort::SessionOptions session_options;
   using task_type = std::pair<std::vector<float>, std::promise<return_type>>;
   // pair: input board state(float list), output P and V
 

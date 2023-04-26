@@ -1,5 +1,7 @@
 # Z2I
 
+The `pbrain-Z2I` is just a gomoku engine which use the [protocal of gomocup](lastovicka.github.io/protocl2en.htm). A GUI named [qpiskvork](https://github.com/Joker2770/qpiskvork) can load this engine.
+
 ## Supported Games
 Currently only Gomoku and similar games such as Tic-Tac-Toe. 
 

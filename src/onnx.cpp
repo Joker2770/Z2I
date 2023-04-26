@@ -52,12 +52,11 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   this->env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "alphaZero");
   // const auto& api = Ort::GetApi();
   // OrtTensorRTProviderOptionsV2* tensorrt_options;
-  Ort::SessionOptions *session_options = new Ort::SessionOptions();
   // auto share_session_options = std::make_shared<Ort::SessionOptions>(session_options);
   // session_options->SetIntraOpNumThreads(1); // TODO:study the parameter
   // session_options->SetInterOpNumThreads(1); // TODO:study the parameter
 
-  session_options->SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+  session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
 #ifdef USE_CUDA
   void enable_cuda(OrtSessionOptions * session_options)
@@ -67,13 +66,16 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 #endif
 
 #ifdef _WIN32
-  std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-  const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
+  //std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
+  std::wstring wstr(model_path.length(),L' ');
+  std::copy(model_path.begin(), model_path.end(), wstr.begin());
+  // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+  // const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
   // No CUDA
-  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path_w, *session_options));
+  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, wstr.c_str(), session_options));
 #else
   // Ort::Session session = Ort::Session(env, model_path.c_str(), *session_options);
-  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), *session_options));
+  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), session_options));
 #endif
   // sess = &session;
 
@@ -93,7 +95,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // printf("Number of inputs = %zu\n", num_input_nodes);
 
   // iterate over all input nodes
-  for (int i = 0; i < num_input_nodes; i++)
+  for (size_t i = 0; i < num_input_nodes; i++)
   {
     // print input node names
     char *input_name = shared_session->GetInputName(i, allocator);
@@ -136,9 +138,9 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // run infer thread
   this->loop = std::make_unique<std::thread>([this]
                                              {
-    while (this->running) {
-      this->infer();
-    } });
+	  while (this->running) {
+		  this->infer();
+	  } });
 }
 
 NeuralNetwork::~NeuralNetwork()

@@ -27,12 +27,11 @@ SOFTWARE.
 #include <iostream>
 #include <sstream>
 #include <string>
-#include<iostream>
-#include<fstream>
+#include <iostream>
+#include <fstream>
 
 #include <tuple>
 #include <vector>
-
 
 using namespace std;
 

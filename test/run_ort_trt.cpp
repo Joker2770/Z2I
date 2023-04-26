@@ -65,10 +65,10 @@ void run_ort_trt() {
   
   
   // Ort::SessionOptions session_options
-  Ort::SessionOptions *session_options = new Ort::SessionOptions();
+  Ort::SessionOptions session_options;
   //session_options->SetIntraOpNumThreads(4);
 
-  session_options->SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+  session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
 #ifdef USE_CUDA
   void enable_cuda(OrtSessionOptions * session_options)
@@ -82,11 +82,11 @@ void run_ort_trt() {
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
   //auto s = MultiByteToWideChar(model_path_s);
   const wchar_t* model_path = converter.from_bytes(model_path_s).c_str();
-  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, *session_options));
+  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
 #else
   string model_path_s = "/data/AlphaZero-Onnx/python/mymodel.onnx";
   const char* model_path = model_path_s.c_str();
-  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, *session_options));
+  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
 #endif
 
     
@@ -195,10 +195,9 @@ void run_ort_trt() {
   // Score for class[3] = 0.001180
   // Score for class[4] = 0.001317
 
-
   // release buffers allocated by ORT alloctor
-  for(const char* node_name : input_node_names)
-    allocator.Free(const_cast<void*>(reinterpret_cast<const void*>(node_name)));
+  for (const char *node_name : input_node_names)
+     allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
 
   printf("Done!\n");
 }

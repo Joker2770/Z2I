@@ -24,9 +24,15 @@ link_directories("${ONNXRUNTIME_ROOTDIR}/lib")
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
 
 add_library(Z2I_lib ${SOURCES})
-add_executable(train_eval_net ${CMAKE_SOURCE_DIR}/src/eval/train_eval_net.cpp)
+
+add_executable(train_eval_net ${CMAKE_SOURCE_DIR}/src/train_and_eval/train_eval_net.cpp)
+add_executable(pbrain-Z2I ${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/pbrain-Z2I.cpp)
+
 target_link_libraries(train_eval_net Z2I_lib)
 target_link_libraries(train_eval_net onnxruntime)
+
+target_link_libraries(pbrain-Z2I Z2I_lib)
+target_link_libraries(pbrain-Z2I onnxruntime)
 
 add_subdirectory(test)
 

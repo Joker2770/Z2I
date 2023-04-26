@@ -272,4 +272,20 @@ void Gomoku::render()
   }
   out << column_no;
   puts(out.str().c_str());
+
+  if (nullptr != line)
+  {
+      delete[] line;
+      line = nullptr;
+  }
+  if (nullptr != line2)
+  {
+      delete[] line2;
+      line2 = nullptr;
+  }
+  if (nullptr != column_no)
+  {
+      delete[] column_no;
+      column_no = nullptr;
+  }
 }

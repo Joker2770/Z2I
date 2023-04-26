@@ -25,16 +25,16 @@ SOFTWARE.
 
 #pragma once
 
+#include "gomoku.h"
+#include "onnx.h"
+#include "thread_pool.h"
+
 #include <unordered_map>
 #include <string>
 #include <vector>
 #include <thread>
 #include <atomic>
 #include <random>
-
-#include <gomoku.h>
-#include <onnx.h>
-#include <thread_pool.h>
 
 class TreeNode
 {
