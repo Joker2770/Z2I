@@ -38,8 +38,8 @@ add_subdirectory(test)
 
 if (MSVC)
  file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/*.dll")
- add_custom_command(TARGET Z2I_lib POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${ONNX_DLLS} ${CMAKE_CURRENT_BINARY_DIR})
+ add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
 endif (MSVC)
 
 # ADD_EXECUTABLE(AlphaZeroInference  main.cpp)

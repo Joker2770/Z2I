@@ -40,10 +40,12 @@ SOFTWARE.
 #include <iostream>
 using namespace std;
 
-bool isNumericString(const char* str) {
-    int len = strlen(str);
-    for (int i = 0; i < len; i++) {
-        if (!isdigit(str[i])) {
+bool isNumericString(const char *str, unsigned int i_len)
+{
+    for (int i = 0; i < i_len; i++)
+    {
+        if (!isdigit(str[i]))
+        {
             return false;
         }
     }
@@ -114,7 +116,7 @@ int main(int argc, char *argv[])
     module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
 
     unsigned int u_timeout_turn = 30000;
-    double per_sims = (double)(u_timeout_turn)/(double)(4*120000);
+    double per_sims = (double)(u_timeout_turn)/(double)(4*60000);
     cout << "DEBUG per_sims: " << per_sims << endl;
 
     MCTS *m;
@@ -132,7 +134,7 @@ int main(int argc, char *argv[])
 		{
             char s_size[4] = "\0";
             cin >> s_size;
-            if (isNumericString(s_size))
+            if (isNumericString(s_size, strlen(s_size)))
             {
                 size = atoi(s_size);
             }
@@ -217,14 +219,16 @@ int main(int argc, char *argv[])
                 vector<string> v_s = split(command, ",");
                 if ((command.find_first_of(',', 0) != command.find_last_of(',', 0)) && v_s.size() == 3)
                 {
-                    //cout << "DEBUG " << v_s.at(0) << "," << v_s.at(1) << "," << v_s.at(2) << endl;
-                    if (isNumericString(v_s.at(0).c_str()) && isNumericString(v_s.at(1).c_str()) && isNumericString(v_s.at(2).c_str()))
+                    // cout << "DEBUG " << v_s.at(0) << "," << v_s.at(1) << "," << v_s.at(2) << endl;
+                    if (isNumericString(v_s.at(0).c_str(), v_s.at(0).length()) &&
+                     isNumericString(v_s.at(1).c_str(), v_s.at(1).length()) &&
+                      isNumericString(v_s.at(2).c_str(), v_s.at(2).length()))
                     {
                         x = atoi(v_s.at(0).c_str());
                         y = atoi(v_s.at(1).c_str());
                         c = atoi(v_s.at(2).c_str());
                         int move = x * size + y;
-                        cout << "DEBUG move: " << move << endl;
+                        //cout << "DEBUG move: " << move << endl;
                         if (c == 1)
                         {
                             move_1.push_back(move);
@@ -261,9 +265,9 @@ int main(int argc, char *argv[])
                 }
                 cin >> command;
             }
-            cout << "DEBUG move_1 size: " << move_1.size() << endl;
-            cout << "DEBUG move_2 size: " << move_2.size() << endl;
-            cout << "DEBUG move_3 size: " << move_3.size() << endl;
+            // cout << "DEBUG move_1 size: " << move_1.size() << endl;
+            // cout << "DEBUG move_2 size: " << move_2.size() << endl;
+            // cout << "DEBUG move_3 size: " << move_3.size() << endl;
 
             if (move_1.size() == 0 && move_2.size() == 0 && move_3.size() != 0)
             {
@@ -414,7 +418,7 @@ int main(int argc, char *argv[])
 
             std::vector<double> p = m->get_action_probs(g);
             int action = m->get_best_action_from_prob(p);
-            cout << "DEBUG move: " << action << endl;
+            //cout << "DEBUG action: " << action << endl;
             x = action / size;
             y = action % size;
             if (!g->is_illegal(x, y))
@@ -438,7 +442,7 @@ int main(int argc, char *argv[])
             {
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                 {
                     value = atoi(s_value);
                 }
@@ -449,7 +453,7 @@ int main(int argc, char *argv[])
 			{
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
                 // if (value != 0)
@@ -469,7 +473,7 @@ int main(int argc, char *argv[])
             {
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
                 if (value != 0)
@@ -489,7 +493,7 @@ int main(int argc, char *argv[])
 			{
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 				// TODO
 			}
@@ -497,7 +501,7 @@ int main(int argc, char *argv[])
 			{
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 				// TODO
 			}
@@ -505,7 +509,7 @@ int main(int argc, char *argv[])
 			{
                 char s_value[16] = "\0";
                 cin >> s_value;
-                if (isNumericString(s_value))
+                if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
                 if (0 != value)
