@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 
     NeuralNetwork *module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_model_path = exe_path.string() + "474.onnx";
+    string s_model_path = exe_path.string() + "free-style_474.onnx";
     cout << "MESSAGE model load path: " << s_model_path << endl;
     module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
 
