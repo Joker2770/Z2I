@@ -2,7 +2,7 @@ project(AlphaZeroGomoku)
 cmake_minimum_required(VERSION 3.13)
 
 if(CMAKE_COMPILER_IS_GNUCC)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -Wl,-rpath=./:./lib")
     set(ONNXRUNTIME_ROOTDIR "/mnt/d/Linker/onnxruntime-linux-x64-1.11.1")
 else()
     set(ONNXRUNTIME_ROOTDIR "D:/Linker/onnxruntime-win-x86-1.11.1")
@@ -41,6 +41,12 @@ if (MSVC)
  add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
 endif (MSVC)
+
+if (UNIX)
+ file(GLOB ONNX_DLLS "${ONNXRUNTIME_ROOTDIR}/lib/lib*.so*")
+ add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
+endif (UNIX)
 
 # ADD_EXECUTABLE(AlphaZeroInference  main.cpp)
 
