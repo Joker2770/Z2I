@@ -58,11 +58,10 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 
   session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
+//#define USE_CUDA
 #ifdef USE_CUDA
-  void enable_cuda(OrtSessionOptions * session_options)
-  {
-    ORT_ABORT_ON_ERROR(OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0));
-  }
+    OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0);
+    //std::cout << "DEBUG ......Enable CUDA......" << std::endl;
 #endif
 
 #ifdef _WIN32

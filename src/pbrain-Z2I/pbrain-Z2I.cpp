@@ -116,11 +116,11 @@ int main(int argc, char *argv[])
     module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
 
     unsigned int u_timeout_turn = 30000;
-    double per_sims = (double)(u_timeout_turn)/(double)(4*60000);
+    double per_sims = (double)(u_timeout_turn)/(double)(4*30000);
     cout << "DEBUG per_sims: " << per_sims << endl;
 
     MCTS *m;
-    m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * NUM_MCT_THREADS * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+    m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
     string command;
     unsigned int size;
@@ -485,7 +485,7 @@ int main(int argc, char *argv[])
                             delete m;
                             m = nullptr;
                         }
-                        m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * NUM_MCT_THREADS * per_sims * (value * 0.1 / u_timeout_turn) + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                        m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims * (value * 0.1 / u_timeout_turn) + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
                     }
                 }
             }

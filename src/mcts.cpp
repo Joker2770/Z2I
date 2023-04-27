@@ -463,9 +463,6 @@ void MCTS::simulate(std::shared_ptr<Gomoku> game)
       }
     }
 
-    // std::cout << "value = " << value << std::endl;
-    // std::cout << "action_priors = " << action_priors << std::endl;
-
     double sum = 0;
     for (unsigned int i = 0; i < action_priors.size(); i++)
     {

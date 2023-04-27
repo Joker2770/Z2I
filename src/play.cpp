@@ -61,12 +61,11 @@ void SelfPlay::play(unsigned int saved_id)
 
     while (game_state.first == 0)
     {
-        // g->render();
-        double temp = step < EXPLORE_STEP ? 1 : 0;
+        // cout << "game id: " << saved_id << endl;
+        double temp = step < EXPLORE_STEP ? 1.0 : 1e-3;
         auto action_probs = mcts->get_action_probs(g.get(), temp);
         // auto action_probs = m->get_action_probs(g.get(), 1);
         // int best_action = m->get_best_action_from_prob(action_probs);
-
         board_type board = g->get_board();
         for (int i = 0; i < BORAD_SIZE * BORAD_SIZE; i++)
         {
@@ -115,6 +114,7 @@ void SelfPlay::play(unsigned int saved_id)
         mcts->update_with_move(res);
         g->execute_move(res);
         game_state = g->get_game_status();
+        g->render();
         step++;
     }
     cout << "Self play: total step num = " << step << " winner = " << game_state.second << endl;

@@ -51,8 +51,6 @@ cmake ..    # (or "cmake -A x64 ..")
 cmake --build . --config Release   # (or open .sln file through visual Studio 19 and generate for win10)
 ```
 
-add `-DUSE_CUDA=ON` to enable gpu.
-
 ## Train (Linux)
 
 ```shell
