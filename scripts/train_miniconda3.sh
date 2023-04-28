@@ -15,7 +15,7 @@ do
 	for ((i=0;i<$batch_num;i++));do
 		{
 		# sleep 3;echo 1>>aa && echo "done!"
-		bash ./train_net.sh generate $i
+		bash ./train_net.sh generate $($n + $i)
 		}&
 	done
 	wait
