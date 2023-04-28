@@ -37,7 +37,7 @@ class Learner():
 
         self.examples_buffer = deque([], maxlen=config['examples_buffer_max_len'])
 
-        use_GPU = torch.cuda.is_available()
+        self.use_GPU = torch.cuda.is_available()
 
         # neural network
         self.batch_size = config['batch_size']
@@ -83,7 +83,8 @@ class Learner():
 
         model_path = path.join(model_dir, str(model_id+1))
         self.nnet.save_model(model_path)
-        torch.cuda.empty_cache()
+        if self.use_GPU:
+            torch.cuda.empty_cache()
 
     def get_symmetries(self, board, pi, last_action):
         # mirror, rotational
