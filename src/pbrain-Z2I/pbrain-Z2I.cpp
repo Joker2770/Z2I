@@ -40,9 +40,9 @@ SOFTWARE.
 #include <iostream>
 using namespace std;
 
-bool isNumericString(const char *str, unsigned int i_len)
+bool isNumericString(const char *str, size_t i_len)
 {
-    for (unsigned int i = 0; i < i_len; i++)
+    for (size_t i = 0; i < i_len; i++)
     {
         if (!isdigit(str[i]))
         {
@@ -57,14 +57,14 @@ vector<string> split(const string &str, const string &pattern)
     string::size_type pos;
     vector<string> result;
     string strs = str + pattern;
-    unsigned int size = strs.size();
-    for (unsigned int i = 0; i < size; ++i) {
+    size_t size = strs.size();
+    for (size_t i = 0; i < size; ++i) {
         pos = strs.find(pattern, i);
         if (pos < size)
         {
             string s = strs.substr(i, pos - i);
             result.push_back(s);
-            i = pos + pattern.size() -1;
+            i = pos + pattern.size() - 1;
         }
     }
     return result;
