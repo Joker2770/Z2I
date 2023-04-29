@@ -17,7 +17,7 @@ echo --------------%n%-th train------------------
 :INNER_LOOP
 if %i% LSS %batch_num% (
     echo generate data......
-    start /B cmd /C "train_net.bat generate %i%"
+    start /B /WAIT train_net.bat generate %i%
     set /A i+=1
     goto INNER_LOOP
 )
