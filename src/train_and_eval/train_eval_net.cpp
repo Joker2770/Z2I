@@ -54,7 +54,7 @@ void generate_data_for_train(int current_weight, int start_batch_id)
     }
 }
 
-void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_table, bool do_render, const int a_mct_sims, const int b_mct_sims)
+void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_table, bool do_render, const unsigned int a_mct_sims, const unsigned int b_mct_sims)
 {
     MCTS ma(a, NUM_MCT_THREADS, C_PUCT, a_mct_sims, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
     MCTS mb(b, NUM_MCT_THREADS, C_PUCT, b_mct_sims, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
@@ -89,7 +89,7 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
         win_table[2]++;
 }
 
-vector<int> eval(int weight_a, int weight_b, unsigned int game_num, int a_sims, int b_sims)
+vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int a_sims, unsigned int b_sims)
 {
     int win_table[3] = {0, 0, 0};
 
@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 
         int game_num = atoi(argv[2]);
 
-        auto result = eval(current_weight, best_weight, game_num, NUM_MCT_SIMS, NUM_MCT_SIMS);
+        auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS/16 + 1), (unsigned int)(NUM_MCT_SIMS/16 + 1));
         string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
 
         double win_ratio = result[0] / (result[1] + 0.01);
@@ -242,11 +242,11 @@ int main(int argc, char *argv[])
 
         int game_num = atoi(argv[2]);
 
-        int random_mcts_simulation;
+        unsigned int random_mcts_simulation;
         ifstream random_mcts_logger_reader("random_mcts_number.txt");
         random_mcts_logger_reader >> random_mcts_simulation;
 
-        int nn_mcts_simulation = NUM_MCT_SIMS / 16; // can not be too small !!
+        unsigned int nn_mcts_simulation = NUM_MCT_SIMS / 16 + 1; // can not be too small !!
 
         vector<int> result_random_mcts = eval(current_weight, -1, game_num, nn_mcts_simulation, random_mcts_simulation);
 
