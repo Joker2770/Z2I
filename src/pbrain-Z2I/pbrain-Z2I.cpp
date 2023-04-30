@@ -84,6 +84,7 @@ void toupper(string &str)
 
 int main(int argc, char *argv[])
 {
+    cout << "MESSAGE ................................................................................." << endl;
     cout << "MESSAGE MIT License" << endl;
     cout << "MESSAGE " << endl;
     cout << "MESSAGE Copyright (c) 2023 Joker2770" << endl;
@@ -106,14 +107,24 @@ int main(int argc, char *argv[])
     cout << "MESSAGE OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" << endl;
     cout << "MESSAGE SOFTWARE." << endl;
     cout << "MESSAGE " << endl;
-
-    Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+    cout << "MESSAGE ................................................................................." << endl;
 
     NeuralNetwork *module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_model_path = exe_path.string() + "free-style_474.onnx";
+    string s_model_path = exe_path.string() + "free-style_476.onnx";
     cout << "MESSAGE model load path: " << s_model_path << endl;
-    module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
+    if (std::filesystem::exists(s_model_path))
+    {
+        cout << "MESSAGE model exists" << endl;
+        module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
+    }
+    else
+    {
+        cout << "MESSAGE model not exists" << endl;
+        return -1;
+    }
+
+    Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
 
     unsigned int u_timeout_turn = 30000;
     double per_sims = (double)(u_timeout_turn)/(double)(4*30000);
