@@ -214,7 +214,11 @@ int main(int argc, char *argv[])
 
         int game_num = atoi(argv[2]);
 
-        auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS/16 + 1), (unsigned int)(NUM_MCT_SIMS/16 + 1));
+#ifdef USE_CUDA
+        auto result = eval(current_weight, best_weight, game_num, NUM_MCT_SIMS, NUM_MCT_SIMS);
+#else
+        auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS / 16 + 1), (unsigned int)(NUM_MCT_SIMS / 16 + 1));
+#endif
         string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
 
         double win_ratio = result[0] / (result[1] + 0.01);
