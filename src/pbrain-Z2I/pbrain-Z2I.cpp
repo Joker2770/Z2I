@@ -127,7 +127,11 @@ int main(int argc, char *argv[])
     Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
 
     unsigned int u_timeout_turn = 30000;
-    double per_sims = (double)(u_timeout_turn)/(double)(4*30000);
+#ifdef USE_CUDA
+    double per_sims = (double)(u_timeout_turn) / (double)(4 * 3000);
+#else
+    double per_sims = (double)(u_timeout_turn) / (double)(4 * 30000);
+#endif
     cout << "DEBUG per_sims: " << per_sims << endl;
 
     MCTS *m;

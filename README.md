@@ -11,11 +11,11 @@ Welcome other game implementions if you want to become the contributor!
 
 
 ## Supported OS System
-linux/Windows (tested on Ubuntu 20 + GPU and Windows 10 + GPU or CPU)
+linux/Windows (tested on Ubuntu 20 + GPU/CPU and Windows 10 + GPU/CPU)
 
 
 ## Supported Enviroment
-Both GPU and CPU (GPU test on Tesla V100 + Cuda 11 / CPU test on Intel i7)
+Both GPU and CPU (GPU test on Tesla V100 + Cuda 11 and CPU test on Intel i5/i7)
 
 
 ## Language

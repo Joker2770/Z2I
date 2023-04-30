@@ -25,8 +25,9 @@ SOFTWARE.
 
 #pragma once
 #include <iostream>
+
 // #define SMALL_BOARD_MODE
-// #define USE_GPU
+// #define USE_CUDA
 
 #define CHANNEL_SIZE 3
 
