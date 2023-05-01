@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
         int game_num = atoi(argv[2]);
 
 #ifdef USE_CUDA
-        auto result = eval(current_weight, best_weight, game_num, NUM_MCT_SIMS, NUM_MCT_SIMS);
+        auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS / 4 + 1), (unsigned int)(NUM_MCT_SIMS / 4 + 1));
 #else
         auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS / 16 + 1), (unsigned int)(NUM_MCT_SIMS / 16 + 1));
 #endif

@@ -29,8 +29,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef RENJU_H
-#define RENJU_H
+#ifndef RENJUJUDGE_H
+#define RENJUJUDGE_H
 
 #include "rule.h"
 #include <iostream>

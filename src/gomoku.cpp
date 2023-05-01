@@ -24,15 +24,30 @@ SOFTWARE.
 */
 
 #include "gomoku.h"
+#include "FreeStyleJudge.h"
+#include "StandardJudge.h"
+#include "RenjuJudge.h"
+#include "CaroJudge.h"
 
 #include <iostream>
 #include <sstream>
 
 Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color)
-    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1)
+    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(0)
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
   this->record_list.clear();
+}
+
+bool Gomoku::set_rule(unsigned int rule_flag)
+{
+  if (-1 == this->last_move)
+  {
+    this->rule_flag = rule_flag;
+    return true;
+  }
+
+  return false;
 }
 
 bool Gomoku::is_illegal(unsigned int x, unsigned int y)
@@ -117,64 +132,115 @@ std::pair<int, int> Gomoku::get_game_status()
   auto n = this->n;
   auto n_in_row = this->n_in_row;
 
-  for (unsigned int i = 0; i < n; i++)
+  FreeStyleJudge free_style;
+  StandardJudge standard;
+  RenjuJudge renju;
+  CaroJudge caro;
+
+  if (5 == n_in_row && n > 8 && n < 25)
   {
-    for (unsigned int j = 0; j < n; j++)
+    bool isWin = false;
+    int i_win = 0;
+    isWin = free_style.checkWin(this->board, this->last_move).first;
+    if (1 == (this->rule_flag & 1) && this->record_list.size() >= 9)
     {
-      if (this->board[i][j] == 0)
-      {
-        continue;
-      }
+      if (standard.checkWin(this->board, this->last_move).first)
+        i_win |= 1;
+      else
+        isWin = false;
+    }
+    if (4 == (this->rule_flag & 4) && this->record_list.size() >= 6)
+    {
+      if (renju.checkWin(this->board, this->last_move).first)
+        i_win |= 4;
+      else
+        isWin = false;
+    }
+    if (8 == (this->rule_flag & 8) && this->record_list.size() >= 9)
+    {
+      if (caro.checkWin(this->board, this->last_move).first)
+        i_win |= 8;
+      else
+        isWin = false;
+    }
 
-      if (j <= n - n_in_row)
-      {
-        auto sum = 0;
-        for (unsigned int k = 0; k < n_in_row; k++)
-        {
-          sum += this->board[i][j + k];
-        }
-        if (abs(sum) == n_in_row)
-        {
-          return {1, this->board[i][j]};
-        }
-      }
+    if (0 != i_win)
+    {
+      if ((this->rule_flag & i_win) == this->rule_flag)
+        isWin = true;
+      else
+        isWin = false;
+    }
 
-      if (i <= n - n_in_row)
+    if (isWin)
+      return {1, this->board[this->last_move / this->n][this->last_move % this->n]};
+    else if (4 == (this->rule_flag & 4))
+    {
+      if (!renju.isLegal(this->board, this->last_move) && 1 == this->board[this->last_move / this->n][this->last_move % this->n])
+        return {1, -1};
+    }
+  }
+  else
+  {
+    for (unsigned int i = 0; i < n; i++)
+    {
+      for (unsigned int j = 0; j < n; j++)
       {
-        auto sum = 0;
-        for (unsigned int k = 0; k < n_in_row; k++)
+        if (this->board[i][j] == 0)
         {
-          sum += this->board[i + k][j];
+          continue;
         }
-        if (abs(sum) == n_in_row)
-        {
-          return {1, this->board[i][j]};
-        }
-      }
 
-      if (i <= n - n_in_row && j <= n - n_in_row)
-      {
-        auto sum = 0;
-        for (unsigned int k = 0; k < n_in_row; k++)
+        if (j <= n - n_in_row)
         {
-          sum += this->board[i + k][j + k];
+          auto sum = 0;
+          for (unsigned int k = 0; k < n_in_row; k++)
+          {
+            sum += this->board[i][j + k];
+          }
+          if (abs(sum) == n_in_row)
+          {
+            return {1, this->board[i][j]};
+          }
         }
-        if (abs(sum) == n_in_row)
-        {
-          return {1, this->board[i][j]};
-        }
-      }
 
-      if (i <= n - n_in_row && j >= n_in_row - 1)
-      {
-        auto sum = 0;
-        for (unsigned int k = 0; k < n_in_row; k++)
+        if (i <= n - n_in_row)
         {
-          sum += this->board[i + k][j - k];
+          auto sum = 0;
+          for (unsigned int k = 0; k < n_in_row; k++)
+          {
+            sum += this->board[i + k][j];
+          }
+          if (abs(sum) == n_in_row)
+          {
+            return {1, this->board[i][j]};
+          }
         }
-        if (abs(sum) == n_in_row)
+
+        if (i <= n - n_in_row && j <= n - n_in_row)
         {
-          return {1, this->board[i][j]};
+          auto sum = 0;
+          for (unsigned int k = 0; k < n_in_row; k++)
+          {
+            sum += this->board[i + k][j + k];
+          }
+          if (abs(sum) == n_in_row)
+          {
+            return {1, this->board[i][j]};
+          }
+        }
+
+        if (i <= n - n_in_row && j >= n_in_row - 1)
+        {
+          auto sum = 0;
+          for (unsigned int k = 0; k < n_in_row; k++)
+          {
+            sum += this->board[i + k][j - k];
+          }
+          if (abs(sum) == n_in_row)
+          {
+            return {1, this->board[i][j]};
+          }
         }
       }
     }

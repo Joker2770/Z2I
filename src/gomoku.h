@@ -40,6 +40,7 @@ public:
 
   Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color);
 
+  bool set_rule(unsigned int i_rule_flag);
   bool has_legal_moves();
   std::vector<int> get_legal_moves();
   void execute_move(move_type move);
@@ -62,6 +63,7 @@ private:
   std::vector<move_type> record_list; // record moves in order
   const unsigned int n;               // board size
   const unsigned int n_in_row;        // 5 in row or else
+  unsigned int rule_flag;
 
   int cur_color;       // current player's color
   move_type last_move; // last move

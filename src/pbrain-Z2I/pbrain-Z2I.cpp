@@ -550,6 +550,8 @@ int main(int argc, char *argv[])
 		{
 			break;
 		}
+        else
+            cout << "UNKNOWN unsupport command!" << endl;
     }
 
     if (nullptr != module)

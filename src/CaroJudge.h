@@ -29,8 +29,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#ifndef CARO_H
-#define CARO_H
+#ifndef CAROJUDGE_H
+#define CAROJUDGE_H
 
 #include "rule.h"
 #include <iostream>
