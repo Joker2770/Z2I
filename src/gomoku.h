@@ -26,6 +26,10 @@ SOFTWARE.
 #pragma once
 
 #include "common.h"
+#include "FreeStyleJudge.h"
+#include "StandardJudge.h"
+#include "RenjuJudge.h"
+#include "CaroJudge.h"
 
 #include <tuple>
 #include <vector>
@@ -64,6 +68,11 @@ private:
   const unsigned int n;               // board size
   const unsigned int n_in_row;        // 5 in row or else
   unsigned int rule_flag;
+
+    FreeStyleJudge free_style;
+    StandardJudge standard;
+    RenjuJudge renju;
+    CaroJudge caro;
 
   int cur_color;       // current player's color
   move_type last_move; // last move

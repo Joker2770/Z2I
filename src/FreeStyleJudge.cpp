@@ -69,6 +69,9 @@ int FreeStyleJudge::countNearStone(const board_type &board, int last_move, const
 
 std::pair<bool, int> FreeStyleJudge::checkWin(const board_type &board, int last_move)
 {
+    if (last_move < 0)
+        return {false, 0};
+
     int n = board.size();
 
     pair<int, int> p_drt_up(0, -1), 

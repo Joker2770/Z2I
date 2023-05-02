@@ -114,6 +114,9 @@ bool CaroJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 
 std::pair<bool, int> CaroJudge::checkWin(const board_type &board, int last_move)
 {
+    if (last_move < 0)
+        return {false, 0};
+
     int n = board.size();
     pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     bool b_up = findShap(board, last_move, p_drt_up);

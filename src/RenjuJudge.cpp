@@ -438,6 +438,9 @@ bool RenjuJudge::isThree(const board_type &board, int last_move)
 
 bool RenjuJudge::isLegal(const board_type &board, int last_move)
 {
+    if (last_move < 0)
+        return false;
+
     unsigned int n = board.size();
     if (board[last_move/n][last_move%n] == 1)
     {
@@ -522,6 +525,9 @@ int RenjuJudge::countNearStone(const board_type &board, int last_move, const pai
 
 std::pair<bool, int> RenjuJudge::checkWin(const board_type &board, int last_move)
 {
+    if (last_move < 0)
+        return {false, 0};
+
     int n = board.size();
 
     pair<int, int> p_drt_up(0, -1), 
@@ -558,9 +564,6 @@ std::pair<bool, int> RenjuJudge::checkWin(const board_type &board, int last_move
             return {true, -1};
         }
     }
-
-    if (i_up + i_down == 4 || i_left + i_right == 4 || i_leftup + i_rightdown == 4 || i_leftdown + i_rightup == 4)
-        return {true, board[last_move / n][last_move % n]};
 
     return {false, 0};
 }
