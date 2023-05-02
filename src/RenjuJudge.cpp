@@ -439,7 +439,12 @@ bool RenjuJudge::isThree(const board_type &board, int last_move)
 bool RenjuJudge::isLegal(const board_type &board, int last_move)
 {
     if (last_move < 0)
-        return false;
+    {
+        if (last_move == -1)
+            return true;
+        else
+            return false;
+    }
 
     unsigned int n = board.size();
     if (board[last_move/n][last_move%n] == 1)
@@ -507,10 +512,7 @@ int RenjuJudge::countNearStone(const board_type &board, int last_move, const pai
     while (!isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
     {
         if (board[p_drt_idx.first][p_drt_idx.second] == board[p_idx.first][p_idx.second])
-        {
             i_count++;
-            break;
-        }
         else
             return i_count;
 

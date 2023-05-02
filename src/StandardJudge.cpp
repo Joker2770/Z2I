@@ -51,10 +51,7 @@ int StandardJudge::countNearStone(const board_type &board, int last_move, const 
     while (!isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
     {
         if (board[p_drt_idx.first][p_drt_idx.second] == board[p_idx.first][p_idx.second])
-        {
             i_count++;
-            break;
-        }
         else
             return i_count;
 

@@ -29,7 +29,7 @@ SOFTWARE.
 #include <sstream>
 
 Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color)
-    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(4)
+    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(0)
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
   this->record_list.clear();
