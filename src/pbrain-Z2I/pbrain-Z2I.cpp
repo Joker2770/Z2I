@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
 
     NeuralNetwork *module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_model_path = exe_path.string() + "free-style_476.onnx";
+    string s_model_path = exe_path.string() + "free-style_15x15_476.onnx";
     cout << "MESSAGE model load path: " << s_model_path << endl;
     if (std::filesystem::exists(s_model_path))
     {
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     }
     else
     {
-        cout << "MESSAGE model not exists" << endl;
+        cout << "ERROR model not exists" << endl;
         return -1;
     }
 
@@ -529,7 +529,48 @@ int main(int argc, char *argv[])
 
                 if (0 != value)
                 {
-                    cout << "ERROR unsupport rule: " << value << endl;
+                    bool bChangeModule = false;
+                    // renju > caro > standard > free-style
+                    if (4 == (value & 4))
+                    {
+                        bChangeModule = true;
+                        s_model_path = exe_path.string() + "renju_15x15_100.onnx";
+                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                    }
+                    else if (8 == (value & 8))
+                    {
+                        bChangeModule = true;
+                        s_model_path = exe_path.string() + "caro_15x15_0.onnx";
+                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                    }
+                    else if (1 == (value & 1))
+                    {
+                        bChangeModule = true;
+                        s_model_path = exe_path.string() + "standard_15x15_0.onnx";
+                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                    }
+                    else
+                        cout << "ERROR unsupport rule: " << value << endl;
+
+                    if (bChangeModule)
+                    {
+                        if (std::filesystem::exists(s_model_path))
+                        {
+                            cout << "MESSAGE model exists" << endl;
+                            module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
+                            if (nullptr != m)
+                            {
+                                delete m;
+                                m = nullptr;
+                            }
+                            m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                        }
+                        else
+                        {
+                            cout << "ERROR model not exists" << endl;
+                            continue;
+                        }
+                    }
                 }
             }
 			else if (key == "folder")
