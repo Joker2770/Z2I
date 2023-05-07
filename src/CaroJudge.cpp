@@ -47,7 +47,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
     if (1 == board[last_move / n][last_move % n])
         vColor.push_back(1);
     else if (-1 == board[last_move / n][last_move % n])
-        vColor.push_back(-1);
+        vColor.push_back(2);
     else
         return false;
 
@@ -56,7 +56,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
         if (1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
-            vColor.push_back(-1);
+            vColor.push_back(2);
         else
             vColor.push_back(0);
 
@@ -74,7 +74,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
         if (1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
-            vColor.push_back(-1);
+            vColor.push_back(2);
         else
             vColor.push_back(0);
 
