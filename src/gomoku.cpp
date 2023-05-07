@@ -135,24 +135,24 @@ std::pair<int, int> Gomoku::get_game_status()
 
     bool isWin = false;
     int i_win = 0;
-    isWin = free_style.checkWin(this->board, this->last_move).first;
+    isWin = free_style.checkWin(this->board, this->last_move);
     if (0x01 == (this->rule_flag & 0x01) && this->record_list.size() >= 9)
     {
-      if (standard.checkWin(this->board, this->last_move).first)
+      if (standard.checkWin(this->board, this->last_move))
         i_win |= 1;
       else
         isWin = false;
     }
     if (0x04 == (this->rule_flag & 0x04) && this->record_list.size() >= 6)
     {
-      if (renju.checkWin(this->board, this->last_move).first)
+      if (renju.checkWin(this->board, this->last_move))
         i_win |= 4;
       else
         isWin = false;
     }
     if (0x08 == (this->rule_flag & 0x08) && this->record_list.size() >= 9)
     {
-      if (caro.checkWin(this->board, this->last_move).first)
+      if (caro.checkWin(this->board, this->last_move))
         i_win |= 8;
       else
         isWin = false;

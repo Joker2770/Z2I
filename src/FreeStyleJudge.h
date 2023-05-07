@@ -39,7 +39,7 @@ using namespace std;
 class FreeStyleJudge final : public rule
 {
 public:
-    std::pair<bool, int> checkWin(const board_type &board, int last_move) override;
+    bool checkWin(const board_type &board, int last_move) override;
 
 private:
     bool isPosOutOfBoard(unsigned int n, int x, int y);

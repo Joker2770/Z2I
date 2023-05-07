@@ -64,10 +64,15 @@ int StandardJudge::countNearStone(const board_type &board, int last_move, const 
     return i_count;
 }
 
-std::pair<bool, int> StandardJudge::checkWin(const board_type &board, int last_move)
+bool StandardJudge::checkWin(const board_type &board, int last_move)
 {
     if (last_move < 0)
-        return {false, 0};
+    {
+        if (last_move == -1)
+            return true;
+        else
+            return false;
+    }
 
     int n = board.size();
 
@@ -90,8 +95,8 @@ std::pair<bool, int> StandardJudge::checkWin(const board_type &board, int last_m
     int i_rightup = countNearStone(board, last_move, p_drt_rightup);
 
     if (i_up + i_down == 4 || i_left + i_right == 4 || i_leftup + i_rightdown == 4 || i_leftdown + i_rightup == 4)
-        return {true, board[last_move / n][last_move % n]};
+        return true;
 
-    return {false, 0};
+    return false;
 }
 

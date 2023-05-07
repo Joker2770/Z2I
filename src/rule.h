@@ -41,7 +41,7 @@ using namespace std;
 class rule
 {
 public:
-    virtual std::pair<bool, int> checkWin(const board_type &board, int last_move) = 0;
+    virtual bool checkWin(const board_type &board, int last_move) = 0;
 };
 
 #endif

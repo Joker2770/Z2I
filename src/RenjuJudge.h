@@ -66,7 +66,7 @@ const int A3_SHAPES[][6] = {
 class RenjuJudge final : public rule
 {
 public:
-    std::pair<bool, int> checkWin(const board_type &board, int last_move) override;
+    bool checkWin(const board_type &board, int last_move) override;
     //after checkWin
     bool isLegal(const board_type &board, int last_move);
     int getRenjuState();

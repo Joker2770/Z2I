@@ -112,10 +112,15 @@ bool CaroJudge::isPosOutOfBoard(unsigned int n, int x, int y)
   return x > n - 1 || y > n - 1 || x < 0 || y < 0;
 }
 
-std::pair<bool, int> CaroJudge::checkWin(const board_type &board, int last_move)
+bool CaroJudge::checkWin(const board_type &board, int last_move)
 {
     if (last_move < 0)
-        return {false, 0};
+    {
+        if (last_move == -1)
+            return true;
+        else
+            return false;
+    }
 
     int n = board.size();
     pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
@@ -125,9 +130,9 @@ std::pair<bool, int> CaroJudge::checkWin(const board_type &board, int last_move)
     bool b_leftdown = findShap(board, last_move, p_drt_leftdown);
 
     if (b_up || b_left || b_leftup || b_leftdown)
-        return {true, board[last_move / n][last_move % n]};
+        return true;
 
-    return {false, 0};
+    return false;
 }
 
 

@@ -525,10 +525,15 @@ int RenjuJudge::countNearStone(const board_type &board, int last_move, const pai
     return i_count;
 }
 
-std::pair<bool, int> RenjuJudge::checkWin(const board_type &board, int last_move)
+bool RenjuJudge::checkWin(const board_type &board, int last_move)
 {
     if (last_move < 0)
-        return {false, 0};
+    {
+        if (last_move == -1)
+            return true;
+        else
+            return false;
+    }
 
     int n = board.size();
 
@@ -555,7 +560,7 @@ std::pair<bool, int> RenjuJudge::checkWin(const board_type &board, int last_move
         if (i_up + i_down == 4 || i_left + i_right == 4 || i_leftup + i_rightdown == 4 || i_leftdown + i_rightup == 4)
         {
             this->m_renju_state = PATTERN::FIVE_IN_A_ROW;
-            return {true, 1};
+            return true;
         }
     }
     else
@@ -563,10 +568,10 @@ std::pair<bool, int> RenjuJudge::checkWin(const board_type &board, int last_move
         if (i_up + i_down >= 4 || i_left + i_right >= 4 || i_leftup + i_rightdown >= 4 || i_leftdown + i_rightup >= 4)
         {
             this->m_renju_state = PATTERN::FIVE_IN_A_ROW;
-            return {true, -1};
+            return true;
         }
     }
 
-    return {false, 0};
+    return false;
 }
 
