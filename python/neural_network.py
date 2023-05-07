@@ -143,6 +143,7 @@ class NeuralNetWorkWrapper():
         self.is_cuda_available = torch.cuda.is_available()
         if(self.is_cuda_available):
             print("发现并使用GPU")
+            print(torch.cuda.get_device_name(torch.cuda.current_device()))
         else:
             print("使用CPU")
 
