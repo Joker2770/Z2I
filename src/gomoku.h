@@ -44,7 +44,7 @@ public:
 
   Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color);
 
-  bool set_rule(unsigned int i_rule_flag);
+  bool set_rule(const unsigned int i_rule_flag);
   bool has_legal_moves();
   std::vector<int> get_legal_moves();
   void execute_move(move_type move);
@@ -61,6 +61,7 @@ public:
   inline int get_current_color() const { return this->cur_color; }
   inline unsigned int get_n() const { return this->n; }
   inline std::vector<move_type> get_record_list() const { return this->record_list; }
+  inline unsigned int get_rule() const { return this->rule_flag; };
 
 private:
   board_type board;                   // game borad
@@ -69,10 +70,10 @@ private:
   const unsigned int n_in_row;        // 5 in row or else
   unsigned int rule_flag;
 
-    FreeStyleJudge free_style;
-    StandardJudge standard;
-    RenjuJudge renju;
-    CaroJudge caro;
+  FreeStyleJudge free_style;
+  StandardJudge standard;
+  RenjuJudge renju;
+  CaroJudge caro;
 
   int cur_color;       // current player's color
   move_type last_move; // last move

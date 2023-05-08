@@ -125,6 +125,7 @@ int main(int argc, char *argv[])
     }
 
     Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+    g->set_rule(0);
 
     unsigned int u_timeout_turn = 30000;
 #ifdef USE_CUDA
@@ -536,18 +537,21 @@ int main(int argc, char *argv[])
                         bChangeModule = true;
                         s_model_path = exe_path.string() + "renju_15x15_100.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
+                        g->set_rule(4);
                     }
                     else if (8 == (value & 8))
                     {
                         bChangeModule = true;
                         s_model_path = exe_path.string() + "caro_15x15_0.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
+                        g->set_rule(8);
                     }
                     else if (1 == (value & 1))
                     {
                         bChangeModule = true;
                         s_model_path = exe_path.string() + "standard_15x15_0.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
+                        g->set_rule(1);
                     }
                     else
                         cout << "ERROR unsupport rule: " << value << endl;
