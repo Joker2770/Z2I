@@ -170,7 +170,7 @@ std::pair<int, int> Gomoku::get_game_status()
       return {1, this->board[this->last_move / n][this->last_move % n]};
     else if (4 == (this->rule_flag & 4) && this->record_list.size() >= 6)
     {
-      if (!renju.isLegal(this->board, this->last_move) && 1 == this->board[this->last_move / n][this->last_move % n])
+      if ((1 == this->board[this->last_move / n][this->last_move % n]) && !(renju.isLegal(this->board, this->last_move)))
         return {1, -1};
     }
   }
