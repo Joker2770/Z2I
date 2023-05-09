@@ -231,6 +231,12 @@ int main(int argc, char *argv[])
         }
         cout << result_log_info;
 
+        ifstream logger("logger.txt");
+        if (!(logger.good()))
+        {
+            ofstream detail_logger_writer("logger.txt");
+            detail_logger_writer.close();
+        }
         ofstream detail_logger_writer("logger.txt", ios::app);
         // detail_logger_writer << result_log_info << result_log_info2;
         detail_logger_writer << result_log_info;
@@ -275,6 +281,12 @@ int main(int argc, char *argv[])
         }
         cout << result_log_info2;
 
+        ifstream logger("logger.txt");
+        if (!(logger.good()))
+        {
+            ofstream detail_logger_writer("logger.txt");
+            detail_logger_writer.close();
+        }
         ofstream detail_logger_writer("logger.txt", ios::app);
         detail_logger_writer << result_log_info2;
         detail_logger_writer.close();
