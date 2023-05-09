@@ -38,15 +38,10 @@ void generate_data_for_train(int current_weight, int start_batch_id)
 {
     string path = "./weights/" + to_string(current_weight) + ".onnx";
 
-    NeuralNetwork *model = new NeuralNetwork(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
-    SelfPlay *sp = new SelfPlay(model);
+    std::shared_ptr<NeuralNetwork> model = std::make_shared<NeuralNetwork>(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
+    SelfPlay *sp = new SelfPlay(model.get());
     sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
 
-    if (nullptr != model)
-    {
-        delete model;
-        model = nullptr;
-    }
     if (nullptr != sp)
     {
         delete sp;
@@ -92,15 +87,14 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
 vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int a_sims, unsigned int b_sims)
 {
     int win_table[3] = {0, 0, 0};
-
-    ThreadPool *thread_pool = new ThreadPool(game_num);
-    NeuralNetwork *nn_a = nullptr;
-    NeuralNetwork *nn_b = nullptr;
+    std::unique_ptr<ThreadPool> thread_pool(new ThreadPool(game_num));
+    std::shared_ptr<NeuralNetwork> nn_a = nullptr;
+    std::shared_ptr<NeuralNetwork> nn_b = nullptr;
 
     if (weight_a >= 0)
     {
         string path = "./weights/" + to_string(weight_a) + ".onnx";
-        nn_a = new NeuralNetwork(path, game_num * a_sims);
+        nn_a = std::make_shared<NeuralNetwork>(path, game_num * a_sims);
         cout << "NeuralNetwork A load: " << weight_a << endl;
     }
     else
@@ -111,7 +105,7 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
     if (weight_b >= 0)
     {
         string path = "./weights/" + to_string(weight_b) + ".onnx";
-        nn_b = new NeuralNetwork(path, game_num * b_sims);
+        nn_b = std::make_shared<NeuralNetwork>(path, game_num * b_sims);
         cout << "NeuralNetwork B load: " << weight_b << endl;
     }
     else
@@ -123,7 +117,7 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
     // NeuralNetwork* a = new NeuralNetwork(NUM_MCT_THREADS * NUM_MCT_SIMS);
     for (unsigned int i = 0; i < game_num; i++)
     {
-        auto future = thread_pool->commit(std::bind(play_for_eval, nn_a, nn_b, false, win_table, false, a_sims, b_sims));
+        auto future = thread_pool->commit(std::bind(play_for_eval, nn_a.get(), nn_b.get(), rand() % 2 == 0 ? false : true, win_table, false, a_sims, b_sims));
         futures.emplace_back(std::move(future));
     }
     for (unsigned int i = 0; i < futures.size(); i++)
@@ -139,22 +133,6 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
         }
     }
     // cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;
-
-    if (nullptr != nn_a)
-    {
-        delete nn_a;
-        nn_a = nullptr;
-    }
-    if (nullptr != nn_b)
-    {
-        delete nn_b;
-        nn_b = nullptr;
-    }
-    if (nullptr != thread_pool)
-    {
-        delete thread_pool;
-        thread_pool = nullptr;
-    }
 
     return {win_table[0], win_table[1], win_table[2]};
 }
@@ -231,12 +209,6 @@ int main(int argc, char *argv[])
         }
         cout << result_log_info;
 
-        ifstream logger("logger.txt");
-        if (!(logger.good()))
-        {
-            ofstream detail_logger_writer("logger.txt");
-            detail_logger_writer.close();
-        }
         ofstream detail_logger_writer("logger.txt", ios::app);
         // detail_logger_writer << result_log_info << result_log_info2;
         detail_logger_writer << result_log_info;
@@ -281,12 +253,6 @@ int main(int argc, char *argv[])
         }
         cout << result_log_info2;
 
-        ifstream logger("logger.txt");
-        if (!(logger.good()))
-        {
-            ofstream detail_logger_writer("logger.txt");
-            detail_logger_writer.close();
-        }
         ofstream detail_logger_writer("logger.txt", ios::app);
         detail_logger_writer << result_log_info2;
         detail_logger_writer.close();

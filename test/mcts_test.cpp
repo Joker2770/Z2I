@@ -49,16 +49,16 @@ int main(int argc, char* argv[]) {
   //std::shared_ptr<torch::jit::script::Module> module = torch::jit::load("../test/models/checkpoint.pt");
   //torch::jit::script::Module module = torch::jit::load("../test/models/checkpoint.pt");
   
-  NeuralNetwork* module = nullptr;
+  std::shared_ptr<NeuralNetwork> module = nullptr;
   bool ai_black = true;
   if (argc <= 1) {
       //cout << "Do not load weights. AI color = BLACK." << endl;
       
       cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << endl;
 #ifdef _WIN32
-  module = new NeuralNetwork("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+  module = std::make_shared<NeuralNetwork>("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #else
-  module = new NeuralNetwork("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+  module = std::make_shared<NeuralNetwork>("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #endif
   }
   else {
@@ -68,11 +68,11 @@ int main(int argc, char* argv[]) {
       // wchar_t wchar[128] = {0};
       // swprintf(wchar,128,L"%S",argv[1]);
 
-      module = new NeuralNetwork(argv[1], NUM_MCT_SIMS);
+      module = std::make_shared<NeuralNetwork>(argv[1], NUM_MCT_SIMS);
   }
   //module->save_weights("net.pt");
   
-  MCTS m(module, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+  MCTS m(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
   std::cout << "Running..." << std::endl;
 
@@ -125,11 +125,6 @@ int main(int argc, char* argv[]) {
     // m.update_with_move(-1);
   }
   std::cout << "winner num = " << game_state.second << std::endl;
-  if (nullptr != module)
-  {
-      delete module;
-      module = nullptr;
-  }
 
   return 0;
 }

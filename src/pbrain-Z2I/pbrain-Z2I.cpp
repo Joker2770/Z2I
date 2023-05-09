@@ -109,14 +109,14 @@ int main(int argc, char *argv[])
     cout << "MESSAGE " << endl;
     cout << "MESSAGE ................................................................................." << endl;
 
-    NeuralNetwork *module = nullptr;
+    std::shared_ptr<NeuralNetwork> module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
     string s_model_path = exe_path.string() + "free-style_15x15_476.onnx";
     cout << "MESSAGE model load path: " << s_model_path << endl;
     if (std::filesystem::exists(s_model_path))
     {
         cout << "MESSAGE model exists" << endl;
-        module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
+        module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
     }
     else
     {
@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     cout << "DEBUG per_sims: " << per_sims << endl;
 
     MCTS *m;
-    m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+    m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
     string command;
     unsigned int size;
@@ -501,7 +501,7 @@ int main(int argc, char *argv[])
                             delete m;
                             m = nullptr;
                         }
-                        m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims * (value * 0.1 / u_timeout_turn) + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                        m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims * (value * 0.1 / u_timeout_turn) + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
                     }
                 }
             }
@@ -561,13 +561,13 @@ int main(int argc, char *argv[])
                         if (std::filesystem::exists(s_model_path))
                         {
                             cout << "MESSAGE model exists" << endl;
-                            module = new NeuralNetwork(s_model_path, NUM_MCT_SIMS);
+                            module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
                             if (nullptr != m)
                             {
                                 delete m;
                                 m = nullptr;
                             }
-                            m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                            m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
                         }
                         else
                         {
@@ -597,12 +597,6 @@ int main(int argc, char *argv[])
 		}
         else
             cout << "UNKNOWN unsupport command!" << endl;
-    }
-
-    if (nullptr != module)
-    {
-        delete module;
-        module = nullptr;
     }
 
     if (nullptr != m)

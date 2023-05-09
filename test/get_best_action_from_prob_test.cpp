@@ -33,15 +33,15 @@ using namespace std;
 int main(int argc, char* argv[]) {
   Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
   
-  NeuralNetwork* module = nullptr;
+  std::shared_ptr<NeuralNetwork> module = nullptr;
   if (argc <= 1) {
       //cout << "Do not load weights. AI color = BLACK." << endl;
       
       cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << endl;
 #ifdef _WIN32
-  module = new NeuralNetwork("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+  module = std::make_shared<NeuralNetwork>("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #else
-  module = new NeuralNetwork("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+  module = std::make_shared<NeuralNetwork>("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #endif
   }
   else {
@@ -49,11 +49,11 @@ int main(int argc, char* argv[]) {
       // wchar_t wchar[128] = {0};
       // swprintf(wchar,128,L"%S",argv[1]);
 
-      module = new NeuralNetwork(argv[1], NUM_MCT_SIMS);
+      module = std::make_shared<NeuralNetwork>(argv[1], NUM_MCT_SIMS);
   }
   //module->save_weights("net.pt");
   
-  MCTS *m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+  MCTS *m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
   std::cout << "Running..." << std::endl;
 
@@ -73,11 +73,6 @@ int main(int argc, char* argv[]) {
   g->execute_move(action);
   g->render();
 
-  if (nullptr != module)
-  {
-      delete module;
-      module = nullptr;
-  }
   if (nullptr != m)
   {
       delete m;

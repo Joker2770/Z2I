@@ -23,8 +23,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "gomoku.h"
-#include "common.h"
+#include "../src/gomoku.h"
+#include "../src/common.h"
 #include "../src/onnx.h"
 
 #include <iostream>

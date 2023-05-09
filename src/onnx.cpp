@@ -39,6 +39,16 @@ SOFTWARE.
 
 // using namespace customType;
 
+bool CheckStatus(const OrtApi* g_ort, OrtStatus* status) {
+	if (status != nullptr) {
+		const char* msg = g_ort->GetErrorMessage(status);
+		std::cerr << msg << std::endl;
+		g_ort->ReleaseStatus(status);
+		throw Ort::Exception(msg, OrtErrorCode::ORT_EP_FAIL);
+	}
+	return true;
+}
+
 NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int batch_size)
     : // module(std::make_shared<torch::jit::script::Module>(torch::jit::load(model_path.c_str()))),
       env(nullptr),
@@ -58,15 +68,25 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 
   session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
-//#define USE_CUDA
+// #define USE_CUDA
 #ifdef USE_CUDA
-    OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0);
-    //std::cout << "DEBUG ......Enable CUDA......" << std::endl;
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  // CUDA option set
+  OrtCUDAProviderOptions cuda_option;
+  cuda_option.device_id = 0;
+  cuda_option.arena_extend_strategy = 0;
+  cuda_option.cudnn_conv_algo_search = OrtCudnnConvAlgoSearchExhaustive;
+  cuda_option.gpu_mem_limit = SIZE_MAX;
+  cuda_option.do_copy_in_default_stream = 1;
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_CUDA(session_options, &cuda_option));
+  // OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0);
+  // std::cout << "DEBUG ......Enable CUDA......" << std::endl;
 #endif
 
 #ifdef _WIN32
-  //std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
-  std::wstring wstr(model_path.length(),L' ');
+  // std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
+  std::wstring wstr(model_path.length(), L' ');
   std::copy(model_path.begin(), model_path.end(), wstr.begin());
   // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
   // const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
