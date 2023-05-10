@@ -70,10 +70,10 @@ private:
   const unsigned int n_in_row;        // 5 in row or else
   unsigned int rule_flag;
 
-  FreeStyleJudge free_style;
-  StandardJudge standard;
-  RenjuJudge renju;
-  CaroJudge caro;
+  std::shared_ptr<FreeStyleJudge> free_style;
+  std::shared_ptr<StandardJudge> standard;
+  std::shared_ptr<RenjuJudge> renju;
+  std::shared_ptr<CaroJudge> caro;
 
   int cur_color;       // current player's color
   move_type last_move; // last move

@@ -29,7 +29,7 @@ SOFTWARE.
 #include <sstream>
 
 Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color)
-    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(0)
+    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(0), free_style(new FreeStyleJudge()), standard(new StandardJudge()), renju(new RenjuJudge()), caro(new CaroJudge())
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
   this->record_list.clear();
@@ -135,24 +135,25 @@ std::pair<int, int> Gomoku::get_game_status()
 
     bool isWin = false;
     int i_win = 0;
-    isWin = free_style.checkWin(this->board, this->last_move);
-    if (0x01 == (this->rule_flag & 0x01) && this->record_list.size() >= 9)
+    if (nullptr != free_style)
+      isWin = free_style->checkWin(this->board, this->last_move);
+    if (0x01 == (this->rule_flag & 0x01) && this->record_list.size() >= 9 && nullptr != standard)
     {
-      if (standard.checkWin(this->board, this->last_move))
+      if (standard->checkWin(this->board, this->last_move))
         i_win |= 1;
       else
         isWin = false;
     }
-    if (0x04 == (this->rule_flag & 0x04) && this->record_list.size() >= 6)
+    if (0x04 == (this->rule_flag & 0x04) && this->record_list.size() >= 6 && nullptr != renju)
     {
-      if (renju.checkWin(this->board, this->last_move))
+      if (renju->checkWin(this->board, this->last_move))
         i_win |= 4;
       else
         isWin = false;
     }
-    if (0x08 == (this->rule_flag & 0x08) && this->record_list.size() >= 9)
+    if (0x08 == (this->rule_flag & 0x08) && this->record_list.size() >= 9 && nullptr != caro)
     {
-      if (caro.checkWin(this->board, this->last_move))
+      if (caro->checkWin(this->board, this->last_move))
         i_win |= 8;
       else
         isWin = false;
@@ -168,9 +169,9 @@ std::pair<int, int> Gomoku::get_game_status()
 
     if (isWin)
       return {1, this->board[this->last_move / n][this->last_move % n]};
-    else if (4 == (this->rule_flag & 4) && this->record_list.size() >= 6)
+    else if (4 == (this->rule_flag & 4) && this->record_list.size() >= 6 && nullptr != renju)
     {
-      if ((1 == this->board[this->last_move / n][this->last_move % n]) && !(renju.isLegal(this->board, this->last_move)))
+      if ((1 == this->board[this->last_move / n][this->last_move % n]) && !(renju->isLegal(this->board, this->last_move)))
         return {1, -1};
     }
   }
