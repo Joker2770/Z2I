@@ -34,6 +34,7 @@ SOFTWARE.
 #include <tuple>
 #include <vector>
 #include <utility>
+#include <memory>
 
 // using namespace customType;
 
