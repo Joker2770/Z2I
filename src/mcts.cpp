@@ -31,6 +31,7 @@ SOFTWARE.
 #include <random>
 #include <assert.h>
 #include <algorithm>
+#include <cmath>
 
 // TreeNode
 TreeNode::TreeNode()
@@ -298,7 +299,7 @@ std::vector<double> MCTS::get_action_probs(Gomoku *gomoku, double temp)
   const auto &children = this->root->children;
 
   // greedy
-  if (temp - 1e-3 < FLT_EPSILON)
+  if (fabs(temp - 1e-3) < FLT_EPSILON)
   {
     unsigned int max_count = 0;
     unsigned int best_action = 0;
