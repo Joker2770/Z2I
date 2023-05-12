@@ -23,18 +23,27 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\CaroJudge.cpp" />
+    <ClCompile Include="..\..\src\FreeStyleJudge.cpp" />
     <ClCompile Include="..\..\src\gomoku.cpp" />
     <ClCompile Include="..\..\src\mcts.cpp" />
     <ClCompile Include="..\..\src\onnx.cpp" />
     <ClCompile Include="..\..\src\pbrain-Z2I\pbrain-Z2I.cpp" />
     <ClCompile Include="..\..\src\play.cpp" />
+    <ClCompile Include="..\..\src\RenjuJudge.cpp" />
+    <ClCompile Include="..\..\src\StandardJudge.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\CaroJudge.h" />
     <ClInclude Include="..\..\src\common.h" />
+    <ClInclude Include="..\..\src\FreeStyleJudge.h" />
     <ClInclude Include="..\..\src\gomoku.h" />
     <ClInclude Include="..\..\src\mcts.h" />
     <ClInclude Include="..\..\src\onnx.h" />
     <ClInclude Include="..\..\src\play.h" />
+    <ClInclude Include="..\..\src\RenjuJudge.h" />
+    <ClInclude Include="..\..\src\rule.h" />
+    <ClInclude Include="..\..\src\StandardJudge.h" />
     <ClInclude Include="..\..\src\thread_pool.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
