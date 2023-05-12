@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import sys
-import os
+# import sys
+# import os
 import random
 
 import torch
 import torch.nn as nn
 from torch.optim import Adam
-from torch.autograd import Variable
-import torch.nn.functional as F
+# from torch.autograd import Variable
+# import torch.nn.functional as F
 
 import numpy as np
 
@@ -304,7 +304,7 @@ if __name__ == '__main__':
     state_batch[batch_all][0][0][1] = 1 #   gomoku.execute_move(1);
     state_batch[batch_all][1][3][4] = 1 #   gomoku.execute_move(3*15+4=49);
 
-    state_batch[batch_all][2][3][4] = 1 # last move 
+    state_batch[batch_all][2][3][4] = 1 # last move
 
 
     if net.is_cuda_available:
@@ -312,6 +312,5 @@ if __name__ == '__main__':
     else:
         state_batch = torch.Tensor(state_batch)
     print("predict")
-    P,V = net._infer(state_batch) 
+    P,V = net._infer(state_batch)
     print(f"P[{batch_all}:5]={P[batch_all][0:5]},V={V[batch_all][0]}")
-    

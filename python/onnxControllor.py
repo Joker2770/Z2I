@@ -2,8 +2,6 @@
 
 # sys.path.append(os.getcwd())
 import onnxruntime
-import onnx
-
 
 class ONNXModel():
     def __init__(self, onnx_path):

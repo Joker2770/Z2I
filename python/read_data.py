@@ -2,10 +2,6 @@ import struct
 import os
 import numpy as np
 
-import struct
-
-
-
 BOARD_SIZE = 15
 if __name__ == '__main__':
     filepath = os.path.join('..', 'build', 'data',"data_0")

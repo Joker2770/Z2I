@@ -7,7 +7,7 @@ import common as config
 # import pickle
 # import concurrent.futures
 import random, struct
-from functools import reduce
+# from functools import reduce
 
 import sys
 
@@ -43,7 +43,7 @@ class Learner():
         self.batch_size = config['batch_size']
         self.epochs = config['epochs']
         self.nnet = NeuralNetWorkWrapper(config['lr'], config['l2'], config['num_layers'],
-                                         config['num_channels'], config['n'], 
+                                         config['num_channels'], config['n'],
                                          self.action_size, config['input_channel_size'])
 
         # start gui
@@ -98,7 +98,6 @@ class Learner():
 
         for i in range(1, 5):
             for j in [True, False]:
-                
                 newB = np.rot90(board, i)
                 newPi = np.rot90(pi_board, i)
                 newAction = np.rot90(last_action_board, i)
