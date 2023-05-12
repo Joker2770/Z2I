@@ -48,6 +48,7 @@ void SelfPlay::play(unsigned int saved_id)
     MCTS *mcts = new MCTS(nn, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
     std::pair<int, int> game_state;
     game_state = g->get_game_status();
+    std::cout << "game rule: " << g->get_rule() << std::endl;
     // std::cout << "begin !!" << std::endl;
     int step = 0;
     board_buff_type board_buffer(BUFFER_LEN, vector<vector<int>>(BORAD_SIZE, vector<int>(BORAD_SIZE)));

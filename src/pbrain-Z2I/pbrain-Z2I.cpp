@@ -126,6 +126,7 @@ int main(int argc, char *argv[])
 
     Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
     g->set_rule(0);
+    cout << "MESSAGE game rule: " << g->get_rule() << endl;
 
     unsigned int u_timeout_turn = 30000;
 #ifdef USE_CUDA
@@ -532,10 +533,17 @@ int main(int argc, char *argv[])
                 {
                     bool bChangeModule = false;
                     // renju > caro > standard > free-style
-                    if (4 == (value & 4))
+                    if (0 == value)
                     {
                         bChangeModule = true;
-                        s_model_path = exe_path.string() + "renju_15x15_100.onnx";
+                        s_model_path = exe_path.string() + "free-style_15x15_476.onnx";
+                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                        g->set_rule(0);
+                    }
+                    else if (4 == (value & 4))
+                    {
+                        bChangeModule = true;
+                        s_model_path = exe_path.string() + "renju_15x15_487.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(4);
                     }
@@ -561,6 +569,7 @@ int main(int argc, char *argv[])
                         if (std::filesystem::exists(s_model_path))
                         {
                             cout << "MESSAGE model exists" << endl;
+                            cout << "MESSAGE game rule: " << g->get_rule() << endl;
                             module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
                             if (nullptr != m)
                             {
