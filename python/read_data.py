@@ -28,7 +28,7 @@ if __name__ == '__main__':
                 p[i][j] = data
         p = p.reshape((-1,BOARD_SIZE,BOARD_SIZE))
         print("p=", p[step_id])
-        
+
         v = []
         for i in range(step):
             data = binfile.read(4)
