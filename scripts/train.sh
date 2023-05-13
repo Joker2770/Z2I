@@ -5,7 +5,7 @@ do_prepare=1
 if [ $do_prepare == 1 ]
 then
 	echo "preparing........"
-	bash ./train_net.sh prepare
+	exec ./train_net.sh prepare
 	python3 ../python/learner.py
 fi
 
@@ -15,12 +15,12 @@ do
 	for ((i=0;i<$batch_num;i++));do
 		{
 		# sleep 3;echo 1>>aa && echo "done!"
-		bash ./train_net.sh generate $i
+		exec ./train_net.sh generate $i
 		}&
 	done
 	wait
 	python3 ../python/learner.py train
-#	bash ./train_net.sh eval_with_winner 10
-	bash ./train_net.sh eval_with_random 10
+#	exec ./train_net.sh eval_with_winner 10
+	exec ./train_net.sh eval_with_random 10
 	let n++
 done
