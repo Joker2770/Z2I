@@ -529,64 +529,77 @@ int main(int argc, char *argv[])
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
-                if (0 != value)
+                bool bChangeModule = false;
+                // renju > standard > caro > free-style
+                if (0 == value)
                 {
-                    bool bChangeModule = false;
-                    // renju > caro > standard > free-style
-                    if (0 == value)
+                    if (s_model_path.find("free-style") == string::npos)
                     {
                         bChangeModule = true;
+                        cout << "MESSAGE change model path!"<< endl;
                         s_model_path = exe_path.string() + "free-style_15x15_502.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(0);
                     }
-                    else if (4 == (value & 4))
+                }
+                else if (4 == (value & 4))
+                {
+                    if (s_model_path.find("renju") == string::npos)
                     {
                         bChangeModule = true;
+                        cout << "MESSAGE change model path!"<< endl;
                         s_model_path = exe_path.string() + "renju_15x15_487.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(4);
                     }
-                    else if (8 == (value & 8))
+                }
+                else if (1 == (value & 1))
+                {
+                    if (s_model_path.find("standard") == string::npos)
                     {
                         bChangeModule = true;
-                        s_model_path = exe_path.string() + "caro_15x15_0.onnx";
-                        cout << "MESSAGE model load path: " << s_model_path << endl;
-                        g->set_rule(8);
-                    }
-                    else if (1 == (value & 1))
-                    {
-                        bChangeModule = true;
+                        cout << "MESSAGE change model path!"<< endl;
                         s_model_path = exe_path.string() + "standard_15x15_479.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(1);
                     }
-                    else
-                        cout << "ERROR unsupport rule: " << value << endl;
-
-                    if (bChangeModule)
+                }
+                else if (8 == (value & 8))
+                {
+                    if (s_model_path.find("caro") == string::npos)
                     {
-                        if (std::filesystem::exists(s_model_path))
+                        bChangeModule = true;
+                        cout << "MESSAGE change model path!"<< endl;
+                        s_model_path = exe_path.string() + "caro_15x15_0.onnx";
+                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                        g->set_rule(8);
+                    }
+                }
+                else
+                    cout << "ERROR unsupport rule: " << value << endl;
+
+                if (bChangeModule)
+                {
+                    if (std::filesystem::exists(s_model_path))
+                    {
+                        cout << "MESSAGE model exists" << endl;
+                        cout << "MESSAGE game rule: " << g->get_rule() << endl;
+                        module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
+                        if (nullptr != m)
                         {
-                            cout << "MESSAGE model exists" << endl;
-                            cout << "MESSAGE game rule: " << g->get_rule() << endl;
-                            module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
-                            if (nullptr != m)
-                            {
-                                delete m;
-                                m = nullptr;
-                            }
-                            m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                            delete m;
+                            m = nullptr;
                         }
-                        else
-                        {
-                            cout << "ERROR model not exists" << endl;
-                            continue;
-                        }
+                        m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                    }
+                    else
+                    {
+                        cout << "ERROR model not exists" << endl;
+                        continue;
                     }
                 }
             }
-			else if (key == "folder")
+            else if (key == "folder")
 			{
 				string t;
 				cin >> t;

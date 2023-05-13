@@ -329,7 +329,7 @@ void Gomoku::render()
   unsigned int offset = 0;
   for (unsigned int i = 1; i <= n; i++)
   {
-    offset += snprintf(column_no + offset, row_size - offset, "  %-2d", i); // snprintf -> sprintf_s
+    offset += snprintf(column_no + offset, row_size - offset, "  %-2u", i); // snprintf -> sprintf_s
   }
   if (nullptr != column_no)
     out << column_no;
