@@ -1,7 +1,7 @@
 /*************************************************************************
     > File Name: pbrain-Z2I.cpp
     > Author: Jintao Yang
-    > Mail: 18608842770@163.com 
+    > Mail: 18608842770@163.com
     > Created Time: Mon Apr 24 12:39:45 2023
  ************************************************************************/
 
@@ -58,7 +58,8 @@ vector<string> split(const string &str, const string &pattern)
     vector<string> result;
     string strs = str + pattern;
     size_t size = strs.size();
-    for (size_t i = 0; i < size; ++i) {
+    for (size_t i = 0; i < size; ++i)
+    {
         pos = strs.find(pattern, i);
         if (pos < size)
         {
@@ -72,14 +73,14 @@ vector<string> split(const string &str, const string &pattern)
 
 void toupper(string &str)
 {
-	for (size_t i = 0; i < str.size(); i++)
-	{
-		char &c = str[i];
-		if (c >= 'a' && c <= 'z')
-		{
-			c += 'A' - 'a';
-		}
-	}
+    for (size_t i = 0; i < str.size(); i++)
+    {
+        char &c = str[i];
+        if (c >= 'a' && c <= 'z')
+        {
+            c += 'A' - 'a';
+        }
+    }
 }
 
 int main(int argc, char *argv[])
@@ -141,15 +142,15 @@ int main(int argc, char *argv[])
 
     string command;
     unsigned int size = 0;
-	char dot = NULL;
+    char dot = NULL;
     bool isPlaying = false;
     for (;;)
-	{
-		cin >> command;
-		toupper(command);
+    {
+        cin >> command;
+        toupper(command);
 
-		if (command == "START")
-		{
+        if (command == "START")
+        {
             char s_size[4] = "\0";
             cin >> s_size;
             if (isNumericString(s_size, strlen(s_size)))
@@ -170,16 +171,16 @@ int main(int argc, char *argv[])
                 cout << "OK" << endl;
             }
             else
-			{
-				cout << "ERROR" << endl;
-			}
-		}
-		// else if (command == "RESTART")
-		// {
-		// }
-		// else if (command == "TAKEBACK")
-		// {
-		// }
+            {
+                cout << "ERROR" << endl;
+            }
+        }
+        // else if (command == "RESTART")
+        // {
+        // }
+        // else if (command == "TAKEBACK")
+        // {
+        // }
         else if (command == "BEGIN")
         {
             isPlaying = true;
@@ -203,7 +204,7 @@ int main(int argc, char *argv[])
                 std::vector<double> p = m->get_action_probs(g);
                 int action = m->get_best_action_from_prob(p);
                 x = action / size;
-                y =  action % size;
+                y = action % size;
                 if (!g->is_illegal(x, y))
                 {
                     m->update_with_move(action);
@@ -216,14 +217,14 @@ int main(int argc, char *argv[])
                 }
             }
             else
-			{
-				cout << "ERROR Illegal move from opponent! " << endl;
-			}
+            {
+                cout << "ERROR Illegal move from opponent! " << endl;
+            }
         }
         else if (command == "BOARD")
-		{
+        {
             isPlaying = true;
-			unsigned int x, y, c;
+            unsigned int x, y, c;
             vector<int> move_1, move_2, move_3;
 
             if (nullptr != g)
@@ -234,22 +235,22 @@ int main(int argc, char *argv[])
             g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
 
             cin >> command;
-			while (command != "DONE")
+            while (command != "DONE")
             {
-                //cout << "DEBUG " << command << endl;
+                // cout << "DEBUG " << command << endl;
                 vector<string> v_s = split(command, ",");
                 if ((command.find_first_of(',', 0) != command.find_last_of(',', 0)) && v_s.size() == 3)
                 {
                     // cout << "DEBUG " << v_s.at(0) << "," << v_s.at(1) << "," << v_s.at(2) << endl;
                     if (isNumericString(v_s.at(0).c_str(), v_s.at(0).length()) &&
-                     isNumericString(v_s.at(1).c_str(), v_s.at(1).length()) &&
-                      isNumericString(v_s.at(2).c_str(), v_s.at(2).length()))
+                        isNumericString(v_s.at(1).c_str(), v_s.at(1).length()) &&
+                        isNumericString(v_s.at(2).c_str(), v_s.at(2).length()))
                     {
                         x = atoi(v_s.at(0).c_str());
                         y = atoi(v_s.at(1).c_str());
                         c = atoi(v_s.at(2).c_str());
                         int move = x * size + y;
-                        //cout << "DEBUG move: " << move << endl;
+                        // cout << "DEBUG move: " << move << endl;
                         if (c == 1)
                         {
                             move_1.push_back(move);
@@ -264,7 +265,6 @@ int main(int argc, char *argv[])
                         }
                         else
                         {
-
                         }
                     }
                     else
@@ -369,7 +369,7 @@ int main(int argc, char *argv[])
                             break;
                         }
                     }
-                    //last move of move_2
+                    // last move of move_2
                     if (!(g->is_illegal(move_2.back() / size, move_2.back() % size)))
                     {
                         m->update_with_move(move_2.back());
@@ -439,7 +439,7 @@ int main(int argc, char *argv[])
 
             std::vector<double> p = m->get_action_probs(g);
             int action = m->get_best_action_from_prob(p);
-            //cout << "DEBUG action: " << action << endl;
+            // cout << "DEBUG action: " << action << endl;
             x = action / size;
             y = action % size;
             if (!g->is_illegal(x, y))
@@ -454,10 +454,10 @@ int main(int argc, char *argv[])
             }
         }
         else if (command == "INFO")
-		{
-			unsigned int value = 0;
-			string key;
-			cin >> key;
+        {
+            unsigned int value = 0;
+            string key;
+            cin >> key;
 
             if (key == "timeout_turn")
             {
@@ -471,7 +471,7 @@ int main(int argc, char *argv[])
                 u_timeout_turn = value;
             }
             else if (key == "timeout_match")
-			{
+            {
                 char s_value[16] = "\0";
                 cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
@@ -511,22 +511,22 @@ int main(int argc, char *argv[])
                 }
             }
             else if (key == "max_memory")
-			{
+            {
                 char s_value[16] = "\0";
                 cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
-				// TODO
-			}
-			else if (key == "game_type")
-			{
+                // TODO
+            }
+            else if (key == "game_type")
+            {
                 char s_value[16] = "\0";
                 cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
-				// TODO
-			}
-			else if (key == "rule")
+                // TODO
+            }
+            else if (key == "rule")
             {
                 char s_value[16] = "\0";
                 cin >> s_value;
@@ -544,7 +544,7 @@ int main(int argc, char *argv[])
                     if (s_model_path.find("free-style") == string::npos)
                     {
                         bChangeModule = true;
-                        cout << "MESSAGE change model path!"<< endl;
+                        cout << "MESSAGE change model path!" << endl;
                         s_model_path = exe_path.string() + "free-style_15x15_502.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(0);
@@ -555,7 +555,7 @@ int main(int argc, char *argv[])
                     if (s_model_path.find("renju") == string::npos)
                     {
                         bChangeModule = true;
-                        cout << "MESSAGE change model path!"<< endl;
+                        cout << "MESSAGE change model path!" << endl;
                         s_model_path = exe_path.string() + "renju_15x15_487.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(4);
@@ -566,7 +566,7 @@ int main(int argc, char *argv[])
                     if (s_model_path.find("standard") == string::npos)
                     {
                         bChangeModule = true;
-                        cout << "MESSAGE change model path!"<< endl;
+                        cout << "MESSAGE change model path!" << endl;
                         s_model_path = exe_path.string() + "standard_15x15_479.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(1);
@@ -577,7 +577,7 @@ int main(int argc, char *argv[])
                     if (s_model_path.find("caro") == string::npos)
                     {
                         bChangeModule = true;
-                        cout << "MESSAGE change model path!"<< endl;
+                        cout << "MESSAGE change model path!" << endl;
                         s_model_path = exe_path.string() + "caro_15x15_0.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(8);
@@ -608,24 +608,19 @@ int main(int argc, char *argv[])
                 }
             }
             else if (key == "folder")
-			{
-				string t;
-				cin >> t;
-			}
+            {
+                string t;
+                cin >> t;
+            }
             else
             {
                 cout << "ERROR unsupport key: " << key << endl;
             }
         }
-		else if (command == "ABOUT")
-		{
-			cout << "name=\"Z2I\", version=\"0.1\", author=\"Joker2770\", country=\"CHN\"" << endl;
-		}
+        else if (command == "ABOUT")
+            cout << "name=\"Z2I\", version=\"0.1\", author=\"Joker2770\", country=\"CHN\"" << endl;
         else if (command == "END")
-        {
-            isPlaying = false;
             break;
-        }
         else
             cout << "UNKNOWN unsupport command!" << endl;
     }
