@@ -140,8 +140,9 @@ int main(int argc, char *argv[])
     m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
 
     string command;
-    unsigned int size;
-	char dot;
+    unsigned int size = 0;
+	char dot = NULL;
+    bool isPlaying = false;
     for (;;)
 	{
 		cin >> command;
@@ -181,6 +182,7 @@ int main(int argc, char *argv[])
 		// }
         else if (command == "BEGIN")
         {
+            isPlaying = true;
             int res = m->get_best_action(g);
             m->update_with_move(res);
             g->execute_move(res);
@@ -190,6 +192,7 @@ int main(int argc, char *argv[])
         }
         else if (command == "TURN")
         {
+            isPlaying = true;
             unsigned int x, y;
             cin >> x >> dot >> y;
             if (!(g->is_illegal(x, y)))
@@ -219,6 +222,7 @@ int main(int argc, char *argv[])
         }
         else if (command == "BOARD")
 		{
+            isPlaying = true;
 			unsigned int x, y, c;
             vector<int> move_1, move_2, move_3;
 
@@ -523,9 +527,13 @@ int main(int argc, char *argv[])
 				// TODO
 			}
 			else if (key == "rule")
-			{
+            {
                 char s_value[16] = "\0";
                 cin >> s_value;
+
+                if (isPlaying)
+                    continue;
+
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
@@ -613,10 +621,11 @@ int main(int argc, char *argv[])
 		{
 			cout << "name=\"Z2I\", version=\"0.1\", author=\"Joker2770\", country=\"CHN\"" << endl;
 		}
-		else if (command == "END")
-		{
-			break;
-		}
+        else if (command == "END")
+        {
+            isPlaying = false;
+            break;
+        }
         else
             cout << "UNKNOWN unsupport command!" << endl;
     }

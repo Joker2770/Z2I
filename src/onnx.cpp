@@ -169,6 +169,9 @@ NeuralNetwork::~NeuralNetwork()
   // release buffers allocated by ORT alloctor
   for (const char *node_name : input_node_names)
     allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
+
+  if (nullptr != this->shared_session)
+    this->shared_session.reset();
 }
 
 std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
