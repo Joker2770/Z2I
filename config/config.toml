@@ -1,9 +1,10 @@
 [model]
-default_model="free-style_15x15_502.onnx"
-free_style_model="free-style_15x15_502.onnx"
+default_model="free-style_15x15_536.onnx"
+free_style_model="free-style_15x15_536.onnx"
 renju_model="renju_15x15_487.onnx"
 standard_model="standard_15x15_479.onnx"
 caro_model="caro_15x15_488.onnx"
 
 [time]
+# time(ms) limitation per step
 timeout_turn=30000

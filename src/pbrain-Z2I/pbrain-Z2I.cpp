@@ -122,10 +122,11 @@ int main(int argc, char *argv[])
         toml_data = toml::parse(s_config_file_path);
         if (toml_data["time"].is_table())
             u_timeout_turn = toml::find<unsigned int>(toml_data["time"], "timeout_turn");
+        cout << "MESSAGE timeout_turn: " << u_timeout_turn << endl;
         if (toml_data["model"].is_table())
             s_model_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "default_model");
         cout << "MESSAGE model load path: " << s_model_path << endl;
-        if (std::filesystem::exists(s_model_path))
+        if (!s_model_path.empty() && std::filesystem::exists(s_model_path))
         {
             cout << "MESSAGE model exists" << endl;
             module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
