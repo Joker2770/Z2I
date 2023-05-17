@@ -112,8 +112,8 @@ void SelfPlay::play(unsigned int saved_id)
             }
         }
 
-        // int res = mcts->get_action_by_sample(action_probs);
-        int res = mcts->get_best_action_from_prob(action_probs);
+        int res = mcts->get_action_by_sample(action_probs);
+        // int res = mcts->get_best_action_from_prob(action_probs);
         mcts->update_with_move(res);
         g->execute_move(res);
         game_state = g->get_game_status();

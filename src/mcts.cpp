@@ -339,7 +339,7 @@ std::vector<double> MCTS::get_action_probs(Gomoku *gomoku, double temp)
   }
 }
 
-int MCTS::get_best_action_from_prob(std::vector<double> action_probs)
+int MCTS::get_best_action_from_prob(std::vector<double> &action_probs)
 {
   int best_action = -1;
   double best_prob = -1.0f;
@@ -398,7 +398,7 @@ int MCTS::get_best_action(Gomoku *gomoku)
   return best_action;
 }
 
-int MCTS::get_action_by_sample(std::vector<double> probs)
+int MCTS::get_action_by_sample(std::vector<double> &probs)
 {
   double r = rnd_dis(rnd_eng);
   int index = 0;
