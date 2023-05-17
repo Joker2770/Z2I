@@ -32,6 +32,7 @@ SOFTWARE.
 #include "../mcts.h"
 #include "../common.h"
 #include "../onnx.h"
+#include "toml11/toml.hpp"
 
 #include <string>
 #include <cstring>
@@ -112,16 +113,32 @@ int main(int argc, char *argv[])
 
     std::shared_ptr<NeuralNetwork> module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_model_path = exe_path.string() + "free-style_15x15_533.onnx";
-    cout << "MESSAGE model load path: " << s_model_path << endl;
-    if (std::filesystem::exists(s_model_path))
+    string s_config_file_path = exe_path.string() + "config.toml";
+    string s_model_path;
+    unsigned int u_timeout_turn = 30000;
+    toml::value toml_data;
+    if (std::filesystem::exists(s_config_file_path))
     {
-        cout << "MESSAGE model exists" << endl;
-        module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
+        toml_data = toml::parse(s_config_file_path);
+        if (toml_data["time"].is_table())
+            u_timeout_turn = toml::find<unsigned int>(toml_data["time"], "timeout_turn");
+        if (toml_data["model"].is_table())
+            s_model_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "default_model");
+        cout << "MESSAGE model load path: " << s_model_path << endl;
+        if (std::filesystem::exists(s_model_path))
+        {
+            cout << "MESSAGE model exists" << endl;
+            module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
+        }
+        else
+        {
+            cout << "ERROR model not exists" << endl;
+            return -1;
+        }
     }
     else
     {
-        cout << "ERROR model not exists" << endl;
+        cout << "ERROR config file not exists" << endl;
         return -1;
     }
 
@@ -129,7 +146,6 @@ int main(int argc, char *argv[])
     g->set_rule(0);
     cout << "MESSAGE game rule: " << g->get_rule() << endl;
 
-    unsigned int u_timeout_turn = 30000;
 #ifdef USE_CUDA
     double per_sims = (double)(u_timeout_turn) / (double)(4 * 3000);
 #else
@@ -142,7 +158,7 @@ int main(int argc, char *argv[])
 
     string command;
     unsigned int size = 0;
-    char dot = NULL;
+    char dot = ',';
     bool isPlaying = false;
     for (;;)
     {
@@ -172,7 +188,7 @@ int main(int argc, char *argv[])
             }
             else
             {
-                cout << "ERROR" << endl;
+                cout << "ERROR unsupported board size!" << endl;
             }
         }
         // else if (command == "RESTART")
@@ -543,44 +559,116 @@ int main(int argc, char *argv[])
                 {
                     if (s_model_path.find("free-style") == string::npos)
                     {
-                        bChangeModule = true;
-                        cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "free-style_15x15_533.onnx";
-                        cout << "MESSAGE model load path: " << s_model_path << endl;
-                        g->set_rule(0);
+                        if (std::filesystem::exists(s_config_file_path))
+                        {
+                            cout << "MESSAGE change model path!" << endl;
+                            toml_data = toml::parse(s_config_file_path);
+                            if (toml_data["model"].is_table())
+                            {
+                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "free_style_model");
+                                if (std::filesystem::exists(s_tmp_path))
+                                {
+                                    cout << "MESSAGE model exists" << endl;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    s_model_path = s_tmp_path;
+                                    bChangeModule = true;
+                                    g->set_rule(0);
+                                }
+                                else
+                                {
+                                    cout << "ERROR model not exists" << endl;
+                                }
+                            }
+                        }
+                        else
+                            cout << "ERROR config file not exists" << endl;
                     }
                 }
                 else if (4 == (value & 4))
                 {
                     if (s_model_path.find("renju") == string::npos)
                     {
-                        bChangeModule = true;
-                        cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "renju_15x15_487.onnx";
-                        cout << "MESSAGE model load path: " << s_model_path << endl;
-                        g->set_rule(4);
+                        if (std::filesystem::exists(s_config_file_path))
+                        {
+                            cout << "MESSAGE change model path!" << endl;
+                            toml_data = toml::parse(s_config_file_path);
+                            if (toml_data["model"].is_table())
+                            {
+                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "renju_model");
+                                if (std::filesystem::exists(s_tmp_path))
+                                {
+                                    cout << "MESSAGE model exists" << endl;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    s_model_path = s_tmp_path;
+                                    bChangeModule = true;
+                                    g->set_rule(4);
+                                }
+                                else
+                                {
+                                    cout << "ERROR model not exists" << endl;
+                                }
+                            }
+                        }
+                        else
+                            cout << "ERROR config file not exists" << endl;
                     }
                 }
                 else if (1 == (value & 1))
                 {
                     if (s_model_path.find("standard") == string::npos)
                     {
-                        bChangeModule = true;
-                        cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "standard_15x15_479.onnx";
-                        cout << "MESSAGE model load path: " << s_model_path << endl;
-                        g->set_rule(1);
+                        if (std::filesystem::exists(s_config_file_path))
+                        {
+                            cout << "MESSAGE change model path!" << endl;
+                            toml_data = toml::parse(s_config_file_path);
+                            if (toml_data["model"].is_table())
+                            {
+                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_model");
+                                if (std::filesystem::exists(s_tmp_path))
+                                {
+                                    cout << "MESSAGE model exists" << endl;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    s_model_path = s_tmp_path;
+                                    bChangeModule = true;
+                                    g->set_rule(1);
+                                }
+                                else
+                                {
+                                    cout << "ERROR model not exists" << endl;
+                                }
+                            }
+                        }
+                        else
+                            cout << "ERROR config file not exists" << endl;
                     }
                 }
                 else if (8 == (value & 8))
                 {
                     if (s_model_path.find("caro") == string::npos)
                     {
-                        bChangeModule = true;
-                        cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "caro_15x15_488.onnx";
-                        cout << "MESSAGE model load path: " << s_model_path << endl;
-                        g->set_rule(8);
+                        if (std::filesystem::exists(s_config_file_path))
+                        {
+                            cout << "MESSAGE change model path!" << endl;
+                            toml_data = toml::parse(s_config_file_path);
+                            if (toml_data["model"].is_table())
+                            {
+                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "caro_model");
+                                if (std::filesystem::exists(s_tmp_path))
+                                {
+                                    cout << "MESSAGE model exists" << endl;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    s_model_path = s_tmp_path;
+                                    bChangeModule = true;
+                                    g->set_rule(8);
+                                }
+                                else
+                                {
+                                    cout << "ERROR model not exists" << endl;
+                                }
+                            }
+                        }
+                        else
+                            cout << "ERROR config file not exists" << endl;
                     }
                 }
                 else

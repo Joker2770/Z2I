@@ -17,6 +17,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
+                "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"
 )
 link_directories("${ONNXRUNTIME_ROOTDIR}/lib")
 
@@ -44,7 +45,7 @@ endif()
 
 if(DEFINED ONNX_DLLS)
     add_custom_command(TARGET pbrain-Z2I POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                    ${ONNX_DLLS} $<TARGET_FILE_DIR:pbrain-Z2I>)
+                    ${ONNX_DLLS} ${CMAKE_SOURCE_DIR}/config/config.toml $<TARGET_FILE_DIR:pbrain-Z2I>)
 else()
     message("ONNX_DLLS does not exist or is empty.")
 endif()

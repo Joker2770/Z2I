@@ -45,6 +45,9 @@ CMakefiles.txt:  convert the onnxruntime path to your own path
 
 
 ```shell
+git clone --recursive https://github.com/Joker2770/Z2I.git
+# git submodule update --init --recursive
+cd Z2I
 mkdir build
 cp ./scripts/*.sh ./build/
 cd ./build
