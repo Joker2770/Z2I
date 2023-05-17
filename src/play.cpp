@@ -67,20 +67,6 @@ void SelfPlay::play(unsigned int saved_id)
         auto action_probs = mcts->get_action_probs(g.get(), temp);
         // auto action_probs = m->get_action_probs(g.get(), 1);
         // int best_action = m->get_best_action_from_prob(action_probs);
-        board_type board = g->get_board();
-        for (int i = 0; i < BORAD_SIZE * BORAD_SIZE; i++)
-        {
-            p_buffer[step][i] = (float)action_probs[i];
-        }
-        for (int i = 0; i < BORAD_SIZE; i++)
-        {
-            for (int j = 0; j < BORAD_SIZE; j++)
-            {
-                board_buffer[step][i][j] = board[i][j];
-            }
-        }
-        col_buffer[step] = g->get_current_color();
-        last_move_buffer[step] = g->get_last_move();
 
         std::vector<int> lm = g->get_legal_moves();
         double sum = 0;
@@ -111,7 +97,23 @@ void SelfPlay::play(unsigned int saved_id)
             }
         }
 
-        int res = mcts->get_action_by_sample(action_probs);
+        board_type board = g->get_board();
+        for (int i = 0; i < BORAD_SIZE * BORAD_SIZE; i++)
+        {
+            p_buffer[step][i] = (float)action_probs[i];
+        }
+        for (int i = 0; i < BORAD_SIZE; i++)
+        {
+            for (int j = 0; j < BORAD_SIZE; j++)
+            {
+                board_buffer[step][i][j] = board[i][j];
+            }
+        }
+        col_buffer[step] = g->get_current_color();
+        last_move_buffer[step] = g->get_last_move();
+
+        // int res = mcts->get_action_by_sample(action_probs);
+        int res = mcts->get_best_action_from_prob(action_probs);
         mcts->update_with_move(res);
         g->execute_move(res);
         game_state = g->get_game_status();

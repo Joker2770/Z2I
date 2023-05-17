@@ -51,14 +51,14 @@ SOFTWARE.
 #define N_IN_ROW 5
 #define NUM_MCT_THREADS 4
 #define NUM_MCT_SIMS 1600
-#define EXPLORE_STEP 10
+#define EXPLORE_STEP 100
 #define C_PUCT 5
 #define C_VIRTUAL_LOSS 3
 // #define NUM_CHANNELS 256
 // #define NUM_LAYERS 4
 
 #define BATCH_SIZE 256
-#define DIRI 0.01
+#define DIRI 0.05
 
 #define NUM_TRAIN_THREADS 10
 #endif

@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 
     std::shared_ptr<NeuralNetwork> module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_model_path = exe_path.string() + "free-style_15x15_502.onnx";
+    string s_model_path = exe_path.string() + "free-style_15x15_533.onnx";
     cout << "MESSAGE model load path: " << s_model_path << endl;
     if (std::filesystem::exists(s_model_path))
     {
@@ -545,7 +545,7 @@ int main(int argc, char *argv[])
                     {
                         bChangeModule = true;
                         cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "free-style_15x15_502.onnx";
+                        s_model_path = exe_path.string() + "free-style_15x15_533.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(0);
                     }
@@ -578,7 +578,7 @@ int main(int argc, char *argv[])
                     {
                         bChangeModule = true;
                         cout << "MESSAGE change model path!" << endl;
-                        s_model_path = exe_path.string() + "caro_15x15_0.onnx";
+                        s_model_path = exe_path.string() + "caro_15x15_488.onnx";
                         cout << "MESSAGE model load path: " << s_model_path << endl;
                         g->set_rule(8);
                     }
