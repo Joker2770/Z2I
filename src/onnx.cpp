@@ -98,7 +98,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 #endif
   // sess = &session;
 
-  size_t input_tensor_size = CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE;
+  size_t input_tensor_size = CHANNEL_SIZE * BOARD_SIZE * BOARD_SIZE;
   // simplify ... using known dim values to calculate size
   // use OrtGetTensorShapeElementCount() to get official size!
 
@@ -194,7 +194,7 @@ std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
 
 std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int last_move, int cur_player)
 {
-  auto input_tensor_values = std::vector<float>(CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE);
+  auto input_tensor_values = std::vector<float>(CHANNEL_SIZE * BOARD_SIZE * BOARD_SIZE);
   int first = 0;
   int second = 0;
   if (cur_player == BLACK)
@@ -205,17 +205,17 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
   {
     first = 1;
   }
-  for (int r = 0; r < BORAD_SIZE; r++)
+  for (int r = 0; r < BOARD_SIZE; r++)
   {
-    for (int c = 0; c < BORAD_SIZE; c++)
+    for (int c = 0; c < BOARD_SIZE; c++)
     {
       switch (board[r][c])
       {
       case 1:
-        input_tensor_values[first * BORAD_SIZE * BORAD_SIZE + r * BORAD_SIZE + c] = 1;
+        input_tensor_values[first * BOARD_SIZE * BOARD_SIZE + r * BOARD_SIZE + c] = 1;
         break;
       case -1:
-        input_tensor_values[second * BORAD_SIZE * BORAD_SIZE + r * BORAD_SIZE + c] = 1;
+        input_tensor_values[second * BOARD_SIZE * BOARD_SIZE + r * BOARD_SIZE + c] = 1;
         break;
       default:
         break;
@@ -223,7 +223,7 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
     }
     if (last_move >= 0)
     {
-      input_tensor_values[2 * BORAD_SIZE * BORAD_SIZE + last_move] = 1;
+      input_tensor_values[2 * BOARD_SIZE * BOARD_SIZE + last_move] = 1;
     }
   }
   return input_tensor_values;
@@ -231,12 +231,12 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
   // std::vector<int> board0;
   // std::vector<int> state0;
   // std::vector<int> state1;
-  // for (unsigned int i = 0; i < BORAD_SIZE; i++) {
+  // for (unsigned int i = 0; i < BOARD_SIZE; i++) {
   //     board0.insert(board0.end(), board[i].begin(), board[i].end());
   // }
 
   // torch::Tensor temp =
-  //     torch::from_blob(&board0[0], { 1, 1, BORAD_SIZE, BORAD_SIZE }, torch::dtype(torch::kInt32));
+  //     torch::from_blob(&board0[0], { 1, 1, BOARD_SIZE, BOARD_SIZE }, torch::dtype(torch::kInt32));
 
   // torch::Tensor state0 = temp.gt(0).toType(torch::kFloat32);
   // torch::Tensor state1 = temp.lt(0).toType(torch::kFloat32);
@@ -246,10 +246,10 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int
   // }
 
   // torch::Tensor state2 =
-  //     torch::zeros({ 1, 1, BORAD_SIZE, BORAD_SIZE }, torch::dtype(torch::kFloat32));
+  //     torch::zeros({ 1, 1, BOARD_SIZE, BOARD_SIZE }, torch::dtype(torch::kFloat32));
 
   // if (last_move != -1) {
-  //     state2[0][0][last_move / BORAD_SIZE][last_move % BORAD_SIZE] = 1;
+  //     state2[0][0][last_move / BOARD_SIZE][last_move % BOARD_SIZE] = 1;
   // }
 
   // torch::Tensor states = torch::cat({ state0, state1 }, 1);
@@ -308,7 +308,7 @@ void NeuralNetwork::infer()
 
   // std::cout<<"promises size  = "<<promises.size()<<std::endl;
 
-  size_t input_tensor_size = input_node_dims[0] * CHANNEL_SIZE * BORAD_SIZE * BORAD_SIZE;
+  size_t input_tensor_size = input_node_dims[0] * CHANNEL_SIZE * BOARD_SIZE * BOARD_SIZE;
   std::vector<float> state_all(0);
   for (auto &item : states)
   {
@@ -333,11 +333,11 @@ void NeuralNetwork::infer()
 
     // Get pointer to output tensor float values
 
-    std::vector<double> prob(P + i * BORAD_SIZE * BORAD_SIZE, P + (i + 1) * BORAD_SIZE * BORAD_SIZE);
+    std::vector<double> prob(P + i * BOARD_SIZE * BOARD_SIZE, P + (i + 1) * BOARD_SIZE * BOARD_SIZE);
     std::vector<double> value{V[i]};
-    // assert(prob.size() == BORAD_SIZE * BORAD_SIZE);
+    // assert(prob.size() == BOARD_SIZE * BOARD_SIZE);
 
-    for (int j = 0; j < BORAD_SIZE * BORAD_SIZE; j++)
+    for (int j = 0; j < BOARD_SIZE * BOARD_SIZE; j++)
     {
       prob[j] = std::exp(prob[j]);
       // printf("prob [%d] =  %f\n", j, prob[j]);

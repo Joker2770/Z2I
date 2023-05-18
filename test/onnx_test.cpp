@@ -35,7 +35,7 @@ using namespace std;
 
 
 int main() {
-  Gomoku gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+  Gomoku gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
 
   // test execute_move
   gomoku.execute_move(0);

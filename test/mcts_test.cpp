@@ -32,7 +32,7 @@ SOFTWARE.
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  auto g = std::make_shared<Gomoku>(BORAD_SIZE, N_IN_ROW, BLACK);
+  auto g = std::make_shared<Gomoku>(BOARD_SIZE, N_IN_ROW, BLACK);
   //Gomoku g(15, 5, 1);
   //g.execute_move(12);
   //g->execute_move(12);
@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
   }
   //module->save_weights("net.pt");
   
-  MCTS m(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+  MCTS m(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
 
   std::cout << "Running..." << std::endl;
 
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
       y = move_j - 1;
       is_illlegal = g->is_illegal(x,y);
     }
-    int my_move = x * BORAD_SIZE + y;
+    int my_move = x * BOARD_SIZE + y;
     m.update_with_move(my_move);
     g->execute_move(my_move);
     game_state = g->get_game_status();

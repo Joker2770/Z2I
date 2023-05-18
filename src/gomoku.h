@@ -65,7 +65,7 @@ public:
   inline unsigned int get_rule() const { return this->rule_flag; };
 
 private:
-  board_type board;                   // game borad
+  board_type board;                   // game board
   std::vector<move_type> record_list; // record moves in order
   const unsigned int n;               // board size
   const unsigned int n_in_row;        // 5 in row or else

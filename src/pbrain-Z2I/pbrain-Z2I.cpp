@@ -115,14 +115,18 @@ int main(int argc, char *argv[])
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
     string s_config_file_path = exe_path.string() + "config.toml";
     string s_model_path;
-    unsigned int u_timeout_turn = 30000;
+    unsigned int u_num_mct_sims = 1600;
+    unsigned int u_num_mct_threads = 10;
     toml::value toml_data;
     if (std::filesystem::exists(s_config_file_path))
     {
         toml_data = toml::parse(s_config_file_path);
-        if (toml_data["time"].is_table())
-            u_timeout_turn = toml::find<unsigned int>(toml_data["time"], "timeout_turn");
-        cout << "MESSAGE timeout_turn: " << u_timeout_turn << endl;
+        if (toml_data["MCTS"].is_table())
+            u_num_mct_sims = toml::find<unsigned int>(toml_data["MCTS"], "num_mct_sims");
+        if (toml_data["MCTS"].is_table())
+            u_num_mct_threads = toml::find<unsigned int>(toml_data["MCTS"], "num_mct_threads");
+        cout << "MESSAGE num_mct_sims: " << u_num_mct_sims << endl;
+        cout << "MESSAGE num_mct_threads: " << u_num_mct_threads << endl;
         if (toml_data["model"].is_table())
             s_model_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "default_model");
         cout << "MESSAGE model load path: " << s_model_path << endl;
@@ -143,19 +147,12 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+    Gomoku *g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
     g->set_rule(0);
     cout << "MESSAGE game rule: " << g->get_rule() << endl;
 
-#ifdef USE_CUDA
-    double per_sims = (double)(u_timeout_turn) / (double)(4 * 3000);
-#else
-    double per_sims = (double)(u_timeout_turn) / (double)(4 * 30000);
-#endif
-    cout << "DEBUG per_sims: " << per_sims << endl;
-
     MCTS *m;
-    m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
 
     string command;
     unsigned int size = 0;
@@ -181,7 +178,7 @@ int main(int argc, char *argv[])
                 delete g;
                 g = nullptr;
             }
-            g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+            g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
 
             if (size == 15)
             {
@@ -249,7 +246,7 @@ int main(int argc, char *argv[])
                 delete g;
                 g = nullptr;
             }
-            g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+            g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
 
             cin >> command;
             while (command != "DONE")
@@ -484,8 +481,6 @@ int main(int argc, char *argv[])
                 {
                     value = atoi(s_value);
                 }
-
-                u_timeout_turn = value;
             }
             else if (key == "timeout_match")
             {
@@ -493,19 +488,6 @@ int main(int argc, char *argv[])
                 cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
-
-                // if (value != 0)
-                // {
-                //     if (value < u_timeout_turn)
-                //     {
-                //         if (nullptr != m)
-                //         {
-                //             delete m;
-                //             m = nullptr;
-                //         }
-                //         m = new MCTS(module, NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * NUM_MCT_THREADS * (value / u_timeout_turn) * per_sims + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
-                //     }
-                // }
             }
             else if (key == "time_left")
             {
@@ -514,17 +496,14 @@ int main(int argc, char *argv[])
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
-                if (value != 0)
+                if (value < 30000)
                 {
-                    if (value < u_timeout_turn)
+                    if (nullptr != m)
                     {
-                        if (nullptr != m)
-                        {
-                            delete m;
-                            m = nullptr;
-                        }
-                        m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims * (value * 0.1 / u_timeout_turn) + 1), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                        delete m;
+                        m = nullptr;
                     }
+                    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)log10((u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS) + 1) + 10, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
                 }
             }
             else if (key == "max_memory")
@@ -687,7 +666,7 @@ int main(int argc, char *argv[])
                             delete m;
                             m = nullptr;
                         }
-                        m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, (unsigned int)(NUM_MCT_SIMS * log(NUM_MCT_THREADS) * per_sims), C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+                        m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
                     }
                     else
                     {

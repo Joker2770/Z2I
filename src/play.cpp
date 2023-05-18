@@ -44,16 +44,16 @@ SelfPlay::SelfPlay(NeuralNetwork *nn) : // p_buffer(new p_buff_type()),
 
 void SelfPlay::play(unsigned int saved_id)
 {
-    auto g = std::make_shared<Gomoku>(BORAD_SIZE, N_IN_ROW, BLACK);
-    MCTS *mcts = new MCTS(nn, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+    auto g = std::make_shared<Gomoku>(BOARD_SIZE, N_IN_ROW, BLACK);
+    MCTS *mcts = new MCTS(nn, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
     std::pair<int, int> game_state;
     game_state = g->get_game_status();
     std::cout << "game rule: " << g->get_rule() << std::endl;
     // std::cout << "begin !!" << std::endl;
     int step = 0;
-    board_buff_type board_buffer(BUFFER_LEN, vector<vector<int>>(BORAD_SIZE, vector<int>(BORAD_SIZE)));
+    board_buff_type board_buffer(BUFFER_LEN, vector<vector<int>>(BOARD_SIZE, vector<int>(BOARD_SIZE)));
     v_buff_type v_buffer(BUFFER_LEN);
-    p_buff_type p_buffer(BUFFER_LEN, vector<float>(BORAD_SIZE * BORAD_SIZE)); // = new p_buff_type();
+    p_buff_type p_buffer(BUFFER_LEN, vector<float>(BOARD_SIZE * BOARD_SIZE)); // = new p_buff_type();
     vector<int> col_buffer(BUFFER_LEN);
     vector<int> last_move_buffer(BUFFER_LEN);
     // diri noise
@@ -69,13 +69,13 @@ void SelfPlay::play(unsigned int saved_id)
         // int best_action = m->get_best_action_from_prob(action_probs);
 
         board_type board = g->get_board();
-        for (int i = 0; i < BORAD_SIZE * BORAD_SIZE; i++)
+        for (int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++)
         {
             p_buffer[step][i] = (float)action_probs[i];
         }
-        for (int i = 0; i < BORAD_SIZE; i++)
+        for (int i = 0; i < BOARD_SIZE; i++)
         {
-            for (int j = 0; j < BORAD_SIZE; j++)
+            for (int j = 0; j < BOARD_SIZE; j++)
             {
                 board_buffer[step][i][j] = board[i][j];
             }
@@ -128,15 +128,15 @@ void SelfPlay::play(unsigned int saved_id)
 
     for (int i = 0; i < step; i++)
     {
-        for (int j = 0; j < BORAD_SIZE; j++)
+        for (int j = 0; j < BOARD_SIZE; j++)
         {
-            bestand.write(reinterpret_cast<char *>(&board_buffer[i][j][0]), BORAD_SIZE * sizeof(int));
+            bestand.write(reinterpret_cast<char *>(&board_buffer[i][j][0]), BOARD_SIZE * sizeof(int));
         }
     }
 
     for (int i = 0; i < step; i++)
     {
-        bestand.write(reinterpret_cast<char *>(&p_buffer[i][0]), BORAD_SIZE * BORAD_SIZE * sizeof(float));
+        bestand.write(reinterpret_cast<char *>(&p_buffer[i][0]), BOARD_SIZE * BOARD_SIZE * sizeof(float));
         v_buffer[i] = col_buffer[i] * game_state.second;
     }
 
@@ -158,18 +158,18 @@ void SelfPlay::play(unsigned int saved_id)
     // inlezen.open("./data/data_"+str(id), ios::in | ios::binary);
     // inlezen.read(reinterpret_cast<char*>(&new_step), sizeof(int));
 
-    // board_buff_type new_board_buffer(new_step, vector<vector<int>>(BORAD_SIZE, vector<int>(BORAD_SIZE)));
-    // p_buff_type new_p_buffer(new_step, vector<float>(BORAD_SIZE * BORAD_SIZE));
+    // board_buff_type new_board_buffer(new_step, vector<vector<int>>(BOARD_SIZE, vector<int>(BOARD_SIZE)));
+    // p_buff_type new_p_buffer(new_step, vector<float>(BOARD_SIZE * BOARD_SIZE));
     // v_buff_type new_v_buffer(new_step);
 
     // for (int i = 0; i < step; i++) {
-    //     for (int j = 0; j < BORAD_SIZE; j++) {
-    //         inlezen.read(reinterpret_cast<char*>(&new_board_buffer[i][j][0]), BORAD_SIZE * sizeof(int));
+    //     for (int j = 0; j < BOARD_SIZE; j++) {
+    //         inlezen.read(reinterpret_cast<char*>(&new_board_buffer[i][j][0]), BOARD_SIZE * sizeof(int));
     //     }
     // }
 
     // for (int i = 0; i < step; i++) {
-    //     inlezen.read(reinterpret_cast<char*>(&new_p_buffer[i][0]), BORAD_SIZE * BORAD_SIZE * sizeof(float));
+    //     inlezen.read(reinterpret_cast<char*>(&new_p_buffer[i][0]), BOARD_SIZE * BOARD_SIZE * sizeof(float));
     // }
 
     // inlezen.read(reinterpret_cast<char*>(&new_v_buffer[0]), step * sizeof(int));

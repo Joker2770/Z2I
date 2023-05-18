@@ -94,7 +94,7 @@ void Gomoku::execute_move(move_type move)
 
   if (this->board[i][j] != 0)
   {
-    throw std::runtime_error("execute_move borad[i][j] != 0.");
+    throw std::runtime_error("execute_move board[i][j] != 0.");
   }
 
   this->board[i][j] = this->cur_color;

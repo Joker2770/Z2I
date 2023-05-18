@@ -5,6 +5,8 @@ renju_model="renju_15x15_487.onnx"
 standard_model="standard_15x15_479.onnx"
 caro_model="caro_15x15_488.onnx"
 
-[time]
-# time(ms) limitation per step
-timeout_turn=30000
+[MCTS]
+# number of MCTS simulations
+num_mct_sims=100
+# number of MCTS threads
+num_mct_threads=10

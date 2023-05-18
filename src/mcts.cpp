@@ -344,7 +344,7 @@ int MCTS::get_best_action_from_prob(std::vector<double> &action_probs)
   int best_action = -1;
   double best_prob = -1.0f;
 
-  for (unsigned int i = 0; i < BORAD_SIZE * BORAD_SIZE; i++)
+  for (unsigned int i = 0; i < BOARD_SIZE * BOARD_SIZE; i++)
   {
     if (action_probs[i] > best_prob)
     {

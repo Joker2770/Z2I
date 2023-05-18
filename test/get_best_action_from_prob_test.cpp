@@ -31,7 +31,7 @@ SOFTWARE.
 using namespace std;
 
 int main(int argc, char* argv[]) {
-  Gomoku *g = new Gomoku(BORAD_SIZE, N_IN_ROW, BLACK);
+  Gomoku *g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
   
   std::shared_ptr<NeuralNetwork> module = nullptr;
   if (argc <= 1) {
@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
   }
   //module->save_weights("net.pt");
   
-  MCTS *m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BORAD_SIZE * BORAD_SIZE);
+  MCTS *m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
 
   std::cout << "Running..." << std::endl;
 
