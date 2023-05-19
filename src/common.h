@@ -61,6 +61,10 @@ SOFTWARE.
 #define DIRI 0.01
 
 #define NUM_TRAIN_THREADS 10
+
+// 1 - free-style, 2 - continuous, 4 - renju, 8 - caro
+#define DEFAULT_RULE 0
+
 #endif
 
 #define BLACK 1

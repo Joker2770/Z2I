@@ -15,6 +15,12 @@ endif()
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+option(ENABLE_CUDA OFF)
+if(ENABLE_CUDA)
+    message("build project with CUDA")
+    add_definitions(-DUSE_CUDA)
+endif(ENABLE_CUDA)
+
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
                 "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"
