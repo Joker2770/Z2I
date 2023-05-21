@@ -86,7 +86,7 @@ Increase or decrease `num_mct_sims` in `config.toml` (default 100) to increase t
 
 Here 1(or 0) = AI play with black(or white) pieces. 
 
-Increase or decrease `NUM_MCT_SIMS" in src/common.h (default 1600) to increase the power or speed of AI.
+Increase or decrease `NUM_MCT_SIMS` in src/common.h (default 1600) to increase the power or speed of AI.
 
 ## reference
 1.  [https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
