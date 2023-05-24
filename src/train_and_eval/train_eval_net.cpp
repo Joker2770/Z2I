@@ -125,11 +125,11 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
         futures[i].wait();
         if (nn_a != nullptr)
         {
-            nn_a->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
+            nn_a->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
         }
         if (nn_b != nullptr)
         {
-            nn_b->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
+            nn_b->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
         }
     }
     // cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;

@@ -183,12 +183,12 @@ void SelfPlay::self_play_for_train(unsigned int game_num, unsigned int start_bat
         auto future = thread_pool->commit(std::bind(&SelfPlay::play, this, start_batch_id + i));
         futures.emplace_back(std::move(future));
     }
-    this->nn->batch_size = game_num * NUM_MCT_THREADS;
+    this->nn->set_batch_size(game_num * NUM_MCT_THREADS);
     for (unsigned int i = 0; i < futures.size(); i++)
     {
         futures[i].wait();
 
-        this->nn->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
+        this->nn->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
         // cout << "end" << endl;
     }
     // return { *this->board_buffer , *this->p_buffer ,*this->v_buffer };

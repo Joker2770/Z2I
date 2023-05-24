@@ -56,7 +56,10 @@ public:
   // std::shared_ptr<torch::jit::script::Module> module;  // torch module    origin:private
   static std::vector<float> transorm_gomoku_to_Tensor(Gomoku *gomoku);
   static std::vector<float> transorm_board_to_Tensor(board_type board, int last_move, int cur_player);
-  unsigned int batch_size; // batch size
+
+  bool set_batch_size(unsigned int u_batch_size);
+
+  inline unsigned int get_batch_size() const { return this->batch_size; }
 
 private:
   Ort::Env env;
@@ -80,4 +83,6 @@ private:
   std::mutex lock;             // lock for tasks queue
   std::condition_variable cv;  // condition variable for tasks queue
   std::vector<int64_t> input_node_dims;
+
+  unsigned int batch_size; // batch size
 };

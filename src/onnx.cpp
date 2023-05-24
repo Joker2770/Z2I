@@ -392,3 +392,9 @@ void NeuralNetwork::infer()
   //     promises[i].set_value(std::move(temp));
   //   }
 }
+
+bool NeuralNetwork::set_batch_size(unsigned int u_batch_size)
+{
+  this->batch_size = u_batch_size;
+  return true;
+}
