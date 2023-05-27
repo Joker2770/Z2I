@@ -21,6 +21,12 @@ if(ENABLE_CUDA)
     add_definitions(-DUSE_CUDA)
 endif(ENABLE_CUDA)
 
+option(ENABLE_OPENVINO OFF)
+if(ENABLE_OPENVINO)
+    message("build project with OPENVINO")
+    add_definitions(-DUSE_OPENVINO)
+endif(ENABLE_OPENVINO)
+
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
                 "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"

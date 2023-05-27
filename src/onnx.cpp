@@ -84,6 +84,17 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // std::cout << "DEBUG ......Enable CUDA......" << std::endl;
 #endif
 
+// #define USE_OPENVINO
+#ifdef USE_OPENVINO
+  const OrtApiBase* ptr_api_base = OrtGetApiBase();
+  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  // OpenVINO options set
+  OrtOpenVINOProviderOptions OpenVINO_Options;
+  OpenVINO_Options.device_type = "CPU_FP32";
+  OpenVINO_Options.device_id = "";
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_OpenVINO(session_options, &OpenVINO_Options));
+#endif
+
 #ifdef _WIN32
   // std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
   std::wstring wstr(model_path.length(), L' ');
