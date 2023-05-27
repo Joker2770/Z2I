@@ -686,7 +686,7 @@ int main(int argc, char *argv[])
             }
         }
         else if (command == "ABOUT")
-            cout << "name=\"Z2I\", version=\"0.1\", author=\"Joker2770\", country=\"CHN\"" << endl;
+            cout << "name=\"Z2I\", version=\"0.2\", author=\"Joker2770\", country=\"CHN\"" << endl;
         else if (command == "END")
             break;
         else
