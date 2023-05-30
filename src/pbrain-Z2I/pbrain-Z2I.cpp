@@ -595,31 +595,64 @@ int main(int argc, char *argv[])
                 }
                 else if (8 == (value & 8))
                 {
-                    if (s_model_path.find("caro") == string::npos)
+                    // standard caro
+                    if (1 == (value & 1))
                     {
-                        if (std::filesystem::exists(s_config_file_path))
+                        if (s_model_path.find("standard_caro") == string::npos)
                         {
-                            cout << "MESSAGE change model path!" << endl;
-                            toml_data = toml::parse(s_config_file_path);
-                            if (toml_data["model"].is_table())
+                            if (std::filesystem::exists(s_config_file_path))
                             {
-                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "caro_model");
-                                if (std::filesystem::exists(s_tmp_path))
+                                cout << "MESSAGE change model path!" << endl;
+                                toml_data = toml::parse(s_config_file_path);
+                                if (toml_data["model"].is_table())
                                 {
-                                    cout << "MESSAGE model exists" << endl;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
-                                    s_model_path = s_tmp_path;
-                                    bChangeModule = true;
-                                    g->set_rule(8);
-                                }
-                                else
-                                {
-                                    cout << "ERROR model not exists" << endl;
+                                    string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_caro_model");
+                                    if (std::filesystem::exists(s_tmp_path))
+                                    {
+                                        cout << "MESSAGE model exists" << endl;
+                                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                                        s_model_path = s_tmp_path;
+                                        bChangeModule = true;
+                                        g->set_rule(9);
+                                    }
+                                    else
+                                    {
+                                        cout << "ERROR model not exists" << endl;
+                                    }
                                 }
                             }
+                            else
+                                cout << "ERROR config file not exists" << endl;
                         }
-                        else
-                            cout << "ERROR config file not exists" << endl;
+                    }
+                    else
+                    {
+                        if (s_model_path.find("caro") == string::npos || (s_model_path.find("standard_caro") != string::npos))
+                        {
+                            if (std::filesystem::exists(s_config_file_path))
+                            {
+                                cout << "MESSAGE change model path!" << endl;
+                                toml_data = toml::parse(s_config_file_path);
+                                if (toml_data["model"].is_table())
+                                {
+                                    string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "caro_model");
+                                    if (std::filesystem::exists(s_tmp_path))
+                                    {
+                                        cout << "MESSAGE model exists" << endl;
+                                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                                        s_model_path = s_tmp_path;
+                                        bChangeModule = true;
+                                        g->set_rule(8);
+                                    }
+                                    else
+                                    {
+                                        cout << "ERROR model not exists" << endl;
+                                    }
+                                }
+                            }
+                            else
+                                cout << "ERROR config file not exists" << endl;
+                        }
                     }
                 }
                 else if (1 == (value & 1))

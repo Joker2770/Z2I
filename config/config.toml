@@ -1,9 +1,10 @@
 [model]
-default_model="models/free-style_15x15_619.onnx"
-free_style_model="models/free-style_15x15_619.onnx"
-renju_model="models/renju_15x15_508.onnx"
-standard_model="models/standard_15x15_496.onnx"
-caro_model="models/caro_15x15_488.onnx"
+default_model="models/free-style_15x15_651.onnx"
+free_style_model="models/free-style_15x15_651.onnx"
+renju_model="models/renju_15x15_514.onnx"
+standard_model="models/standard_15x15_500.onnx"
+caro_model="models/caro_15x15_497.onnx"
+standard_caro_model="models/standard_caro_15x15_488.onnx"
 
 [MCTS]
 # number of MCTS simulations

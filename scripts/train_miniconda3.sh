@@ -16,7 +16,7 @@ do
 		{
 		# sleep 3;echo 1>>aa && echo "done!"
 		exec ./train_net.sh generate $i
-		}&
+		}
 	done
 	wait
 	/data/miniconda3/bin/python ../python/learner.py train
