@@ -55,6 +55,18 @@ cmake ..    # (or 'cmake -A x64 ..')
 cmake --build . --config Release   # (or open .sln file through visual Studio 19 and generate for win10)
 ```
 
+or build with xmake toolchain(In this way, `onnruntime-1.11.1` will be installed with xrepo).
+
+```shell
+git clone --recursive https://github.com/Joker2770/Z2I.git
+# git submodule update --init --recursive
+cd Z2I
+mkdir build
+cp ./scripts/*.sh ./build/
+xmake config --mode=release
+xmake
+```
+
 ## Train (Linux)
 
 ```shell
