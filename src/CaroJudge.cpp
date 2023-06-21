@@ -51,12 +51,14 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
     else
         return false;
 
-    while (!this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+    while (true)
     {
         if (1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(2);
+        else if (this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+            vColor.push_back(3);
         else
             vColor.push_back(0);
 
@@ -69,12 +71,14 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
     reverse(vColor.begin(), vColor.end());
     p_drt_idx.first = p_idx.first - p_drt.first;
     p_drt_idx.second = p_idx.second - p_drt.second;
-    while (!this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+    while (true)
     {
         if (1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(2);
+        else if (this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+            vColor.push_back(3);
         else
             vColor.push_back(0);
 
@@ -94,7 +98,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
     {
         for (size_t j = 0; j <= vColor.size() - 7; ++j)
         {
-            for (size_t i = 0; i < 20; ++i)
+            for (size_t i = 0; i < 34; ++i)
             {
                 if (((WIN_SHAPES[i][0]) == (vColor[j])) &&
                     ((WIN_SHAPES[i][1]) == (vColor[j + 1])) &&
