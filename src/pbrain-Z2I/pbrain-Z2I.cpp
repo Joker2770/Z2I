@@ -549,8 +549,8 @@ int main(int argc, char *argv[])
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
                                     cout << "MESSAGE model exists" << endl;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     s_model_path = s_tmp_path;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     bChangeModule = true;
                                     g->set_rule(0);
                                 }
@@ -578,8 +578,8 @@ int main(int argc, char *argv[])
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
                                     cout << "MESSAGE model exists" << endl;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     s_model_path = s_tmp_path;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     bChangeModule = true;
                                     g->set_rule(4);
                                 }
@@ -610,8 +610,8 @@ int main(int argc, char *argv[])
                                     if (std::filesystem::exists(s_tmp_path))
                                     {
                                         cout << "MESSAGE model exists" << endl;
-                                        cout << "MESSAGE model load path: " << s_model_path << endl;
                                         s_model_path = s_tmp_path;
+                                        cout << "MESSAGE model load path: " << s_model_path << endl;
                                         bChangeModule = true;
                                         g->set_rule(9);
                                     }
@@ -639,8 +639,8 @@ int main(int argc, char *argv[])
                                     if (std::filesystem::exists(s_tmp_path))
                                     {
                                         cout << "MESSAGE model exists" << endl;
-                                        cout << "MESSAGE model load path: " << s_model_path << endl;
                                         s_model_path = s_tmp_path;
+                                        cout << "MESSAGE model load path: " << s_model_path << endl;
                                         bChangeModule = true;
                                         g->set_rule(8);
                                     }
@@ -669,8 +669,8 @@ int main(int argc, char *argv[])
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
                                     cout << "MESSAGE model exists" << endl;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     s_model_path = s_tmp_path;
+                                    cout << "MESSAGE model load path: " << s_model_path << endl;
                                     bChangeModule = true;
                                     g->set_rule(1);
                                 }

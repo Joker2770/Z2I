@@ -32,7 +32,6 @@ Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_colo
     : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(DEFAULT_RULE), free_style(new FreeStyleJudge()), standard(new StandardJudge()), renju(new RenjuJudge()), caro(new CaroJudge())
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
-  this->record_list.clear();
 }
 
 bool Gomoku::set_rule(unsigned int rule_flag)
@@ -98,28 +97,9 @@ void Gomoku::execute_move(move_type move)
   }
 
   this->board[i][j] = this->cur_color;
-  this->record_list.push_back(move);
   this->last_move = move;
   // change player
   this->cur_color = -this->cur_color;
-}
-
-void Gomoku::take_back_move()
-{
-  size_t s_tmp = this->record_list.size();
-  if (s_tmp >= 1)
-    this->record_list.pop_back();
-  size_t s_new = this->record_list.size();
-
-  if (s_new + 1 == s_tmp)
-  {
-    auto i = this->last_move / this->n;
-    auto j = this->last_move % this->n;
-    this->board[i][j] = 0;
-    this->last_move = this->record_list.back();
-    // change player
-    this->cur_color = -this->cur_color;
-  }
 }
 
 std::pair<int, int> Gomoku::get_game_status()
@@ -137,21 +117,21 @@ std::pair<int, int> Gomoku::get_game_status()
     int i_win = 0;
     if (nullptr != free_style)
       isWin = free_style->checkWin(this->board, this->last_move);
-    if (0x01 == (this->rule_flag & 0x01) && this->record_list.size() >= 9 && nullptr != standard)
+    if (0x01 == (this->rule_flag & 0x01) && (this->get_action_size() - this->get_legal_moves().size() >= 9) && nullptr != standard)
     {
       if (standard->checkWin(this->board, this->last_move))
         i_win |= 1;
       else
         isWin = false;
     }
-    if (0x04 == (this->rule_flag & 0x04) && this->record_list.size() >= 6 && nullptr != renju)
+    if (0x04 == (this->rule_flag & 0x04) && (this->get_action_size() - this->get_legal_moves().size() >= 6) && nullptr != renju)
     {
       if (renju->checkWin(this->board, this->last_move))
         i_win |= 4;
       else
         isWin = false;
     }
-    if (0x08 == (this->rule_flag & 0x08) && this->record_list.size() >= 9 && nullptr != caro)
+    if (0x08 == (this->rule_flag & 0x08) && (this->get_action_size() - this->get_legal_moves().size() >= 9) && nullptr != caro)
     {
       if (caro->checkWin(this->board, this->last_move))
         i_win |= 8;
@@ -169,7 +149,7 @@ std::pair<int, int> Gomoku::get_game_status()
 
     if (isWin)
       return {1, this->board[this->last_move / n][this->last_move % n]};
-    else if (4 == (this->rule_flag & 4) && this->record_list.size() >= 6 && nullptr != renju)
+    else if (4 == (this->rule_flag & 4) && (this->get_action_size() - this->get_legal_moves().size() >= 6) && nullptr != renju)
     {
       if ((1 == this->board[this->last_move / n][this->last_move % n]) && !(renju->isLegal(this->board, this->last_move)))
         return {1, -1};

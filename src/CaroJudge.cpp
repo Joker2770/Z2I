@@ -126,10 +126,7 @@ bool CaroJudge::checkWin(const board_type &board, int last_move)
 {
     if (last_move < 0)
     {
-        if (last_move == -1)
-            return true;
-        else
-            return false;
+        return false;
     }
 
     int n = board.size();

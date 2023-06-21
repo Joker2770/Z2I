@@ -61,12 +61,10 @@ public:
   inline move_type get_last_move() const { return this->last_move; }
   inline int get_current_color() const { return this->cur_color; }
   inline unsigned int get_n() const { return this->n; }
-  inline std::vector<move_type> get_record_list() const { return this->record_list; }
   inline unsigned int get_rule() const { return this->rule_flag; };
 
 private:
   board_type board;                   // game board
-  std::vector<move_type> record_list; // record moves in order
   const unsigned int n;               // board size
   const unsigned int n_in_row;        // 5 in row or else
   unsigned int rule_flag;
