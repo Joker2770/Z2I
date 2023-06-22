@@ -49,7 +49,6 @@ public:
   bool has_legal_moves();
   std::vector<int> get_legal_moves();
   void execute_move(move_type move);
-  void take_back_move();
   std::pair<int, int> get_game_status();
   void display() const;
   void render();
