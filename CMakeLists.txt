@@ -1,4 +1,4 @@
-project(AlphaZeroGomoku)
+project(Z2I)
 cmake_minimum_required(VERSION 3.13)
 
 if(CMAKE_COMPILER_IS_GNUCC)
