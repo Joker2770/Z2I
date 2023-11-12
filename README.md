@@ -80,7 +80,7 @@ If you want to train the model on windows 10, convert `train.sh` to `train.bat` 
 
 ## Human play with AI (inference)
 
-1.  Run `pbrain-Z2I`, for example in Linux:
+1.  Run `pbrain-Z2I`, for example on Linux:
 
 ```shell
 ./pbrain-Z2I
@@ -90,7 +90,7 @@ There is a better way to run `pbrain-Z2I` with the GUI program named [qpiskvork]
 
 Increase or decrease `num_mct_sims` in `config.toml` (default 100) to increase the power or speed of AI.
 
-2.  Run mcts_test, for example in Linux:
+2.  Run mcts_test, for example on Linux:
 
 ```shell
 ./mcts_test ./weights/1000.onnx 1
