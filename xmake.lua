@@ -1,5 +1,6 @@
 add_requires("onnxruntime 1.11.1")
 add_includedirs("src", {public = true})
+add_rules("mode.debug", "mode.release")
 
 set_languages("c11", "cxx17")
 
@@ -13,6 +14,9 @@ target("pbrain-Z2I")
     add_files("src/pbrain-Z2I/*.cpp")
     add_deps("Z2I")
     add_packages("onnxruntime")
+    after_build(function (target)
+        os.cp("$(scriptdir)/config/*.toml", target:targetdir())
+    end)
 
 target("train_and_eval")
     set_kind("binary")
