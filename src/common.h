@@ -63,7 +63,7 @@ SOFTWARE.
 
 #define NUM_TRAIN_THREADS 10
 
-// 1 - free-style, 2 - continuous, 4 - renju, 8 - caro
+// 0 - free-style, 1 - standard, 2 - continuous, 4 - renju, 8 - caro
 #define DEFAULT_RULE 0
 
 #endif
