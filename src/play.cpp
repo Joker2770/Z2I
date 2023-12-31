@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -122,8 +123,11 @@ void SelfPlay::play(unsigned int saved_id)
     }
     cout << "Self play: total step num = " << step << " winner = " << game_state.second << endl;
 
+    size_t hash_value = std::hash<std::shared_ptr<Gomoku>>{}(g);
+    std::ostringstream oss;
+    oss << hash_value;
     ofstream bestand;
-    bestand.open("./data/data_" + to_string(saved_id), ios::out | ios::binary);
+    bestand.open("./data/data_" + to_string(saved_id) + "_" + oss.str(), ios::out | ios::binary);
     bestand.write(reinterpret_cast<char *>(&step), sizeof(int));
 
     for (int i = 0; i < step; i++)
