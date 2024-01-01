@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023 - 2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,7 @@ void Gomoku::execute_move(move_type move)
   this->board[i][j] = this->cur_color;
   this->last_move = move;
   // change player
-  this->cur_color = -this->cur_color;
+  this->cur_color = -(this->cur_color);
 }
 
 std::pair<int, int> Gomoku::get_game_status()
