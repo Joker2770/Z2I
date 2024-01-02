@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -68,6 +68,12 @@ private:
   Ort::SessionOptions session_options;
   using task_type = std::pair<std::vector<float>, std::promise<return_type>>;
   // pair: input board state(float list), output P and V
+
+#if ORT_API_VERSION < ORT_OLD_VISON
+  char *_inputName, *_output_name0; // , * _output_name1;
+#else
+  std::shared_ptr<char> _inputName, _output_name0; // , _output_name1;
+#endif
 
   std::vector<const char *> input_node_names;
   std::vector<const char *> output_node_names;

@@ -1,4 +1,4 @@
-add_requires("onnxruntime 1.11.1")
+add_requires("onnxruntime 1.16.1")
 add_includedirs("src", {public = true})
 add_rules("mode.debug", "mode.release")
 

@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -118,7 +118,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 
   // print number of model input nodes
   size_t num_input_nodes = shared_session->GetInputCount();
-  this->input_node_names = std::vector<const char *>(num_input_nodes);
+  // this->input_node_names = std::vector<const char *>(num_input_nodes);
   // simplify... this model has only 1 input node {?, 3, 15, 15}.
   // Otherwise need vector<vector<>>
 
@@ -127,10 +127,13 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // iterate over all input nodes
   for (size_t i = 0; i < num_input_nodes; i++)
   {
-    // print input node names
-    char *input_name = shared_session->GetInputName(i, allocator);
-    // printf("Input %d : name = %s\n", i, input_name);
-    input_node_names[i] = input_name;
+#if ORT_API_VERSION < ORT_OLD_VISON
+		_inputName = shared_session->GetInputName(i, allocator);
+		input_node_names.push_back(_inputName);
+#else
+		_inputName = std::move(shared_session->GetInputNameAllocated(i, allocator));
+		input_node_names.push_back(_inputName.get());
+#endif
 
     // print input node types
     Ort::TypeInfo type_info = shared_session->GetInputTypeInfo(i);

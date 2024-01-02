@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,8 @@ SOFTWARE.
 // #define SMALL_BOARD_MODE
 // #define USE_CUDA
 // #define USE_OPENVINO
+
+#define ORT_OLD_VISON 12
 
 #define CHANNEL_SIZE 3
 
