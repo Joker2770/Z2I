@@ -149,9 +149,9 @@ std::pair<int, int> Gomoku::get_game_status()
 
     if (isWin)
       return {1, this->board[this->last_move / n][this->last_move % n]};
-    else if (4 == (this->rule_flag & 4) && (this->get_action_size() - this->get_legal_moves().size() >= 6) && nullptr != renju)
+    else if (0x04 == (this->rule_flag & 0x04) && nullptr != renju)
     {
-      if ((1 == this->board[this->last_move / n][this->last_move % n]) && !(renju->isLegal(this->board, this->last_move)))
+      if (!(renju->isLegal(this->board, this->last_move)))
         return {1, -1};
     }
   }
