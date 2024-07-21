@@ -106,23 +106,5 @@ Here 1(or 0) = AI play with black(or white) pieces.
 
 Increase or decrease `NUM_MCT_SIMS` in src/common.h (default 1600) to increase the power or speed of AI.
 
-## Weight strength
-
-* free-style_15x15
-
-```chart
-,elo
-502,1204.55
-523,1213.90
-524,1217.93
-525,1224.33
-
-
-type: line
-title: free-style weight strength
-x.title: weight number
-y.title: elo
-```
-
 ## reference
 1.  [https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
