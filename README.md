@@ -10,6 +10,12 @@ Currently only Gomoku and similar games such as Tic-Tac-Toe.
 
 Welcome other game implementions if you want to become the contributor!
 
+## Supported rules
+
+- [x] free-style
+- [x] standard
+- [x] renju
+- [x] caro
 
 ## Supported OS System
 Linux/Windows (tested on Ubuntu 20 + GPU/CPU and Windows 10 + GPU/CPU)
