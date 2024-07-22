@@ -33,7 +33,7 @@ fn main() {
             "{:?} [first_player_elo] [second_player_elo]",
             env::current_exe().expect("Failed to get file path of executable")
         );
-        panic!("Too less parameters!!!");
+        panic!("Parameters' length error!!!");
     }
 
     let mut bayes_elo_instance = BayesElo::new();
