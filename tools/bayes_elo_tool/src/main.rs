@@ -1,23 +1,21 @@
 use bayes_elo::BayesElo;
-use std::io;
 use std::env;
+use std::io;
 
 fn main() {
     let mut v_elo: Vec<f64> = Vec::new();
     let mut i = 0;
     for arg in env::args() {
-        
         println!("{} - {}", i, arg);
 
         if i > 0 {
             let num = arg.parse::<f64>();
-    
+
             match num {
-                Ok(n) => 
-                {
+                Ok(n) => {
                     println!("parse elo ok: {}", n);
                     v_elo.push(n);
-                },
+                }
                 Err(e) => println!("parse elo error: {}", e),
             }
         }
@@ -25,14 +23,16 @@ fn main() {
         i += 1;
     }
     let mut first_player_elo = 0.0;
-    let mut second_player_elo=0.0;
+    let mut second_player_elo = 0.0;
     println!("init elo: {}, {}", first_player_elo, second_player_elo);
     if 2 == v_elo.len() {
         first_player_elo = v_elo[0];
         second_player_elo = v_elo[1];
-    }
-    else {
-        println!("{:?} [first_player_elo] [second_player_elo]", env::current_exe().expect("Failed to get file path of executable"));
+    } else {
+        println!(
+            "{:?} [first_player_elo] [second_player_elo]",
+            env::current_exe().expect("Failed to get file path of executable")
+        );
         panic!("Too less parameters!!!");
     }
 
@@ -53,12 +53,8 @@ fn main() {
             if "y" == v_str_1[0] {
                 (first_player_elo, second_player_elo) = (second_player_elo, first_player_elo);
                 println!("new elo: {}, {}", first_player_elo, second_player_elo);
-            }
-            else if "n" == v_str_1[0] {
-                
-            }
-            else {
-                
+            } else if "n" == v_str_1[0] {
+            } else {
             }
         }
 
@@ -71,21 +67,20 @@ fn main() {
         }
         if 1 == v_str_2.len() {
             if v_str_2[0] == "y" {
-                (first_player_elo, second_player_elo) = bayes_elo_instance.calculate(first_player_elo, second_player_elo, true);
-            }
-            else if v_str_2[0] == "n"
-            {
-                (second_player_elo, first_player_elo) = bayes_elo_instance.calculate(second_player_elo, first_player_elo, false);
-            }
-            else {
-                (first_player_elo, second_player_elo) = bayes_elo_instance.calculate_4_draw(first_player_elo, second_player_elo, true);
+                (first_player_elo, second_player_elo) =
+                    bayes_elo_instance.calculate(first_player_elo, second_player_elo, true);
+            } else if v_str_2[0] == "n" {
+                (second_player_elo, first_player_elo) =
+                    bayes_elo_instance.calculate(second_player_elo, first_player_elo, false);
+            } else {
+                (first_player_elo, second_player_elo) =
+                    bayes_elo_instance.calculate_4_draw(first_player_elo, second_player_elo, true);
             }
             println!("new elo: {}, {}", first_player_elo, second_player_elo);
-        }
-        else {
+        } else {
             println!("Parameters error!!!");
         }
-        
+
         println!("**************************end game**************************");
     }
 }
