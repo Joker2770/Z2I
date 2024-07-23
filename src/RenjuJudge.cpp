@@ -146,7 +146,9 @@ int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, 
             }
         }
 
-        if ((i_flag & 0x07) == 0x07) //'11101111' or '11110111'
+        if ((i_flag & 0x0F) == 0x0F) // '110111011'
+            i_count = 2;
+        else if ((i_flag & 0x07) == 0x07) //'11101111' or '11110111'
             i_count = 1;
         else if ((i_flag & 0x03) == 0x03) //'1011101', '10111101'
             i_count = 2;
