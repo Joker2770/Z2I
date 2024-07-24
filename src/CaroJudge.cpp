@@ -98,7 +98,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
     {
         for (size_t j = 0; j <= vColor.size() - 7; ++j)
         {
-            for (size_t i = 0; i < 34; ++i)
+            for (size_t i = 0; i < 46; ++i)
             {
                 if (((WIN_SHAPES[i][0]) == (vColor[j])) &&
                     ((WIN_SHAPES[i][1]) == (vColor[j + 1])) &&
