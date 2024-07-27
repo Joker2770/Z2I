@@ -254,9 +254,9 @@ class NeuralNetWorkWrapper():
         """
 
         if self.is_cuda_available:
-            state = torch.load(filepath+'.pkl')
+            state = torch.load(filepath+'.pkl', weights_only=True)
         else:
-            state = torch.load(filepath+'.pkl', map_location='cpu')
+            state = torch.load(filepath+'.pkl', map_location='cpu', weights_only=True)
         self.neural_network.load_state_dict(state['network'])
         self.optim.load_state_dict(state['optim'])
         if self.is_cuda_available:

@@ -15,11 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\onnxruntime_providers_shared.dll" />
-    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x64\native\onnxruntime.dll" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="..\..\src\pbrain-Z2I\pbrain-Z2I.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -82,5 +77,9 @@
     <ClInclude Include="..\..\src\StandardJudge.h">
       <Filter>头文件</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\runtimes\win-x86\native\onnxruntime.dll" />
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>
