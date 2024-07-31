@@ -112,4 +112,5 @@ Increase or decrease `NUM_MCT_SIMS` in src/common.h (default 1600) to increase t
 
 ## reference
 1.  [https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
-2.  [https://netron.app/](https://netron.app/)
+2.  [https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html)
+3.  [https://netron.app/](https://netron.app/)
