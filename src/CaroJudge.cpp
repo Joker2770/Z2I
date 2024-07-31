@@ -8,7 +8,7 @@
 /**
 MIT License
 
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,8 +39,8 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
 {
     vector<int> vColor;
 
-    unsigned int n = board.size();
-    pair<int, int> p_idx(last_move / n, last_move % n);
+    size_t n = board.size();
+    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
     pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     // push back current stone color
@@ -57,7 +57,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(2);
-        else if (this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+        else if (this->isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second))
             vColor.push_back(3);
         else
             vColor.push_back(0);
@@ -77,7 +77,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
             vColor.push_back(1);
         else if (-1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(2);
-        else if (this->isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second))
+        else if (this->isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second))
             vColor.push_back(3);
         else
             vColor.push_back(0);
@@ -120,7 +120,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
 
 bool CaroJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
-  return x > n - 1 || y > n - 1 || x < 0 || y < 0;
+  return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
 bool CaroJudge::checkWin(const board_type &board, int last_move)
@@ -130,7 +130,7 @@ bool CaroJudge::checkWin(const board_type &board, int last_move)
         return false;
     }
 
-    int n = board.size();
+    size_t n = board.size();
     pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     bool b_up = findShap(board, last_move, p_drt_up);
     bool b_left = findShap(board, last_move, p_drt_left);

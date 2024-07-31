@@ -8,7 +8,7 @@
 /**
 MIT License
 
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ using namespace std;
 
 bool FreeStyleJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
-  return x > n - 1 || y > n - 1 || x < 0 || y < 0;
+  return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
 int FreeStyleJudge::countNearStone(const board_type &board, int last_move, const pair<int, int>& p_drt)
@@ -44,11 +44,11 @@ int FreeStyleJudge::countNearStone(const board_type &board, int last_move, const
     if (-1 == last_move)
         return 0;
 
-    unsigned int n = board.size();
-    pair<int, int> p_idx(last_move / n, last_move % n);
+    size_t n = board.size();
+    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
     pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
-    while (!isPosOutOfBoard(n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
+    while (!isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
     {
         if (board[p_drt_idx.first][p_drt_idx.second] == board[p_idx.first][p_idx.second])
             i_count++;
@@ -74,7 +74,7 @@ bool FreeStyleJudge::checkWin(const board_type &board, int last_move)
             return false;
     }
 
-    int n = board.size();
+    size_t n = board.size();
 
     pair<int, int> p_drt_up(0, -1), 
     p_drt_down(0, 1), 

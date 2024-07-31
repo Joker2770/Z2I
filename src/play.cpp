@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -59,7 +59,7 @@ void SelfPlay::play(unsigned int saved_id)
     vector<int> last_move_buffer(BUFFER_LEN);
     // diri noise
     static std::gamma_distribution<float> gamma(0.3f, 1.0f);
-    static std::default_random_engine rng(std::time(nullptr));
+    static std::default_random_engine rng(static_cast<unsigned int>(std::time(nullptr)));
 
     while (game_state.first == 0)
     {

@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -227,7 +227,7 @@ MCTS::MCTS(NeuralNetwork *neural_network, unsigned int thread_num, double c_puct
       num_mcts_sims(num_mcts_sims),
       c_virtual_loss(c_virtual_loss),
       action_size(action_size),
-      rnd_eng(std::time(nullptr)),
+      rnd_eng(static_cast<unsigned int>(std::time(nullptr))),
       root(new TreeNode(nullptr, 1., action_size), MCTS::tree_deleter) {}
 
 void MCTS::update_with_move(int last_action)
