@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     cout << "MESSAGE ................................................................................." << endl;
     cout << "MESSAGE MIT License" << endl;
     cout << "MESSAGE " << endl;
-    cout << "MESSAGE Copyright (c) 2023 Joker2770" << endl;
+    cout << "MESSAGE Copyright (c) 2023-2024 Joker2770" << endl;
     cout << "MESSAGE " << endl;
     cout << "MESSAGE Permission is hereby granted, free of charge, to any person obtaining a copy" << endl;
     cout << "MESSAGE of this software and associated documentation files (the \"Software\"), to deal" << endl;
