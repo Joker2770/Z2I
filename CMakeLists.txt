@@ -27,6 +27,12 @@ if(ENABLE_OPENVINO)
     add_definitions(-DUSE_OPENVINO)
 endif(ENABLE_OPENVINO)
 
+option(ENABLE_TENSORRT OFF)
+if(ENABLE_TENSORRT)
+    message("build project with TensorRT")
+    add_definitions(-DUSE_TENSORRT)
+endif(ENABLE_TENSORRT)
+
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
                 "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"

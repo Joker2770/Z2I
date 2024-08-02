@@ -29,6 +29,7 @@ SOFTWARE.
 // #define SMALL_BOARD_MODE
 // #define USE_CUDA
 // #define USE_OPENVINO
+// #define USE_TENSORRT
 
 #define ORT_OLD_VISON 12
 
