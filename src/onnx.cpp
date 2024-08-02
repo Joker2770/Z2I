@@ -95,6 +95,14 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_OpenVINO(session_options, &OpenVINO_Options));
 #endif
 
+#ifdef USE_TENSORRT
+  const OrtApiBase* ptr_api_base = OrtGetApiBase();
+  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  OrtTensorRTProviderOptions TensorRT_Options;
+  TensorRT_Options.device_id = 0;
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_TensorRT(session_options, &TensorRT_Options));
+#endif
+
 #ifdef _WIN32
   // std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
   std::wstring wstr(model_path.length(), L' ');

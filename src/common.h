@@ -29,6 +29,7 @@ SOFTWARE.
 // #define SMALL_BOARD_MODE
 // #define USE_CUDA
 // #define USE_OPENVINO
+// #define USE_TENSORRT
 
 #define CHANNEL_SIZE 3
 
