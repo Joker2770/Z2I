@@ -30,14 +30,15 @@ SOFTWARE.
 
 #include <iostream>
 
-int main() {
+int main()
+{
   NeuralNetwork *model = new NeuralNetwork(8);
   if (nullptr == model)
   {
     return -1
   }
 
-  //torch::optim::SGD optimizer(model->module->parameters(), /*lr=*/0.01);
+  // torch::optim::SGD optimizer(model->module->parameters(), /*lr=*/0.01);
   SelfPlay *sp = new SelfPlay(model);
   if (nullptr == sp)
   {
@@ -61,4 +62,3 @@ int main() {
 
   return 0;
 }
-
