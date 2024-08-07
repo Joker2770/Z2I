@@ -211,7 +211,7 @@ std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
   return ret;
 }
 
-std::vector<float> NeuralNetwork::transorm_board_to_Tensor(const board_type board, int last_move, int cur_player)
+std::vector<float> NeuralNetwork::transorm_board_to_Tensor(const board_type &board, int last_move, int cur_player)
 {
   auto input_tensor_values = std::vector<float>(CHANNEL_SIZE * BOARD_SIZE * BOARD_SIZE);
   int first = 0;
