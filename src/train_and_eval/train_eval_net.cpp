@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -40,10 +40,10 @@ void generate_data_for_train(int current_weight, int start_batch_id)
 
     std::shared_ptr<NeuralNetwork> model = std::make_shared<NeuralNetwork>(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
     SelfPlay *sp = new SelfPlay(model.get());
-    sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
 
     if (nullptr != sp)
     {
+        sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
         delete sp;
         sp = nullptr;
     }
