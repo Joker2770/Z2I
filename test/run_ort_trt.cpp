@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -154,7 +154,7 @@ void run_ort_trt() {
     input_node_dims = tensor_info.GetShape();
     printf("Input %d : num_dims = %zu\n", i, input_node_dims.size());
     for (size_t j = 0; j < input_node_dims.size(); j++)
-      printf("Input %d : dim %zu = %jd\n", i, j, input_node_dims[j]);
+      printf("Input %d : dim %zu = %lld\n", i, j, input_node_dims[j]);
   }
 
   size_t input_tensor_size = 3 * 15 * 15;  // simplify ... using known dim values to calculate size
