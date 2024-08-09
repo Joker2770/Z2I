@@ -6,7 +6,6 @@
 The `pbrain-Z2I` is just a gomoku engine which use the [protocol of gomocup](lastovicka.github.io/protocl2en.htm). A GUI named [qpiskvork](https://github.com/Joker2770/qpiskvork) can load this engine.
 
 ## Supported Games
-Currently only Gomoku and similar games such as Tic-Tac-Toe. 
 
 Welcome other game implementions if you want to become the contributor!
 
@@ -18,18 +17,19 @@ Welcome other game implementions if you want to become the contributor!
 - [x] caro
 
 ## Supported OS System
+
 Linux/Windows (tested on Ubuntu 20 + GPU/CPU and Windows 10 + GPU/CPU)
 
-
 ## Supported Enviroment
+
 Both GPU and CPU (GPU test on Tesla V100 + Cuda 11 and CPU test on Intel i5/i7)
 
-
 ## Language
+
 C++ (for speed!) and python. The model is trained by pytorch (Python) and onnxruntime (C++, for selfplay), and inferenced by onnxruntime (C++).
 
-
 ## Dependence
+
 gcc (Linux) or visual studio 19 (windows)
 
 cmake 3.13+
@@ -38,14 +38,14 @@ pytorch (tested on 1.11)
 
 onnxruntime-gpu (tested on 1.11)
 
-
 ## Installation
+
 Download and install miniconda / python
 and `pip install` all the dependent packages such as pytorch
 
 train.sh: convert `/data/miniconda3/bin/python` to `python` or `python3` or your own python intepreter path
 
-Download onnxruntime: https://github.com/microsoft/onnxruntime/releases/tag/v1.11.1
+Download onnxruntime: <https://github.com/microsoft/onnxruntime/releases/tag/v1.11.1>
 
 CMakefiles.txt: convert the onnxruntime path to your own path
 
@@ -83,10 +83,9 @@ bash train.sh
 
 If you want to train the model on windows 10, convert `train.sh` to `train.bat` and change corresponding commands.
 
-
 ## Human play with AI (inference)
 
-1.  Run `pbrain-Z2I`, for example on Linux:
+1. Run `pbrain-Z2I`, for example on Linux:
 
 ```shell
 ./pbrain-Z2I
@@ -96,7 +95,7 @@ There is a better way to run `pbrain-Z2I` with the GUI program named [qpiskvork]
 
 Increase or decrease `num_mct_sims` in `config.toml` (default 100) to increase the power or speed of AI.
 
-2.  Run mcts_test, for example on Linux:
+2. Run mcts_test, for example on Linux:
 
 ```shell
 ./mcts_test ./weights/1000.onnx 1
@@ -111,6 +110,7 @@ Increase or decrease `NUM_MCT_SIMS` in src/common.h (default 1600) to increase t
 ![weight struct](https://github.com/Joker2770/Z2I/blob/main/Z2I_onnx.svg)
 
 ## reference
-1.  [https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
-2.  [https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html)
-3.  [https://netron.app/](https://netron.app/)
+
+1. [https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/CUDA-ExecutionProvider.html)
+2. [https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html](https://onnxruntime.ai/docs/execution-providers/OpenVINO-ExecutionProvider.html)
+3. [https://netron.app/](https://netron.app/)
