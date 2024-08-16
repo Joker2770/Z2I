@@ -30,37 +30,40 @@ SOFTWARE.
 
 using namespace std;
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
   Gomoku *g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
   if (nullptr == g)
   {
     return -1;
   }
-  
+
   std::shared_ptr<NeuralNetwork> module = nullptr;
-  if (argc <= 1) {
-      //cout << "Do not load weights. AI color = BLACK." << endl;
-      
-      cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << endl;
+  if (argc <= 1)
+  {
+    // cout << "Do not load weights. AI color = BLACK." << endl;
+
+    cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << endl;
 #ifdef _WIN32
-  module = std::make_shared<NeuralNetwork>("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+    module = std::make_shared<NeuralNetwork>("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #else
-  module = std::make_shared<NeuralNetwork>("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
+    module = std::make_shared<NeuralNetwork>("$HOME/data/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #endif
   }
-  else {
-      cout << "Load weights: "<< argv[1] << endl;
-      // wchar_t wchar[128] = {0};
-      // swprintf(wchar,128,L"%S",argv[1]);
+  else
+  {
+    cout << "Load weights: " << argv[1] << endl;
+    // wchar_t wchar[128] = {0};
+    // swprintf(wchar,128,L"%S",argv[1]);
 
-      module = std::make_shared<NeuralNetwork>(argv[1], NUM_MCT_SIMS);
+    module = std::make_shared<NeuralNetwork>(argv[1], NUM_MCT_SIMS);
   }
-  //module->save_weights("net.pt");
+  // module->save_weights("net.pt");
   if (nullptr == module)
   {
     return -2;
   }
-  
+
   MCTS *m = new MCTS(module.get(), NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
   if (nullptr == m)
   {
@@ -87,15 +90,14 @@ int main(int argc, char* argv[]) {
 
   if (nullptr != m)
   {
-      delete m;
-      m = nullptr;
+    delete m;
+    m = nullptr;
   }
   if (nullptr != g)
   {
-      delete g;
-      g = nullptr;
+    delete g;
+    g = nullptr;
   }
 
   return 0;
 }
-

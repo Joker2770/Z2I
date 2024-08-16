@@ -1,7 +1,7 @@
 /*************************************************************************
     > File Name: FreeStyleJudge.cpp
     > Author: Jintao Yang
-    > Mail: 18608842770@163.com 
+    > Mail: 18608842770@163.com
     > Created Time: Sun Apr 30 15:27:10 2023
  ************************************************************************/
 
@@ -35,10 +35,10 @@ using namespace std;
 
 bool FreeStyleJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
-  return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
+    return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
-int FreeStyleJudge::countNearStone(const board_type &board, int last_move, const pair<int, int>& p_drt)
+int FreeStyleJudge::countNearStone(const board_type &board, int last_move, const pair<int, int> &p_drt)
 {
     int i_count = 0;
     if (-1 == last_move)
@@ -76,14 +76,14 @@ bool FreeStyleJudge::checkWin(const board_type &board, int last_move)
 
     size_t n = board.size();
 
-    pair<int, int> p_drt_up(0, -1), 
-    p_drt_down(0, 1), 
-    p_drt_left(-1, 0), 
-    p_drt_right(1, 0), 
-    p_drt_leftup(-1, -1), 
-    p_drt_rightdown(1, 1), 
-    p_drt_rightup(1, -1), 
-    p_drt_leftdown(-1, 1);
+    pair<int, int> p_drt_up(0, -1),
+        p_drt_down(0, 1),
+        p_drt_left(-1, 0),
+        p_drt_right(1, 0),
+        p_drt_leftup(-1, -1),
+        p_drt_rightdown(1, 1),
+        p_drt_rightup(1, -1),
+        p_drt_leftdown(-1, 1);
 
     int i_up = countNearStone(board, last_move, p_drt_up);
     int i_down = countNearStone(board, last_move, p_drt_down);
