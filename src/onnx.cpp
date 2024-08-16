@@ -39,14 +39,16 @@ SOFTWARE.
 
 // using namespace customType;
 
-bool CheckStatus(const OrtApi* g_ort, OrtStatus* status) {
-	if (status != nullptr) {
-		const char* msg = g_ort->GetErrorMessage(status);
-		std::cerr << msg << std::endl;
-		g_ort->ReleaseStatus(status);
-		throw Ort::Exception(msg, OrtErrorCode::ORT_EP_FAIL);
-	}
-	return true;
+bool CheckStatus(const OrtApi *g_ort, OrtStatus *status)
+{
+  if (status != nullptr)
+  {
+    const char *msg = g_ort->GetErrorMessage(status);
+    std::cerr << msg << std::endl;
+    g_ort->ReleaseStatus(status);
+    throw Ort::Exception(msg, OrtErrorCode::ORT_EP_FAIL);
+  }
+  return true;
 }
 
 NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int batch_size)
@@ -86,8 +88,8 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 
 // #define USE_OPENVINO
 #ifdef USE_OPENVINO
-  const OrtApiBase* ptr_api_base = OrtGetApiBase();
-  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   // OpenVINO options set
   OrtOpenVINOProviderOptions OpenVINO_Options;
   OpenVINO_Options.device_type = "CPU_FP32";
@@ -96,11 +98,19 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 #endif
 
 #ifdef USE_TENSORRT
-  const OrtApiBase* ptr_api_base = OrtGetApiBase();
-  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   OrtTensorRTProviderOptions TensorRT_Options;
   TensorRT_Options.device_id = 0;
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_TensorRT(session_options, &TensorRT_Options));
+#endif
+
+#ifdef USE_ROCM
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  OrtROCMProviderOptions ROCM_Options;
+  ROCM_Options.device_id = 0;
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_ROCM(session_options, &ROCM_Options));
 #endif
 
 #ifdef _WIN32

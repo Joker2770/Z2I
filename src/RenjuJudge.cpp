@@ -1,7 +1,7 @@
 ﻿/*************************************************************************
     > File Name: RenjuJudge.cpp
     > Author: Jintao Yang
-    > Mail: 18608842770@163.com 
+    > Mail: 18608842770@163.com
     > Created Time: Sun Apr 30 15:27:55 2023
  ************************************************************************/
 
@@ -52,7 +52,7 @@ bool RenjuJudge::isOverLine(const board_type &board, int last_move)
     return false;
 }
 
-int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, int>& p_drt)
+int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, int> &p_drt)
 {
     int i_count = 0;
 
@@ -88,7 +88,7 @@ int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, 
     reverse(vColor.begin(), vColor.end());
     p_drt_idx.first = p_idx.first - p_drt.first;
     p_drt_idx.second = p_idx.second - p_drt.second;
-    while (!this->isPosOutOfBoard((unsigned int)n,p_drt_idx.first,p_drt_idx.second))
+    while (!this->isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second))
     {
         if (1 == board[p_drt_idx.first][p_drt_idx.second])
             vColor.push_back(1);
@@ -330,7 +330,7 @@ bool RenjuJudge::isFourThree(const board_type &board, int last_move)
         {
             if (i_left_3 + i_leftup_3 + i_up_3 == 0) // only four
                 return false;
-            else if (i_left_3 + i_leftup_3 + i_up_3 > 1) //433*
+            else if (i_left_3 + i_leftup_3 + i_up_3 > 1) // 433*
                 return false;
             else if (i_left_3 + i_leftup_3 + i_up_3 == 1)
                 return true;
@@ -471,7 +471,7 @@ bool RenjuJudge::isLegal(const board_type &board, int last_move)
     }
 
     size_t n = board.size();
-    if (board[last_move/n][last_move%n] == 1)
+    if (board[last_move / n][last_move % n] == 1)
     {
         if (this->isOverLine(board, last_move))
         {
@@ -520,10 +520,10 @@ int RenjuJudge::getRenjuState()
 
 bool RenjuJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
-  return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
+    return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
-int RenjuJudge::countNearStone(const board_type &board, int last_move, const pair<int, int>& p_drt)
+int RenjuJudge::countNearStone(const board_type &board, int last_move, const pair<int, int> &p_drt)
 {
     int i_count = 0;
     if (-1 == last_move)
@@ -561,14 +561,14 @@ bool RenjuJudge::checkWin(const board_type &board, int last_move)
 
     size_t n = board.size();
 
-    pair<int, int> p_drt_up(0, -1), 
-    p_drt_down(0, 1), 
-    p_drt_left(-1, 0), 
-    p_drt_right(1, 0), 
-    p_drt_leftup(-1, -1), 
-    p_drt_rightdown(1, 1), 
-    p_drt_rightup(1, -1), 
-    p_drt_leftdown(-1, 1);
+    pair<int, int> p_drt_up(0, -1),
+        p_drt_down(0, 1),
+        p_drt_left(-1, 0),
+        p_drt_right(1, 0),
+        p_drt_leftup(-1, -1),
+        p_drt_rightdown(1, 1),
+        p_drt_rightup(1, -1),
+        p_drt_leftdown(-1, 1);
 
     int i_up = countNearStone(board, last_move, p_drt_up);
     int i_down = countNearStone(board, last_move, p_drt_down);
@@ -598,4 +598,3 @@ bool RenjuJudge::checkWin(const board_type &board, int last_move)
 
     return false;
 }
-

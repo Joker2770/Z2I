@@ -28,7 +28,8 @@ SOFTWARE.
 #include <iostream>
 #include <vector>
 
-int main() {
+int main()
+{
   Gomoku gomoku(10, 5, 1);
 
   // test execute_move
@@ -72,7 +73,8 @@ int main() {
 
   // test get_legal_moves
   auto legal_moves = gomoku.get_legal_moves();
-  for (unsigned int i = 0; i < legal_moves.size(); i++) {
+  for (unsigned int i = 0; i < legal_moves.size(); i++)
+  {
     std::cout << legal_moves[i] << ", ";
   }
   std::cout << std::endl;

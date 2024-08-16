@@ -27,12 +27,14 @@ SOFTWARE.
 
 #include <iostream>
 
-unsigned long long calc(unsigned long long n) {
+unsigned long long calc(unsigned long long n)
+{
 
   return n == 0 ? 1 : n * calc(n - 1);
 }
 
-int main() {
+int main()
+{
 
   ThreadPool thread_pool(4);
 

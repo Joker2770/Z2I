@@ -30,6 +30,7 @@ SOFTWARE.
 // #define USE_CUDA
 // #define USE_OPENVINO
 // #define USE_TENSORRT
+// #define USE_ROCM
 
 #define ORT_OLD_VISON 12
 
@@ -55,7 +56,7 @@ SOFTWARE.
 #define N_IN_ROW 5
 #define NUM_MCT_THREADS 4
 #define NUM_MCT_SIMS 1600
-#define EXPLORE_STEP (BOARD_SIZE*BOARD_SIZE)
+#define EXPLORE_STEP (BOARD_SIZE * BOARD_SIZE)
 #define C_PUCT 5
 #define C_VIRTUAL_LOSS 3
 // #define NUM_CHANNELS 256

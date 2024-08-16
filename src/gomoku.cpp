@@ -317,17 +317,17 @@ void Gomoku::render()
 
   if (nullptr != line)
   {
-      delete[] line;
-      line = nullptr;
+    delete[] line;
+    line = nullptr;
   }
   if (nullptr != line2)
   {
-      delete[] line2;
-      line2 = nullptr;
+    delete[] line2;
+    line2 = nullptr;
   }
   if (nullptr != column_no)
   {
-      delete[] column_no;
-      column_no = nullptr;
+    delete[] column_no;
+    column_no = nullptr;
   }
 }
