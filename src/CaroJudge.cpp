@@ -1,7 +1,7 @@
 /*************************************************************************
     > File Name: CaroJudge.cpp
     > Author: Jintao Yang
-    > Mail: 18608842770@163.com 
+    > Mail: 18608842770@163.com
     > Created Time: Mon May  1 16:44:21 2023
  ************************************************************************/
 
@@ -120,7 +120,7 @@ bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int,
 
 bool CaroJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
-  return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
+    return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
 bool CaroJudge::checkWin(const board_type &board, int last_move)
@@ -142,5 +142,3 @@ bool CaroJudge::checkWin(const board_type &board, int last_move)
 
     return false;
 }
-
-

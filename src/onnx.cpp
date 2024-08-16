@@ -39,17 +39,19 @@ SOFTWARE.
 
 // using namespace customType;
 
-bool CheckStatus(const OrtApi* g_ort, OrtStatus* status) {
-	if (status != nullptr) {
-		const char* msg = g_ort->GetErrorMessage(status);
-		std::cerr << msg << std::endl;
-		g_ort->ReleaseStatus(status);
-		throw Ort::Exception(msg, OrtErrorCode::ORT_EP_FAIL);
-	}
-	return true;
+bool CheckStatus(const OrtApi *g_ort, OrtStatus *status)
+{
+  if (status != nullptr)
+  {
+    const char *msg = g_ort->GetErrorMessage(status);
+    std::cerr << msg << std::endl;
+    g_ort->ReleaseStatus(status);
+    throw Ort::Exception(msg, OrtErrorCode::ORT_EP_FAIL);
+  }
+  return true;
 }
 
-NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int batch_size)
+NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int batch_size)
     : // module(std::make_shared<torch::jit::script::Module>(torch::jit::load(model_path.c_str()))),
       env(nullptr),
       shared_session(nullptr),
@@ -58,7 +60,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
       loop(nullptr),
       memory_info(nullptr)
 {
-  memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  this->memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
   this->env = Ort::Env(ORT_LOGGING_LEVEL_WARNING, "alphaZero");
   // const auto& api = Ort::GetApi();
   // OrtTensorRTProviderOptionsV2* tensorrt_options;
@@ -66,7 +68,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // session_options->SetIntraOpNumThreads(1); // TODO:study the parameter
   // session_options->SetInterOpNumThreads(1); // TODO:study the parameter
 
-  session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+  this->session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
 // #define USE_CUDA
 #ifdef USE_CUDA
@@ -86,8 +88,8 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 
 // #define USE_OPENVINO
 #ifdef USE_OPENVINO
-  const OrtApiBase* ptr_api_base = OrtGetApiBase();
-  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   // OpenVINO options set
   OrtOpenVINOProviderOptions OpenVINO_Options;
   OpenVINO_Options.device_type = "CPU_FP32";
@@ -96,11 +98,19 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
 #endif
 
 #ifdef USE_TENSORRT
-  const OrtApiBase* ptr_api_base = OrtGetApiBase();
-  const OrtApi* g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   OrtTensorRTProviderOptions TensorRT_Options;
   TensorRT_Options.device_id = 0;
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_TensorRT(session_options, &TensorRT_Options));
+#endif
+
+#ifdef USE_ROCM
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  OrtROCMProviderOptions ROCM_Options;
+  ROCM_Options.device_id = 0;
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_ROCM(session_options, &ROCM_Options));
 #endif
 
 #ifdef _WIN32
@@ -110,10 +120,10 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
   // std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
   // const wchar_t *model_path_w = converter.from_bytes(model_path).c_str();
   // No CUDA
-  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, wstr.c_str(), session_options));
+  this->shared_session = std::make_shared<Ort::Session>(Ort::Session(env, wstr.c_str(), session_options));
 #else
   // Ort::Session session = Ort::Session(env, model_path.c_str(), *session_options);
-  shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), session_options));
+  this->shared_session = std::make_shared<Ort::Session>(Ort::Session(env, model_path.c_str(), session_options));
 #endif
   // sess = &session;
 
@@ -151,7 +161,7 @@ NeuralNetwork::NeuralNetwork(const std::string model_path, const unsigned int ba
     // printf("Input %d : type = %d\n", i, type);
 
     // print input shapes/dims
-    input_node_dims = tensor_info.GetShape();
+    this->input_node_dims = tensor_info.GetShape();
     // printf("Input %d : num_dims = %zu\n", i, input_node_dims.size());
     // for (size_t j = 0; j < input_node_dims.size(); j++)
     //   printf("Input %d : dim %zu = %jd\n", i, j, input_node_dims[j]);
@@ -214,7 +224,7 @@ std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
   return ret;
 }
 
-std::vector<float> NeuralNetwork::transorm_board_to_Tensor(board_type board, int last_move, int cur_player)
+std::vector<float> NeuralNetwork::transorm_board_to_Tensor(const board_type &board, int last_move, int cur_player)
 {
   auto input_tensor_values = std::vector<float>(CHANNEL_SIZE * BOARD_SIZE * BOARD_SIZE);
   int first = 0;

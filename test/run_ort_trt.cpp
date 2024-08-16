@@ -58,15 +58,15 @@ using namespace std;
 // }
 // #endif
 
-void run_ort_trt() {
+void run_ort_trt()
+{
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   // const auto& api = Ort::GetApi();
   // OrtTensorRTProviderOptionsV2* tensorrt_options;
-  
-  
+
   // Ort::SessionOptions session_options
   Ort::SessionOptions session_options;
-  //session_options->SetIntraOpNumThreads(4);
+  // session_options->SetIntraOpNumThreads(4);
 
   session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
@@ -80,24 +80,22 @@ void run_ort_trt() {
 #ifdef _WIN32
   string model_path_s = "E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-  //auto s = MultiByteToWideChar(model_path_s);
-  const wchar_t* model_path = converter.from_bytes(model_path_s).c_str();
+  // auto s = MultiByteToWideChar(model_path_s);
+  const wchar_t *model_path = converter.from_bytes(model_path_s).c_str();
   auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
 #else
   string model_path_s = "/data/AlphaZero-Onnx/python/mymodel.onnx";
-  const char* model_path = model_path_s.c_str();
+  const char *model_path = model_path_s.c_str();
   auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
 #endif
 
-    
+  // #ifdef _WIN32
 
-// #ifdef _WIN32
-
-//   const wchar_t* model_path = 
-//   L"E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
-// #else
-//   const char* model_path = "/data/AlphaZero-Onnx/python/mymodel.onnx";
-// #endif
+  //   const wchar_t* model_path =
+  //   L"E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
+  // #else
+  //   const char* model_path = "/data/AlphaZero-Onnx/python/mymodel.onnx";
+  // #endif
 
   //*****************************************************************************************
   // It's not suggested to directly new OrtTensorRTProviderOptionsV2 to get provider options
@@ -108,9 +106,9 @@ void run_ort_trt() {
 
   //**************************************************************************************************************************
   // It's suggested to use CreateTensorRTProviderOptions() to get provider options
-  // since ORT takes care of valid options for you 
+  // since ORT takes care of valid options for you
   //**************************************************************************************************************************
-  
+
   // api.CreateTensorRTProviderOptions(&tensorrt_options);
   // std::unique_ptr<OrtTensorRTProviderOptionsV2, decltype(api.ReleaseTensorRTProviderOptions)> rel_trt_options(tensorrt_options, api.ReleaseTensorRTProviderOptions);
   // api.SessionOptionsAppendExecutionProvider_TensorRT_V2(static_cast<OrtSessionOptions*>(session_options), rel_trt_options.get());
@@ -122,24 +120,21 @@ void run_ort_trt() {
   //*************************************************************************
   // print model input layer (node names, types, shape etc.)
 
-
-
-
-
   Ort::AllocatorWithDefaultOptions allocator;
 
   // print number of model input nodes
   size_t num_input_nodes = sh->GetInputCount();
-  std::vector<const char*> input_node_names(num_input_nodes);
-  std::vector<int64_t> input_node_dims;  // simplify... this model has only 1 input node {1, 2, 15, 15}.
-                                         // Otherwise need vector<vector<>>
+  std::vector<const char *> input_node_names(num_input_nodes);
+  std::vector<int64_t> input_node_dims; // simplify... this model has only 1 input node {1, 2, 15, 15}.
+                                        // Otherwise need vector<vector<>>
 
   printf("Number of inputs = %zu\n", num_input_nodes);
 
   // iterate over all input nodes
-  for (int i = 0; i < num_input_nodes; i++) {
+  for (int i = 0; i < num_input_nodes; i++)
+  {
     // print input node names
-    char* input_name = sh->GetInputName(i, allocator);
+    char *input_name = sh->GetInputName(i, allocator);
     printf("Input %d : name = %s\n", i, input_name);
     input_node_names[i] = input_name;
 
@@ -157,11 +152,11 @@ void run_ort_trt() {
       printf("Input %d : dim %zu = %lld\n", i, j, input_node_dims[j]);
   }
 
-  size_t input_tensor_size = 3 * 15 * 15;  // simplify ... using known dim values to calculate size
-                                             // use OrtGetTensorShapeElementCount() to get official size!
+  size_t input_tensor_size = 3 * 15 * 15; // simplify ... using known dim values to calculate size
+                                          // use OrtGetTensorShapeElementCount() to get official size!
 
   std::vector<float> input_tensor_values(input_tensor_size);
-  std::vector<const char*> output_node_names = {"V","P"};
+  std::vector<const char *> output_node_names = {"V", "P"};
 
   // initialize input data with values in [0.0, 1.0]
   for (unsigned int i = 0; i < input_tensor_size; i++)
@@ -179,12 +174,12 @@ void run_ort_trt() {
 
   // Get pointer to output tensor float values
   float V = output_tensors[0].GetTensorMutableData<float>()[0];
-  float* P = output_tensors[1].GetTensorMutableData<float>();
-  //assert(abs(floatarr[0] - 0.000045) < 1e-6);
+  float *P = output_tensors[1].GetTensorMutableData<float>();
+  // assert(abs(floatarr[0] - 0.000045) < 1e-6);
 
   // score the model, and print scores for first 5 classes
   for (int i = 0; i < 5; i++)
-     printf("P for board [%d] =  %f\n", i, P[i]);
+    printf("P for board [%d] =  %f\n", i, P[i]);
 
   printf("V for board =  %f\n", V);
 
@@ -197,14 +192,14 @@ void run_ort_trt() {
 
   // release buffers allocated by ORT alloctor
   for (const char *node_name : input_node_names)
-     allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
+    allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
 
   printf("Done!\n");
 }
 
-
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[])
+{
   run_ort_trt();
-  //cout<< "hello"<<endl;
+  // cout<< "hello"<<endl;
   return 0;
 }

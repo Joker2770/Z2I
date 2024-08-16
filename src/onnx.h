@@ -48,14 +48,14 @@ public:
   // Ort::Session session;
   using return_type = std::vector<std::vector<double>>;
 
-  NeuralNetwork(std::string model_path, unsigned int batch_size);
+  NeuralNetwork(const std::string &model_path, unsigned int batch_size);
   // void save_weights(std::string model_path);
   ~NeuralNetwork();
 
   std::future<return_type> commit(Gomoku *gomoku); // commit task to queue
   // std::shared_ptr<torch::jit::script::Module> module;  // torch module    origin:private
   static std::vector<float> transorm_gomoku_to_Tensor(Gomoku *gomoku);
-  static std::vector<float> transorm_board_to_Tensor(board_type board, int last_move, int cur_player);
+  static std::vector<float> transorm_board_to_Tensor(const board_type &board, int last_move, int cur_player);
 
   bool set_batch_size(unsigned int u_batch_size);
 

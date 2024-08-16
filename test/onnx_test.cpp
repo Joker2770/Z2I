@@ -33,8 +33,8 @@ SOFTWARE.
 
 using namespace std;
 
-
-int main() {
+int main()
+{
   Gomoku gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
 
   // test execute_move
@@ -46,30 +46,30 @@ int main() {
   // gomoku.execute_move(9);
 
   // test render
-  //gomoku.render();
+  // gomoku.render();
 
   std::cout << gomoku.get_last_move() << std::endl;
   std::cout << gomoku.get_current_color() << std::endl;
 
-  //NeuralNetwork nn(1);
+  // NeuralNetwork nn(1);
 #ifdef _WIN32
-    string path = "E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
+  string path = "E:/Projects/AlphaZero-Onnx/python/mymodel.onnx";
 #else
-    string path = "/data/AlphaZero-Onnx/python/mymodel.onnx";
+  string path = "/data/AlphaZero-Onnx/python/mymodel.onnx";
 #endif
-  
-  NeuralNetwork nn(path, 4); 
-  
+
+  NeuralNetwork nn(path, 4);
+
   // 1
   auto res = nn.commit(&gomoku).get();
   auto p = res[0];
   auto v = res[1];
 
-  std::for_each(p.begin(), p.end(), [](double x) { std::cout << x << ","; });
+  std::for_each(p.begin(), p.end(), [](double x)
+                { std::cout << x << ","; });
   std::cout << std::endl;
 
   std::cout << "V =" << v[0] << std::endl;
-
 
   // 2
   // gomoku.execute_move(2);

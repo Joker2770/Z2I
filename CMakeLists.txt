@@ -33,6 +33,12 @@ if(ENABLE_TENSORRT)
     add_definitions(-DUSE_TENSORRT)
 endif(ENABLE_TENSORRT)
 
+option(ENABLE_ROCM OFF)
+if(ENABLE_ROCM)
+    message("build project with ROCM")
+    add_definitions(-DUSE_ROCM)
+endif(ENABLE_ROCM)
+
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
                 "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"

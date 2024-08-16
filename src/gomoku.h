@@ -63,9 +63,9 @@ public:
   inline unsigned int get_rule() const { return this->rule_flag; };
 
 private:
-  board_type board;                   // game board
-  const unsigned int n;               // board size
-  const unsigned int n_in_row;        // 5 in row or else
+  board_type board;            // game board
+  const unsigned int n;        // board size
+  const unsigned int n_in_row; // 5 in row or else
   unsigned int rule_flag;
 
   std::shared_ptr<FreeStyleJudge> free_style;
