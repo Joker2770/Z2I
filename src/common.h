@@ -30,6 +30,7 @@ SOFTWARE.
 // #define USE_CUDA
 // #define USE_OPENVINO
 // #define USE_TENSORRT
+// #define USE_ROCM
 
 #define CHANNEL_SIZE 3
 

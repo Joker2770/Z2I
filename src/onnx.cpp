@@ -105,6 +105,14 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_TensorRT(session_options, &TensorRT_Options));
 #endif
 
+#ifdef USE_ROCM
+  const OrtApiBase *ptr_api_base = OrtGetApiBase();
+  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+  OrtROCMProviderOptions ROCM_Options;
+  ROCM_Options.device_id = 0;
+  CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_ROCM(session_options, &ROCM_Options));
+#endif
+
 #ifdef _WIN32
   // std::wstring widestr = std::wstring(model_path.begin(), model_path.end());
   std::wstring wstr(model_path.length(), L' ');
