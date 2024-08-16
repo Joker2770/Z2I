@@ -2,7 +2,7 @@
 MIT License
 
 Copyright (c) 2022 Augustusmyc
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,10 +63,12 @@ public:
   inline unsigned int get_rule() const { return this->rule_flag; };
 
 private:
-  board_type board;            // game board
+  board_type board; // game board
+  std::vector<int> legal_moves_hash_tab;
   const unsigned int n;        // board size
   const unsigned int n_in_row; // 5 in row or else
   unsigned int rule_flag;
+  unsigned int sum_cur_action;
 
   std::shared_ptr<FreeStyleJudge> free_style;
   std::shared_ptr<StandardJudge> standard;

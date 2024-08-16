@@ -1,8 +1,9 @@
 use bayes_elo::BayesElo;
 use std::env;
 use std::io;
+use std::error::Error;
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>>{
     let mut v_elo: Vec<f64> = Vec::new();
     let mut i = 0;
     for arg in env::args() {
@@ -16,7 +17,7 @@ fn main() {
                     println!("parse elo ok: {}", n);
                     v_elo.push(n);
                 }
-                Err(e) => println!("parse elo error: {}", e),
+                Err(e) => panic!("parse elo error: {}", e),
             }
         }
 
@@ -31,7 +32,7 @@ fn main() {
     } else {
         println!(
             "{:?} [first_player_elo] [second_player_elo]",
-            env::current_exe().expect("Failed to get file path of executable")
+            env::current_exe()?
         );
         panic!("Parameters' length error!!!");
     }
@@ -44,7 +45,7 @@ fn main() {
 
         let mut input_1 = String::new();
         println!("If exchange player? (y/n): ");
-        io::stdin().read_line(&mut input_1).unwrap();
+        io::stdin().read_line(&mut input_1)?;
         let mut v_str_1: Vec<&str> = Vec::new();
         for str_value in input_1.split_whitespace() {
             v_str_1.push(str_value);
@@ -60,7 +61,7 @@ fn main() {
 
         let mut input_2 = String::new();
         println!("If first player win? (y/n/d): ");
-        io::stdin().read_line(&mut input_2).unwrap();
+        io::stdin().read_line(&mut input_2)?;
         let mut v_str_2: Vec<&str> = Vec::new();
         for str_value in input_2.split_whitespace() {
             v_str_2.push(str_value);
@@ -78,9 +79,26 @@ fn main() {
             }
             println!("new elo: {}, {}", first_player_elo, second_player_elo);
         } else {
-            println!("Parameters error!!!");
+            panic!("Parameters error!!!");
         }
 
         println!("**************************end game**************************");
+        let mut input_3 = String::new();
+        println!("If exit program? (y/n): ");
+        io::stdin().read_line(&mut input_3)?;
+        let mut v_str_3: Vec<&str> = Vec::new();
+        for str_value in input_3.split_whitespace() {
+            v_str_3.push(str_value);
+        }
+        if 1 == v_str_3.len() {
+            if "y" == v_str_3[0] {
+                break;
+            } else {
+
+            }
+        } else {
+            panic!("Parameters error!!!");
+        }
     }
+    Ok(())
 }
