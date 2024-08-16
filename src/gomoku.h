@@ -64,9 +64,11 @@ public:
 
 private:
   board_type board;            // game board
+  std::vector<int> legal_moves_hash_tab;
   const unsigned int n;        // board size
   const unsigned int n_in_row; // 5 in row or else
   unsigned int rule_flag;
+  unsigned int sum_cur_action;
 
   std::shared_ptr<FreeStyleJudge> free_style;
   std::shared_ptr<StandardJudge> standard;
