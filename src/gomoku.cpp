@@ -29,9 +29,10 @@ SOFTWARE.
 #include <sstream>
 
 Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color)
-    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(DEFAULT_RULE), free_style(new FreeStyleJudge()), standard(new StandardJudge()), renju(new RenjuJudge()), caro(new CaroJudge())
+    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(DEFAULT_RULE), sum_cur_action(0), free_style(new FreeStyleJudge()), standard(new StandardJudge()), renju(new RenjuJudge()), caro(new CaroJudge())
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
+  this->legal_moves_hash_tab = std::vector<int>(this->get_action_size(), 1);
 }
 
 bool Gomoku::set_rule(unsigned int rule_flag)
@@ -52,38 +53,12 @@ bool Gomoku::is_illegal(unsigned int x, unsigned int y)
 
 std::vector<int> Gomoku::get_legal_moves()
 {
-  auto n = this->n;
-  std::vector<int> legal_moves(this->get_action_size(), 0);
-
-  for (unsigned int i = 0; i < n; i++)
-  {
-    for (unsigned int j = 0; j < n; j++)
-    {
-      if (this->board[i][j] == 0)
-      {
-        legal_moves[i * n + j] = 1;
-      }
-    }
-  }
-
-  return legal_moves;
+  return this->legal_moves_hash_tab;
 }
 
 bool Gomoku::has_legal_moves()
 {
-  auto n = this->n;
-
-  for (unsigned int i = 0; i < n; i++)
-  {
-    for (unsigned int j = 0; j < n; j++)
-    {
-      if (this->board[i][j] == 0)
-      {
-        return true;
-      }
-    }
-  }
-  return false;
+  return (this->sum_cur_action < this->get_action_size());
 }
 
 void Gomoku::execute_move(move_type move)
@@ -97,6 +72,8 @@ void Gomoku::execute_move(move_type move)
   }
 
   this->board[i][j] = this->cur_color;
+  this->legal_moves_hash_tab[move] = 0;
+  this->sum_cur_action++;
   this->last_move = move;
   // change player
   this->cur_color = -(this->cur_color);
@@ -117,21 +94,21 @@ std::pair<int, int> Gomoku::get_game_status()
     int i_win = 0;
     if (nullptr != free_style)
       isWin = free_style->checkWin(this->board, this->last_move);
-    if (0x01 == (this->rule_flag & 0x01) && (this->get_action_size() - this->get_legal_moves().size() >= 9) && nullptr != standard)
+    if (0x01 == (this->rule_flag & 0x01) && (this->sum_cur_action >= 9) && nullptr != standard)
     {
       if (standard->checkWin(this->board, this->last_move))
         i_win |= 1;
       else
         isWin = false;
     }
-    if (0x04 == (this->rule_flag & 0x04) && (this->get_action_size() - this->get_legal_moves().size() >= 6) && nullptr != renju)
+    if (0x04 == (this->rule_flag & 0x04) && (this->sum_cur_action >= 6) && nullptr != renju)
     {
       if (renju->checkWin(this->board, this->last_move))
         i_win |= 4;
       else
         isWin = false;
     }
-    if (0x08 == (this->rule_flag & 0x08) && (this->get_action_size() - this->get_legal_moves().size() >= 9) && nullptr != caro)
+    if (0x08 == (this->rule_flag & 0x08) && (this->sum_cur_action >= 9) && nullptr != caro)
     {
       if (caro->checkWin(this->board, this->last_move))
         i_win |= 8;
