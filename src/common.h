@@ -32,47 +32,47 @@ SOFTWARE.
 // #define USE_TENSORRT
 // #define USE_ROCM
 
-#define ORT_OLD_VISON 12
+#define ORT_OLD_VISON (12)
 
-#define CHANNEL_SIZE 3
+#define CHANNEL_SIZE (3)
 
 #ifdef SMALL_BOARD_MODE
-#define BOARD_SIZE 3
-#define N_IN_ROW 3
-#define NUM_MCT_THREADS 4
-#define NUM_MCT_SIMS 54
-#define EXPLORE_STEP 3
-#define C_PUCT 3
-#define C_VIRTUAL_LOSS 1
-#define NUM_CHANNELS 64
-#define NUM_LAYERS 2
+#define BOARD_SIZE (3)
+#define N_IN_ROW (3)
+#define NUM_MCT_THREADS (4)
+#define NUM_MCT_SIMS (54)
+#define EXPLORE_STEP (3)
+#define C_PUCT (3)
+#define C_VIRTUAL_LOSS (1)
+#define NUM_CHANNELS (64)
+#define NUM_LAYERS (2)
 
-#define BATCH_SIZE 64 // 512
-#define DIRI 0.1
+#define BATCH_SIZE (64) // 512
+#define DIRI (0.1)
 
-#define NUM_TRAIN_THREADS 70
+#define NUM_TRAIN_THREADS (70)
 #else
-#define BOARD_SIZE 15
-#define N_IN_ROW 5
-#define NUM_MCT_THREADS 4
-#define NUM_MCT_SIMS 1600
+#define BOARD_SIZE (15)
+#define N_IN_ROW (5)
+#define NUM_MCT_THREADS (4)
+#define NUM_MCT_SIMS (1600)
 #define EXPLORE_STEP (BOARD_SIZE * BOARD_SIZE)
-#define C_PUCT 5
-#define C_VIRTUAL_LOSS 3
-// #define NUM_CHANNELS 256
-// #define NUM_LAYERS 4
+#define C_PUCT (5)
+#define C_VIRTUAL_LOSS (3)
+// #define NUM_CHANNELS (256)
+// #define NUM_LAYERS (4)
 
-#define BATCH_SIZE 256
-#define DIRI 0.01
+#define BATCH_SIZE (256)
+#define DIRI (0.01)
 
-#define NUM_TRAIN_THREADS 10
+#define NUM_TRAIN_THREADS (10)
 
 // 0 - free-style, 1 - standard, 2 - continuous, 4 - renju, 8 - caro
-#define DEFAULT_RULE 0
+#define DEFAULT_RULE (0)
 
 #endif
 
-#define BLACK 1
+#define BLACK (1)
 #define WHITE (-BLACK)
 
 #define BUFFER_LEN (BOARD_SIZE * BOARD_SIZE + 1)
