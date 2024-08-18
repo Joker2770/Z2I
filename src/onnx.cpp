@@ -145,7 +145,7 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
   // iterate over all input nodes
   for (size_t i = 0; i < num_input_nodes; i++)
   {
-#if ORT_API_VERSION < ORT_OLD_VISON
+#if (ORT_API_VERSION < ORT_OLD_VERSION)
 		_inputName = shared_session->GetInputName(i, allocator);
 		input_node_names.push_back(_inputName);
 #else
