@@ -32,7 +32,7 @@ SOFTWARE.
 // #define USE_TENSORRT
 // #define USE_ROCM
 
-#define ORT_OLD_VISON (12)
+#define ORT_OLD_VERSION (12)
 
 #define CHANNEL_SIZE (3)
 
