@@ -52,7 +52,7 @@ bool CheckStatus(const OrtApi *g_ort, OrtStatus *status)
 }
 
 NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int batch_size)
-    : // module(std::make_shared<torch::jit::script::Module>(torch::jit::load(model_path.c_str()))),
+    : /* module(std::make_shared<torch::jit::script::Module>(torch::jit::load(model_path.c_str()))),*/
       env(nullptr),
       shared_session(nullptr),
       batch_size(batch_size),

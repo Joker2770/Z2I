@@ -35,9 +35,9 @@ SOFTWARE.
 
 using namespace std;
 
-SelfPlay::SelfPlay(NeuralNetwork *nn) : // p_buffer(new p_buff_type()),
-                                        // board_buffer(new board_buff_type()),
-                                        // v_buffer(new v_buff_type()),
+SelfPlay::SelfPlay(NeuralNetwork *nn) : /* p_buffer(new p_buff_type()),*/
+                                        /* board_buffer(new board_buff_type()),*/
+                                        /* v_buffer(new v_buff_type()),*/
                                         nn(nn),
                                         thread_pool(new ThreadPool(NUM_TRAIN_THREADS))
 {
@@ -54,7 +54,7 @@ void SelfPlay::play(unsigned int saved_id)
     int step = 0;
     board_buff_type board_buffer(BUFFER_LEN, vector<vector<int>>(BOARD_SIZE, vector<int>(BOARD_SIZE)));
     v_buff_type v_buffer(BUFFER_LEN);
-    p_buff_type p_buffer(BUFFER_LEN, vector<float>(BOARD_SIZE * BOARD_SIZE)); // = new p_buff_type();
+    p_buff_type p_buffer(BUFFER_LEN, vector<float>(BOARD_SIZE * BOARD_SIZE)); /* = new p_buff_type();*/
     vector<int> col_buffer(BUFFER_LEN);
     vector<int> last_move_buffer(BUFFER_LEN);
     // diri noise

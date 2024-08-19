@@ -8,7 +8,7 @@
 /**
 MIT License
 
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -152,7 +152,11 @@ int main(int argc, char *argv[])
     cout << "MESSAGE game rule: " << g->get_rule() << endl;
 
     MCTS *m;
-    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+    m = new MCTS(module.get(),
+                 (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                 C_PUCT,
+                 (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS),
+                 C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
 
     string command;
     unsigned int size = 0;
@@ -503,7 +507,12 @@ int main(int argc, char *argv[])
                         delete m;
                         m = nullptr;
                     }
-                    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)log10((u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS) + 1) + 10, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+                    m = new MCTS(module.get(),
+                                 (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                                 C_PUCT,
+                                 (unsigned int)log10((u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS) + 1) + 10,
+                                 C_VIRTUAL_LOSS,
+                                 BOARD_SIZE * BOARD_SIZE);
                 }
             }
             else if (key == "max_memory")
@@ -699,7 +708,12 @@ int main(int argc, char *argv[])
                             delete m;
                             m = nullptr;
                         }
-                        m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+                        m = new MCTS(module.get(),
+                                     (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                                     C_PUCT,
+                                     (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS),
+                                     C_VIRTUAL_LOSS,
+                                     BOARD_SIZE * BOARD_SIZE);
                     }
                     else
                     {

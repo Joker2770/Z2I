@@ -197,7 +197,16 @@ int main(int argc, char *argv[])
 #else
         auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS / 16 + 1), (unsigned int)(NUM_MCT_SIMS / 16 + 1));
 #endif
-        string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
+        string result_log_info = to_string(current_weight) +
+                                 "-th weight win: " +
+                                 to_string(result[0]) +
+                                 "  " +
+                                 to_string(best_weight) +
+                                 "-th weight win: " +
+                                 to_string(result[1]) +
+                                 "  tie: " +
+                                 to_string(result[2]) +
+                                 "\n";
 
         double win_ratio = result[0] / (result[1] + 0.01);
         if (win_ratio > 1.2)
@@ -232,7 +241,18 @@ int main(int argc, char *argv[])
 
         vector<int> result_random_mcts = eval(current_weight, -1, game_num, nn_mcts_simulation, random_mcts_simulation);
 
-        string result_log_info2 = to_string(current_weight) + "-th weight with mcts [" + to_string(nn_mcts_simulation) + "] win: " + to_string(result_random_mcts[0]) + "  Random mcts [" + to_string(random_mcts_simulation) + "] win: " + to_string(result_random_mcts[1]) + "  tie: " + to_string(result_random_mcts[2]) + "\n";
+        string result_log_info2 = to_string(current_weight) +
+                                  "-th weight with mcts [" +
+                                  to_string(nn_mcts_simulation) +
+                                  "] win: " +
+                                  to_string(result_random_mcts[0]) +
+                                  "  Random mcts [" +
+                                  to_string(random_mcts_simulation) +
+                                  "] win: " +
+                                  to_string(result_random_mcts[1]) +
+                                  "  tie: " +
+                                  to_string(result_random_mcts[2]) +
+                                  "\n";
         if (result_random_mcts[0] == game_num)
         {
             if (random_mcts_simulation < 8000)
