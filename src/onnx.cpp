@@ -70,10 +70,13 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 
   this->session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
-// #define USE_CUDA
-#ifdef USE_CUDA
+#if (defined(USE_CUDA) || defined(USE_OPENVINO) || defined(USE_TENSORRT) || defined(USE_ROCM))
   const OrtApiBase *ptr_api_base = OrtGetApiBase();
   const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
+#endif // (USE_CUDA || USE_OPENVINO || USE_TENSORRT || USE_ROCM)
+
+// #define USE_CUDA
+#ifdef USE_CUDA
   // CUDA option set
   OrtCUDAProviderOptions cuda_option;
   cuda_option.device_id = 0;
@@ -88,8 +91,6 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 
 // #define USE_OPENVINO
 #ifdef USE_OPENVINO
-  const OrtApiBase *ptr_api_base = OrtGetApiBase();
-  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   // OpenVINO options set
   OrtOpenVINOProviderOptions OpenVINO_Options;
   OpenVINO_Options.device_type = "CPU_FP32";
@@ -98,16 +99,12 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 #endif
 
 #ifdef USE_TENSORRT
-  const OrtApiBase *ptr_api_base = OrtGetApiBase();
-  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   OrtTensorRTProviderOptions TensorRT_Options;
   TensorRT_Options.device_id = 0;
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_TensorRT(session_options, &TensorRT_Options));
 #endif
 
 #ifdef USE_ROCM
-  const OrtApiBase *ptr_api_base = OrtGetApiBase();
-  const OrtApi *g_ort = ptr_api_base->GetApi(ORT_API_VERSION);
   OrtROCMProviderOptions ROCM_Options;
   ROCM_Options.device_id = 0;
   CheckStatus(g_ort, g_ort->SessionOptionsAppendExecutionProvider_ROCM(session_options, &ROCM_Options));
