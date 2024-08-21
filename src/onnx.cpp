@@ -145,7 +145,7 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
     // print input node names
     char *input_name = shared_session->GetInputName(i, allocator);
     // printf("Input %d : name = %s\n", i, input_name);
-    input_node_names[i] = input_name;
+    this->input_node_names[i] = input_name;
 
     // print input node types
     Ort::TypeInfo type_info = shared_session->GetInputTypeInfo(i);
