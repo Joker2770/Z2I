@@ -52,9 +52,9 @@ int main(int argc, char *argv[])
   bool ai_black = true;
   if (argc <= 1)
   {
-    // cout << "Do not load weights. AI color = BLACK." << endl;
+    // std::cout << "Do not load weights. AI color = BLACK." << std::endl;
 
-    cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << endl;
+    std::cout << "Warning: Find No weight path and color, assume they are mymodel and 1 (AI color:Black)" << std::endl;
 #ifdef _WIN32
     module = std::make_shared<NeuralNetwork>("E:/Projects/AlphaZero-Onnx/python/mymodel.onnx", NUM_MCT_SIMS);
 #else
@@ -63,9 +63,9 @@ int main(int argc, char *argv[])
   }
   else
   {
-    ai_black = strcmp(argv[2], "1") == 0 ? true : false;
-    string color = ai_black ? "BLACK" : "WHITE";
-    cout << "Load weights: " << argv[1] << "  AI color: " << color << endl;
+    ai_black = (strcmp(argv[2], "1") == 0) ? true : false;
+    std::string color = ai_black ? "BLACK" : "WHITE";
+    std::cout << "Load weights: " << argv[1] << "  AI color: " << color << std::endl;
     // wchar_t wchar[128] = {0};
     // swprintf(wchar,128,L"%S",argv[1]);
 
