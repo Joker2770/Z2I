@@ -57,7 +57,7 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
     // std::cout << episode << " th game!!" << std::endl;
     while (game_state.first == 0)
     {
-        int res = (step + a_first) % 2 ? ma.get_best_action(g.get()) : mb.get_best_action(g.get());
+        int res = ((step + a_first) % 2) ? ma.get_best_action(g.get()) : mb.get_best_action(g.get());
         ma.update_with_move(res);
         mb.update_with_move(res);
         g->execute_move(res);

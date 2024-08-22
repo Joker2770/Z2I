@@ -57,7 +57,7 @@ bool Gomoku::set_rule(unsigned int rule_flag)
 
 bool Gomoku::is_illegal(unsigned int x, unsigned int y)
 {
-  return x > this->n - 1 || y > this->n - 1 || this->board[x][y] != 0;
+  return (x > this->n - 1 || y > this->n - 1 || this->board[x][y] != 0);
 }
 
 std::vector<int> Gomoku::get_legal_moves()

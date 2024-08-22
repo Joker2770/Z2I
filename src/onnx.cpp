@@ -200,7 +200,7 @@ NeuralNetwork::~NeuralNetwork()
     this->shared_session.reset();
 }
 
-std::future<NeuralNetwork::return_type> NeuralNetwork::commit(Gomoku *gomoku)
+std::future<NeuralNetwork::return_type> NeuralNetwork::commit(const Gomoku *gomoku)
 {
   std::vector<float> state = transorm_gomoku_to_Tensor(gomoku);
 
@@ -282,7 +282,7 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(const board_type &boa
   //  return cat({ state0, state1, state2 }, 1);
 }
 
-std::vector<float> NeuralNetwork::transorm_gomoku_to_Tensor(Gomoku *gomoku)
+std::vector<float> NeuralNetwork::transorm_gomoku_to_Tensor(const Gomoku *gomoku)
 {
   return NeuralNetwork::transorm_board_to_Tensor(gomoku->get_board(), gomoku->get_last_move(), gomoku->get_current_color());
 }
