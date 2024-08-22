@@ -28,7 +28,6 @@ SOFTWARE.
 #include <vector>
 #include <iostream>
 #include <codecvt>
-using namespace std;
 // #ifdef HAVE_TENSORRT_PROVIDER_FACTORY_H
 // #include <tensorrt_provider_factory.h>
 // #include <tensorrt_provider_options.h>

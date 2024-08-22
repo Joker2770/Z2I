@@ -28,8 +28,6 @@ SOFTWARE.
 
 #include <iostream>
 
-using namespace std;
-
 int main(int argc, char *argv[])
 {
   Gomoku *g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
