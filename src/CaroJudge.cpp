@@ -33,15 +33,14 @@ SOFTWARE.
 
 #include <algorithm>
 #include <iostream>
-using namespace std;
 
-bool CaroJudge::findShap(const board_type &board, int last_move, const pair<int, int> &p_drt)
+bool CaroJudge::findShap(const board_type &board, int last_move, const std::pair<int, int> &p_drt)
 {
-    vector<int> vColor;
+    std::vector<int> vColor;
 
     size_t n = board.size();
-    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
-    pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
+    std::pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
+    std::pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     // push back current stone color
     if (1 == board[last_move / n][last_move % n])
@@ -131,7 +130,7 @@ bool CaroJudge::checkWin(const board_type &board, int last_move)
     }
 
     size_t n = board.size();
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     bool b_up = findShap(board, last_move, p_drt_up);
     bool b_left = findShap(board, last_move, p_drt_left);
     bool b_leftup = findShap(board, last_move, p_drt_leftup);

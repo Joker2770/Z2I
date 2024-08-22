@@ -8,7 +8,7 @@
 /**
 MIT License
 
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,6 @@ SOFTWARE.
 
 #include "rule.h"
 #include <iostream>
-using namespace std;
 
 typedef enum pattern
 {
@@ -83,10 +82,10 @@ private:
     bool isDoubleThree(const board_type &board, int last_move);
     // after double-three, only 3
     bool isThree(const board_type &board, int last_move);
-    int countA4(const board_type &board, int last_move, const pair<int, int> &p_drt);
-    int countA3(const board_type &board, int last_move, const pair<int, int> &p_drt);
+    int countA4(const board_type &board, int last_move, const std::pair<int, int> &p_drt);
+    int countA3(const board_type &board, int last_move, const std::pair<int, int> &p_drt);
     bool isPosOutOfBoard(unsigned int n, int x, int y);
-    int countNearStone(const board_type &board, int last_move, const pair<int, int> &p_drt);
+    int countNearStone(const board_type &board, int last_move, const std::pair<int, int> &p_drt);
 
     int m_renju_state;
 };

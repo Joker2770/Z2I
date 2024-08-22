@@ -29,7 +29,16 @@ SOFTWARE.
 #include <sstream>
 
 Gomoku::Gomoku(const unsigned int n, const unsigned int n_in_row, int first_color)
-    : n(n), n_in_row(n_in_row), cur_color(first_color), last_move(-1), rule_flag(DEFAULT_RULE), sum_cur_action(0), free_style(new FreeStyleJudge()), standard(new StandardJudge()), renju(new RenjuJudge()), caro(new CaroJudge())
+    : n(n),
+      n_in_row(n_in_row),
+      cur_color(first_color),
+      last_move(-1),
+      rule_flag(DEFAULT_RULE),
+      sum_cur_action(0),
+      free_style(new FreeStyleJudge()),
+      standard(new StandardJudge()),
+      renju(new RenjuJudge()),
+      caro(new CaroJudge())
 {
   this->board = std::vector<std::vector<int>>(n, std::vector<int>(n, 0));
   this->legal_moves_hash_tab = std::vector<int>(this->get_action_size(), 1);
@@ -48,7 +57,7 @@ bool Gomoku::set_rule(unsigned int rule_flag)
 
 bool Gomoku::is_illegal(unsigned int x, unsigned int y)
 {
-  return x > this->n - 1 || y > this->n - 1 || this->board[x][y] != 0;
+  return (x > this->n - 1 || y > this->n - 1 || this->board[x][y] != 0);
 }
 
 std::vector<int> Gomoku::get_legal_moves()

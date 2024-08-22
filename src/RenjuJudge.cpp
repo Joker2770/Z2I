@@ -32,11 +32,10 @@ SOFTWARE.
 #include "RenjuJudge.h"
 #include <algorithm>
 #include <iostream>
-using namespace std;
 
 bool RenjuJudge::isOverLine(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_down(0, 1), p_drt_left(-1, 0), p_drt_right(1, 0), p_drt_leftup(-1, -1), p_drt_rightdown(1, 1), p_drt_rightup(1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_down(0, 1), p_drt_left(-1, 0), p_drt_right(1, 0), p_drt_leftup(-1, -1), p_drt_rightdown(1, 1), p_drt_rightup(1, -1), p_drt_leftdown(-1, 1);
     int i_up = countNearStone(board, last_move, p_drt_up);
     int i_down = countNearStone(board, last_move, p_drt_down);
     int i_left = countNearStone(board, last_move, p_drt_left);
@@ -52,15 +51,15 @@ bool RenjuJudge::isOverLine(const board_type &board, int last_move)
     return false;
 }
 
-int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, int> &p_drt)
+int RenjuJudge::countA4(const board_type &board, int last_move, const std::pair<int, int> &p_drt)
 {
     int i_count = 0;
 
-    vector<int> vColor;
+    std::vector<int> vColor;
 
     size_t n = board.size();
-    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
-    pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
+    std::pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
+    std::pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     // push back current stone color
     if (1 == board[last_move / n][last_move % n])
@@ -178,7 +177,7 @@ int RenjuJudge::countA4(const board_type &board, int last_move, const pair<int, 
 
 bool RenjuJudge::isDoubleFour(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     int i_up = countA4(board, last_move, p_drt_up);
     int i_left = countA4(board, last_move, p_drt_left);
     int i_leftup = countA4(board, last_move, p_drt_leftup);
@@ -190,13 +189,13 @@ bool RenjuJudge::isDoubleFour(const board_type &board, int last_move)
     return false;
 }
 
-int RenjuJudge::countA3(const board_type &board, int last_move, const pair<int, int> &p_drt)
+int RenjuJudge::countA3(const board_type &board, int last_move, const std::pair<int, int> &p_drt)
 {
-    vector<int> vColor;
+    std::vector<int> vColor;
 
     size_t n = board.size();
-    pair<int, int> p_idx((unsigned int)(last_move / n), (unsigned int)(last_move % n));
-    pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
+    std::pair<int, int> p_idx((unsigned int)(last_move / n), (unsigned int)(last_move % n));
+    std::pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     // push back current stone color
     if (1 == board[last_move / n][last_move % n])
@@ -287,7 +286,7 @@ int RenjuJudge::countA3(const board_type &board, int last_move, const pair<int, 
 
 bool RenjuJudge::isFourThree(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     int i_up_4 = countA4(board, last_move, p_drt_up);
     int i_left_4 = countA4(board, last_move, p_drt_left);
     int i_leftup_4 = countA4(board, last_move, p_drt_leftup);
@@ -342,7 +341,7 @@ bool RenjuJudge::isFourThree(const board_type &board, int last_move)
 
 bool RenjuJudge::isFour(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     int i_up_4 = countA4(board, last_move, p_drt_up);
     int i_left_4 = countA4(board, last_move, p_drt_left);
     int i_leftup_4 = countA4(board, last_move, p_drt_leftup);
@@ -381,7 +380,7 @@ bool RenjuJudge::isFour(const board_type &board, int last_move)
 
 bool RenjuJudge::isDoubleThree(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     int i_up_4 = countA4(board, last_move, p_drt_up);
     int i_left_4 = countA4(board, last_move, p_drt_left);
     int i_leftup_4 = countA4(board, last_move, p_drt_leftup);
@@ -444,7 +443,7 @@ bool RenjuJudge::isDoubleThree(const board_type &board, int last_move)
 
 bool RenjuJudge::isThree(const board_type &board, int last_move)
 {
-    pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
+    std::pair<int, int> p_drt_up(0, -1), p_drt_left(-1, 0), p_drt_leftup(-1, -1), p_drt_leftdown(-1, 1);
     int i_up_4 = countA4(board, last_move, p_drt_up);
     int i_left_4 = countA4(board, last_move, p_drt_left);
     int i_leftup_4 = countA4(board, last_move, p_drt_leftup);
@@ -523,15 +522,15 @@ bool RenjuJudge::isPosOutOfBoard(unsigned int n, int x, int y)
     return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
-int RenjuJudge::countNearStone(const board_type &board, int last_move, const pair<int, int> &p_drt)
+int RenjuJudge::countNearStone(const board_type &board, int last_move, const std::pair<int, int> &p_drt)
 {
     int i_count = 0;
     if (-1 == last_move)
         return 0;
 
     size_t n = board.size();
-    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
-    pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
+    std::pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
+    std::pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     while (!isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
     {
@@ -561,7 +560,7 @@ bool RenjuJudge::checkWin(const board_type &board, int last_move)
 
     size_t n = board.size();
 
-    pair<int, int> p_drt_up(0, -1),
+    std::pair<int, int> p_drt_up(0, -1),
         p_drt_down(0, 1),
         p_drt_left(-1, 0),
         p_drt_right(1, 0),

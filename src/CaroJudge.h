@@ -34,7 +34,6 @@ SOFTWARE.
 
 #include "rule.h"
 #include <iostream>
-using namespace std;
 
 const int WIN_SHAPES[][7] = {
     {1, 1, 1, 1, 1, 0, 0},
@@ -91,7 +90,7 @@ public:
 
 private:
     bool isPosOutOfBoard(unsigned int n, int x, int y);
-    bool findShap(const board_type &board, int last_move, const pair<int, int> &p_drt);
+    bool findShap(const board_type &board, int last_move, const std::pair<int, int> &p_drt);
 };
 
 #endif

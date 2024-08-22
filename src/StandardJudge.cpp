@@ -31,22 +31,21 @@ SOFTWARE.
 
 #include "StandardJudge.h"
 #include <iostream>
-using namespace std;
 
 bool StandardJudge::isPosOutOfBoard(unsigned int n, int x, int y)
 {
     return ((unsigned int)x > n - 1) || ((unsigned int)y > n - 1) || x < 0 || y < 0;
 }
 
-int StandardJudge::countNearStone(const board_type &board, int last_move, const pair<int, int> &p_drt)
+int StandardJudge::countNearStone(const board_type &board, int last_move, const std::pair<int, int> &p_drt)
 {
     int i_count = 0;
     if (-1 == last_move)
         return 0;
 
     size_t n = board.size();
-    pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
-    pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
+    std::pair<int, int> p_idx((int)(last_move / n), (int)(last_move % n));
+    std::pair<int, int> p_drt_idx(p_idx.first + p_drt.first, p_idx.second + p_drt.second);
 
     while (!isPosOutOfBoard((unsigned int)n, p_drt_idx.first, p_drt_idx.second) && 0 != board[p_drt_idx.first][p_drt_idx.second])
     {
@@ -76,7 +75,7 @@ bool StandardJudge::checkWin(const board_type &board, int last_move)
 
     size_t n = board.size();
 
-    pair<int, int> p_drt_up(0, -1),
+    std::pair<int, int> p_drt_up(0, -1),
         p_drt_down(0, 1),
         p_drt_left(-1, 0),
         p_drt_right(1, 0),
