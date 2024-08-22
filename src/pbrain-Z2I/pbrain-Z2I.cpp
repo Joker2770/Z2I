@@ -32,7 +32,7 @@ SOFTWARE.
 #include "../mcts.h"
 #include "../common.h"
 #include "../onnx.h"
-#include "toml11/toml.hpp"
+#include "toml.hpp"
 
 #include <string>
 #include <cstring>
