@@ -41,7 +41,7 @@ endif(ENABLE_ROCM)
 
 include_directories("${ONNXRUNTIME_ROOTDIR}/include"
                 "${CMAKE_SOURCE_DIR}/src"
-                "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11"
+                "${CMAKE_SOURCE_DIR}/src/pbrain-Z2I/toml11/include"
 )
 link_directories("${ONNXRUNTIME_ROOTDIR}/lib")
 
