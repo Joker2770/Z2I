@@ -33,11 +33,9 @@ SOFTWARE.
 #include <fstream>
 #include <sstream>
 
-using namespace std;
-
-SelfPlay::SelfPlay(NeuralNetwork *nn) : // p_buffer(new p_buff_type()),
-                                        // board_buffer(new board_buff_type()),
-                                        // v_buffer(new v_buff_type()),
+SelfPlay::SelfPlay(NeuralNetwork *nn) : /* p_buffer(new p_buff_type()),*/
+                                        /* board_buffer(new board_buff_type()),*/
+                                        /* v_buffer(new v_buff_type()),*/
                                         nn(nn),
                                         thread_pool(new ThreadPool(NUM_TRAIN_THREADS))
 {
@@ -52,19 +50,19 @@ void SelfPlay::play(unsigned int saved_id)
     std::cout << "game rule: " << g->get_rule() << std::endl;
     // std::cout << "begin !!" << std::endl;
     int step = 0;
-    board_buff_type board_buffer(BUFFER_LEN, vector<vector<int>>(BOARD_SIZE, vector<int>(BOARD_SIZE)));
+    board_buff_type board_buffer(BUFFER_LEN, std::vector<std::vector<int>>(BOARD_SIZE, std::vector<int>(BOARD_SIZE)));
     v_buff_type v_buffer(BUFFER_LEN);
-    p_buff_type p_buffer(BUFFER_LEN, vector<float>(BOARD_SIZE * BOARD_SIZE)); // = new p_buff_type();
-    vector<int> col_buffer(BUFFER_LEN);
-    vector<int> last_move_buffer(BUFFER_LEN);
+    p_buff_type p_buffer(BUFFER_LEN, std::vector<float>(BOARD_SIZE * BOARD_SIZE)); /* = new p_buff_type();*/
+    std::vector<int> col_buffer(BUFFER_LEN);
+    std::vector<int> last_move_buffer(BUFFER_LEN);
     // diri noise
     static std::gamma_distribution<float> gamma(0.3f, 1.0f);
     static std::default_random_engine rng(static_cast<unsigned int>(std::time(nullptr)));
 
     while (game_state.first == 0)
     {
-        // cout << "game id: " << saved_id << endl;
-        double temp = step < EXPLORE_STEP ? 1.0 : 1e-3;
+        // std::cout << "game id: " << saved_id << std::endl;
+        double temp = (step < EXPLORE_STEP) ? 1.0 : 1e-3;
         auto action_probs = mcts->get_action_probs(g.get(), temp);
         // auto action_probs = m->get_action_probs(g.get(), 1);
         // int best_action = m->get_best_action_from_prob(action_probs);
@@ -92,7 +90,7 @@ void SelfPlay::play(unsigned int saved_id)
             {
                 double noi = DIRI * gamma(rng);
                 // if (is1){
-                //     cout << "noi = " << noi << endl;
+                //     std::cout << "noi = " << noi << std::endl;
                 //     is1 = false;
                 // }
                 action_probs[i] += noi;
@@ -121,13 +119,13 @@ void SelfPlay::play(unsigned int saved_id)
         g->render();
         step++;
     }
-    cout << "Self play: total step num = " << step << " winner = " << game_state.second << endl;
+    std::cout << "Self play: total step num = " << step << " winner = " << game_state.second << std::endl;
 
     size_t hash_value = std::hash<std::shared_ptr<Gomoku>>{}(g);
     std::ostringstream oss;
     oss << hash_value;
-    ofstream bestand;
-    bestand.open("./data/data_" + to_string(saved_id) + "_" + oss.str(), ios::out | ios::binary);
+    std::ofstream bestand;
+    bestand.open("./data/data_" + std::to_string(saved_id) + "_" + oss.str(), std::ios::out | std::ios::binary);
     bestand.write(reinterpret_cast<char *>(&step), sizeof(int));
 
     for (int i = 0; i < step; i++)
@@ -159,11 +157,11 @@ void SelfPlay::play(unsigned int saved_id)
     // just validation
     // ifstream inlezen;
     // int new_step;
-    // inlezen.open("./data/data_"+str(id), ios::in | ios::binary);
+    // inlezen.open("./data/data_"+str(id), std::ios::in | std::ios::binary);
     // inlezen.read(reinterpret_cast<char*>(&new_step), sizeof(int));
 
-    // board_buff_type new_board_buffer(new_step, vector<vector<int>>(BOARD_SIZE, vector<int>(BOARD_SIZE)));
-    // p_buff_type new_p_buffer(new_step, vector<float>(BOARD_SIZE * BOARD_SIZE));
+    // board_buff_type new_board_buffer(new_step, std::vector<std::vector<int>>(BOARD_SIZE, std::vector<int>(BOARD_SIZE)));
+    // p_buff_type new_p_buffer(new_step, std::vector<float>(BOARD_SIZE * BOARD_SIZE));
     // v_buff_type new_v_buffer(new_step);
 
     // for (int i = 0; i < step; i++) {
@@ -192,8 +190,8 @@ void SelfPlay::self_play_for_train(unsigned int game_num, unsigned int start_bat
     {
         futures[i].wait();
 
-        this->nn->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
-        // cout << "end" << endl;
+        this->nn->set_batch_size(std::max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
+        // std::cout << "end" << std::endl;
     }
     // return { *this->board_buffer , *this->p_buffer ,*this->v_buffer };
 }
@@ -209,7 +207,7 @@ void SelfPlay::self_play_for_train(unsigned int game_num, unsigned int start_bat
 //    for (unsigned int i = 0; i < futures.size(); i++) {
 //        futures[i].wait();
 //
-//        this->nn->batch_size = max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
+//        this->nn->batch_size = std::max((unsigned)1, (game_num - i) * NUM_MCT_THREADS);
 //    }
 //    //return { *this->board_buffer , *this->p_buffer ,*this->v_buffer };
 //}

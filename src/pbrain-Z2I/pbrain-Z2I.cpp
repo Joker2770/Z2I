@@ -8,7 +8,7 @@
 /**
 MIT License
 
-Copyright (c) 2023 Joker2770
+Copyright (c) 2023-2024 Joker2770
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,8 +38,6 @@ SOFTWARE.
 #include <cstring>
 #include <vector>
 #include <filesystem>
-#include <iostream>
-using namespace std;
 
 bool isNumericString(const char *str, size_t i_len)
 {
@@ -53,18 +51,18 @@ bool isNumericString(const char *str, size_t i_len)
     return true;
 }
 
-vector<string> split(const string &str, const string &pattern)
+std::vector<std::string> split(const std::string &str, const std::string &pattern)
 {
-    string::size_type pos;
-    vector<string> result;
-    string strs = str + pattern;
+    std::string::size_type pos;
+    std::vector<std::string> result;
+    std::string strs = str + pattern;
     size_t size = strs.size();
     for (size_t i = 0; i < size; ++i)
     {
         pos = strs.find(pattern, i);
         if (pos < size)
         {
-            string s = strs.substr(i, pos - i);
+            std::string s = strs.substr(i, pos - i);
             result.push_back(s);
             i = pos + pattern.size() - 1;
         }
@@ -72,7 +70,7 @@ vector<string> split(const string &str, const string &pattern)
     return result;
 }
 
-void toupper(string &str)
+void toupper(std::string &str)
 {
     for (size_t i = 0; i < str.size(); i++)
     {
@@ -86,35 +84,35 @@ void toupper(string &str)
 
 int main(int argc, char *argv[])
 {
-    cout << "MESSAGE ................................................................................." << endl;
-    cout << "MESSAGE MIT License" << endl;
-    cout << "MESSAGE " << endl;
-    cout << "MESSAGE Copyright (c) 2023-2024 Joker2770" << endl;
-    cout << "MESSAGE " << endl;
-    cout << "MESSAGE Permission is hereby granted, free of charge, to any person obtaining a copy" << endl;
-    cout << "MESSAGE of this software and associated documentation files (the \"Software\"), to deal" << endl;
-    cout << "MESSAGE in the Software without restriction, including without limitation the rights" << endl;
-    cout << "MESSAGE to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" << endl;
-    cout << "MESSAGE copies of the Software, and to permit persons to whom the Software is" << endl;
-    cout << "MESSAGE furnished to do so, subject to the following conditions:" << endl;
-    cout << "MESSAGE MESSAGE " << endl;
-    cout << "MESSAGE The above copyright notice and this permission notice shall be included in all" << endl;
-    cout << "MESSAGE copies or substantial portions of the Software." << endl;
-    cout << "MESSAGE " << endl;
-    cout << "MESSAGE THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" << endl;
-    cout << "MESSAGE IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," << endl;
-    cout << "MESSAGE FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" << endl;
-    cout << "MESSAGE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" << endl;
-    cout << "MESSAGE LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," << endl;
-    cout << "MESSAGE OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" << endl;
-    cout << "MESSAGE SOFTWARE." << endl;
-    cout << "MESSAGE " << endl;
-    cout << "MESSAGE ................................................................................." << endl;
+    std::cout << "MESSAGE ................................................................................." << std::endl;
+    std::cout << "MESSAGE MIT License" << std::endl;
+    std::cout << "MESSAGE " << std::endl;
+    std::cout << "MESSAGE Copyright (c) 2023-2024 Joker2770" << std::endl;
+    std::cout << "MESSAGE " << std::endl;
+    std::cout << "MESSAGE Permission is hereby granted, free of charge, to any person obtaining a copy" << std::endl;
+    std::cout << "MESSAGE of this software and associated documentation files (the \"Software\"), to deal" << std::endl;
+    std::cout << "MESSAGE in the Software without restriction, including without limitation the rights" << std::endl;
+    std::cout << "MESSAGE to use, copy, modify, merge, publish, distribute, sublicense, and/or sell" << std::endl;
+    std::cout << "MESSAGE copies of the Software, and to permit persons to whom the Software is" << std::endl;
+    std::cout << "MESSAGE furnished to do so, subject to the following conditions:" << std::endl;
+    std::cout << "MESSAGE MESSAGE " << std::endl;
+    std::cout << "MESSAGE The above copyright notice and this permission notice shall be included in all" << std::endl;
+    std::cout << "MESSAGE copies or substantial portions of the Software." << std::endl;
+    std::cout << "MESSAGE " << std::endl;
+    std::cout << "MESSAGE THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR" << std::endl;
+    std::cout << "MESSAGE IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY," << std::endl;
+    std::cout << "MESSAGE FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE" << std::endl;
+    std::cout << "MESSAGE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER" << std::endl;
+    std::cout << "MESSAGE LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM," << std::endl;
+    std::cout << "MESSAGE OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE" << std::endl;
+    std::cout << "MESSAGE SOFTWARE." << std::endl;
+    std::cout << "MESSAGE " << std::endl;
+    std::cout << "MESSAGE ................................................................................." << std::endl;
 
     std::shared_ptr<NeuralNetwork> module = nullptr;
     std::filesystem::path exe_path = std::filesystem::canonical(std::filesystem::path(argv[0])).remove_filename();
-    string s_config_file_path = exe_path.string() + "config.toml";
-    string s_model_path;
+    std::string s_config_file_path = exe_path.string() + "config.toml";
+    std::string s_model_path;
     unsigned int u_num_mct_sims = 1600;
     unsigned int u_num_mct_threads = 10;
     toml::value toml_data;
@@ -125,48 +123,52 @@ int main(int argc, char *argv[])
             u_num_mct_sims = toml::find<unsigned int>(toml_data["MCTS"], "num_mct_sims");
         if (toml_data["MCTS"].is_table())
             u_num_mct_threads = toml::find<unsigned int>(toml_data["MCTS"], "num_mct_threads");
-        cout << "MESSAGE num_mct_sims: " << u_num_mct_sims << endl;
-        cout << "MESSAGE num_mct_threads: " << u_num_mct_threads << endl;
+        std::cout << "MESSAGE num_mct_sims: " << u_num_mct_sims << std::endl;
+        std::cout << "MESSAGE num_mct_threads: " << u_num_mct_threads << std::endl;
         if (toml_data["model"].is_table())
             s_model_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "default_model");
-        cout << "MESSAGE model load path: " << s_model_path << endl;
+        std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
         if (!s_model_path.empty() && std::filesystem::exists(s_model_path))
         {
-            cout << "MESSAGE model exists" << endl;
+            std::cout << "MESSAGE model exists" << std::endl;
             module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
         }
         else
         {
-            cout << "ERROR model not exists" << endl;
+            std::cout << "ERROR model not exists" << std::endl;
             return -1;
         }
     }
     else
     {
-        cout << "ERROR config file not exists" << endl;
+        std::cout << "ERROR config file not exists" << std::endl;
         return -1;
     }
 
     Gomoku *g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
     g->set_rule(0);
-    cout << "MESSAGE game rule: " << g->get_rule() << endl;
+    std::cout << "MESSAGE game rule: " << g->get_rule() << std::endl;
 
     MCTS *m;
-    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+    m = new MCTS(module.get(),
+                 (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                 C_PUCT,
+                 (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS),
+                 C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
 
-    string command;
+    std::string command;
     unsigned int size = 0;
     char dot = ',';
     bool isPlaying = false;
     for (;;)
     {
-        cin >> command;
+        std::cin >> command;
         toupper(command);
 
         if (command == "START")
         {
             char s_size[4] = "\0";
-            cin >> s_size;
+            std::cin >> s_size;
             if (isNumericString(s_size, strlen(s_size)))
             {
                 size = atoi(s_size);
@@ -182,11 +184,11 @@ int main(int argc, char *argv[])
 
             if (size == 15)
             {
-                cout << "OK" << endl;
+                std::cout << "OK" << std::endl;
             }
             else
             {
-                cout << "ERROR unsupported board size!" << endl;
+                std::cout << "ERROR unsupported board size!" << std::endl;
             }
         }
         // else if (command == "RESTART")
@@ -203,13 +205,13 @@ int main(int argc, char *argv[])
             g->execute_move(res);
             unsigned int x = res / size;
             unsigned int y = res % size;
-            cout << x << "," << y << endl;
+            std::cout << x << "," << y << std::endl;
         }
         else if (command == "TURN")
         {
             isPlaying = true;
             unsigned int x, y;
-            cin >> x >> dot >> y;
+            std::cin >> x >> dot >> y;
             if (!(g->is_illegal(x, y)))
             {
                 int move = x * size + y;
@@ -223,23 +225,23 @@ int main(int argc, char *argv[])
                 {
                     m->update_with_move(action);
                     g->execute_move(action);
-                    cout << x << "," << y << endl;
+                    std::cout << x << "," << y << std::endl;
                 }
                 else
                 {
-                    cout << "ERROR Illegal move generated! " << endl;
+                    std::cout << "ERROR Illegal move generated! " << std::endl;
                 }
             }
             else
             {
-                cout << "ERROR Illegal move from opponent! " << endl;
+                std::cout << "ERROR Illegal move from opponent! " << std::endl;
             }
         }
         else if (command == "BOARD")
         {
             isPlaying = true;
             unsigned int x, y, c;
-            vector<int> move_1, move_2, move_3;
+            std::vector<int> move_1, move_2, move_3;
 
             if (nullptr != g)
             {
@@ -248,14 +250,14 @@ int main(int argc, char *argv[])
             }
             g = new Gomoku(BOARD_SIZE, N_IN_ROW, BLACK);
 
-            cin >> command;
+            std::cin >> command;
             while (command != "DONE")
             {
-                // cout << "DEBUG " << command << endl;
-                vector<string> v_s = split(command, ",");
+                // std::cout << "DEBUG " << command << std::endl;
+                std::vector<std::string> v_s = split(command, ",");
                 if ((command.find_first_of(',', 0) != command.find_last_of(',', 0)) && v_s.size() == 3)
                 {
-                    // cout << "DEBUG " << v_s.at(0) << "," << v_s.at(1) << "," << v_s.at(2) << endl;
+                    // std::cout << "DEBUG " << v_s.at(0) << "," << v_s.at(1) << "," << v_s.at(2) << std::endl;
                     if (isNumericString(v_s.at(0).c_str(), v_s.at(0).length()) &&
                         isNumericString(v_s.at(1).c_str(), v_s.at(1).length()) &&
                         isNumericString(v_s.at(2).c_str(), v_s.at(2).length()))
@@ -264,7 +266,7 @@ int main(int argc, char *argv[])
                         y = atoi(v_s.at(1).c_str());
                         c = atoi(v_s.at(2).c_str());
                         int move = x * size + y;
-                        // cout << "DEBUG move: " << move << endl;
+                        // std::cout << "DEBUG move: " << move << std::endl;
                         if (c == 1)
                         {
                             move_1.push_back(move);
@@ -283,7 +285,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        cout << "ERROR Illegal pos! " << endl;
+                        std::cout << "ERROR Illegal pos! " << std::endl;
                         move_1.clear();
                         move_2.clear();
                         move_3.clear();
@@ -292,17 +294,17 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    cout << "ERROR Illegal board! " << endl;
+                    std::cout << "ERROR Illegal board! " << std::endl;
                     move_1.clear();
                     move_2.clear();
                     move_3.clear();
                     break;
                 }
-                cin >> command;
+                std::cin >> command;
             }
-            // cout << "DEBUG move_1 size: " << move_1.size() << endl;
-            // cout << "DEBUG move_2 size: " << move_2.size() << endl;
-            // cout << "DEBUG move_3 size: " << move_3.size() << endl;
+            // std::cout << "DEBUG move_1 size: " << move_1.size() << std::endl;
+            // std::cout << "DEBUG move_2 size: " << move_2.size() << std::endl;
+            // std::cout << "DEBUG move_3 size: " << move_3.size() << std::endl;
 
             if (move_1.size() == 0 && move_2.size() == 0 && move_3.size() != 0)
             {
@@ -317,7 +319,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        cout << "ERROR Illegal pos! " << endl;
+                        std::cout << "ERROR Illegal pos! " << std::endl;
                         move_3.clear();
                         break;
                     }
@@ -333,11 +335,11 @@ int main(int argc, char *argv[])
                     {
                         m->update_with_move(action);
                         g->execute_move(action);
-                        cout << x << "," << y << endl;
+                        std::cout << x << "," << y << std::endl;
                     }
                     else
                     {
-                        cout << "ERROR Illegal move generated! " << endl;
+                        std::cout << "ERROR Illegal move generated! " << std::endl;
                         break;
                     }
                 }
@@ -362,7 +364,7 @@ int main(int argc, char *argv[])
                         }
                         else
                         {
-                            cout << "ERROR Illegal pos! " << endl;
+                            std::cout << "ERROR Illegal pos! " << std::endl;
                             move_1.clear();
                             move_2.clear();
                             move_3.clear();
@@ -376,7 +378,7 @@ int main(int argc, char *argv[])
                         }
                         else
                         {
-                            cout << "ERROR Illegal pos! " << endl;
+                            std::cout << "ERROR Illegal pos! " << std::endl;
                             move_1.clear();
                             move_2.clear();
                             move_3.clear();
@@ -392,7 +394,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        cout << "ERROR Illegal pos! " << endl;
+                        std::cout << "ERROR Illegal pos! " << std::endl;
                         move_1.clear();
                         move_2.clear();
                         move_3.clear();
@@ -401,7 +403,7 @@ int main(int argc, char *argv[])
                 }
                 else
                 {
-                    cout << "ERROR Illegal quantity gap! " << endl;
+                    std::cout << "ERROR Illegal quantity gap! " << std::endl;
                     move_1.clear();
                     move_2.clear();
                     move_3.clear();
@@ -424,7 +426,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        cout << "ERROR Illegal pos! " << endl;
+                        std::cout << "ERROR Illegal pos! " << std::endl;
                         move_1.clear();
                         move_2.clear();
                         move_3.clear();
@@ -438,7 +440,7 @@ int main(int argc, char *argv[])
                     }
                     else
                     {
-                        cout << "ERROR Illegal pos! " << endl;
+                        std::cout << "ERROR Illegal pos! " << std::endl;
                         move_1.clear();
                         move_2.clear();
                         move_3.clear();
@@ -453,30 +455,30 @@ int main(int argc, char *argv[])
 
             std::vector<double> p = m->get_action_probs(g);
             int action = m->get_best_action_from_prob(p);
-            // cout << "DEBUG action: " << action << endl;
+            // std::cout << "DEBUG action: " << action << std::endl;
             x = action / size;
             y = action % size;
             if (!g->is_illegal(x, y))
             {
                 m->update_with_move(action);
                 g->execute_move(action);
-                cout << x << "," << y << endl;
+                std::cout << x << "," << y << std::endl;
             }
             else
             {
-                cout << "ERROR Illegal move generated! " << endl;
+                std::cout << "ERROR Illegal move generated! " << std::endl;
             }
         }
         else if (command == "INFO")
         {
             unsigned int value = 0;
-            string key;
-            cin >> key;
+            std::string key;
+            std::cin >> key;
 
             if (key == "timeout_turn")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                 {
                     value = atoi(s_value);
@@ -485,14 +487,14 @@ int main(int argc, char *argv[])
             else if (key == "timeout_match")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
             }
             else if (key == "time_left")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
 
@@ -503,13 +505,18 @@ int main(int argc, char *argv[])
                         delete m;
                         m = nullptr;
                     }
-                    m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)log10((u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS) + 1) + 10, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+                    m = new MCTS(module.get(),
+                                 (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                                 C_PUCT,
+                                 (unsigned int)log10((u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS) + 1) + 10,
+                                 C_VIRTUAL_LOSS,
+                                 BOARD_SIZE * BOARD_SIZE);
                 }
             }
             else if (key == "max_memory")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
                 // TODO
@@ -517,7 +524,7 @@ int main(int argc, char *argv[])
             else if (key == "game_type")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
                 if (isNumericString(s_value, strlen(s_value)))
                     value = atoi(s_value);
                 // TODO
@@ -525,7 +532,7 @@ int main(int argc, char *argv[])
             else if (key == "rule")
             {
                 char s_value[16] = "\0";
-                cin >> s_value;
+                std::cin >> s_value;
 
                 if (isPlaying)
                     continue;
@@ -537,60 +544,60 @@ int main(int argc, char *argv[])
                 // renju > caro > standard > free-style
                 if (0 == value)
                 {
-                    if (s_model_path.find("free-style") == string::npos)
+                    if (s_model_path.find("free-style") == std::string::npos)
                     {
                         if (std::filesystem::exists(s_config_file_path))
                         {
-                            cout << "MESSAGE change model path!" << endl;
+                            std::cout << "MESSAGE change model path!" << std::endl;
                             toml_data = toml::parse(s_config_file_path);
                             if (toml_data["model"].is_table())
                             {
-                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "free_style_model");
+                                std::string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "free_style_model");
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
-                                    cout << "MESSAGE model exists" << endl;
+                                    std::cout << "MESSAGE model exists" << std::endl;
                                     s_model_path = s_tmp_path;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
                                     bChangeModule = true;
                                     g->set_rule(0);
                                 }
                                 else
                                 {
-                                    cout << "ERROR model not exists" << endl;
+                                    std::cout << "ERROR model not exists" << std::endl;
                                 }
                             }
                         }
                         else
-                            cout << "ERROR config file not exists" << endl;
+                            std::cout << "ERROR config file not exists" << std::endl;
                     }
                 }
                 else if (4 == (value & 4))
                 {
-                    if (s_model_path.find("renju") == string::npos)
+                    if (s_model_path.find("renju") == std::string::npos)
                     {
                         if (std::filesystem::exists(s_config_file_path))
                         {
-                            cout << "MESSAGE change model path!" << endl;
+                            std::cout << "MESSAGE change model path!" << std::endl;
                             toml_data = toml::parse(s_config_file_path);
                             if (toml_data["model"].is_table())
                             {
-                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "renju_model");
+                                std::string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "renju_model");
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
-                                    cout << "MESSAGE model exists" << endl;
+                                    std::cout << "MESSAGE model exists" << std::endl;
                                     s_model_path = s_tmp_path;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
                                     bChangeModule = true;
                                     g->set_rule(4);
                                 }
                                 else
                                 {
-                                    cout << "ERROR model not exists" << endl;
+                                    std::cout << "ERROR model not exists" << std::endl;
                                 }
                             }
                         }
                         else
-                            cout << "ERROR config file not exists" << endl;
+                            std::cout << "ERROR config file not exists" << std::endl;
                     }
                 }
                 else if (8 == (value & 8))
@@ -598,132 +605,137 @@ int main(int argc, char *argv[])
                     // standard caro
                     if (1 == (value & 1))
                     {
-                        if (s_model_path.find("standard_caro") == string::npos)
+                        if (s_model_path.find("standard_caro") == std::string::npos)
                         {
                             if (std::filesystem::exists(s_config_file_path))
                             {
-                                cout << "MESSAGE change model path!" << endl;
+                                std::cout << "MESSAGE change model path!" << std::endl;
                                 toml_data = toml::parse(s_config_file_path);
                                 if (toml_data["model"].is_table())
                                 {
-                                    string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_caro_model");
+                                    std::string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_caro_model");
                                     if (std::filesystem::exists(s_tmp_path))
                                     {
-                                        cout << "MESSAGE model exists" << endl;
+                                        std::cout << "MESSAGE model exists" << std::endl;
                                         s_model_path = s_tmp_path;
-                                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                                        std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
                                         bChangeModule = true;
                                         g->set_rule(9);
                                     }
                                     else
                                     {
-                                        cout << "ERROR model not exists" << endl;
+                                        std::cout << "ERROR model not exists" << std::endl;
                                     }
                                 }
                             }
                             else
-                                cout << "ERROR config file not exists" << endl;
+                                std::cout << "ERROR config file not exists" << std::endl;
                         }
                     }
                     else
                     {
-                        if (s_model_path.find("caro") == string::npos || (s_model_path.find("standard_caro") != string::npos))
+                        if (s_model_path.find("caro") == std::string::npos || (s_model_path.find("standard_caro") != std::string::npos))
                         {
                             if (std::filesystem::exists(s_config_file_path))
                             {
-                                cout << "MESSAGE change model path!" << endl;
+                                std::cout << "MESSAGE change model path!" << std::endl;
                                 toml_data = toml::parse(s_config_file_path);
                                 if (toml_data["model"].is_table())
                                 {
-                                    string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "caro_model");
+                                    std::string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "caro_model");
                                     if (std::filesystem::exists(s_tmp_path))
                                     {
-                                        cout << "MESSAGE model exists" << endl;
+                                        std::cout << "MESSAGE model exists" << std::endl;
                                         s_model_path = s_tmp_path;
-                                        cout << "MESSAGE model load path: " << s_model_path << endl;
+                                        std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
                                         bChangeModule = true;
                                         g->set_rule(8);
                                     }
                                     else
                                     {
-                                        cout << "ERROR model not exists" << endl;
+                                        std::cout << "ERROR model not exists" << std::endl;
                                     }
                                 }
                             }
                             else
-                                cout << "ERROR config file not exists" << endl;
+                                std::cout << "ERROR config file not exists" << std::endl;
                         }
                     }
                 }
                 else if (1 == (value & 1))
                 {
-                    if (s_model_path.find("standard") == string::npos)
+                    if (s_model_path.find("standard") == std::string::npos)
                     {
                         if (std::filesystem::exists(s_config_file_path))
                         {
-                            cout << "MESSAGE change model path!" << endl;
+                            std::cout << "MESSAGE change model path!" << std::endl;
                             toml_data = toml::parse(s_config_file_path);
                             if (toml_data["model"].is_table())
                             {
-                                string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_model");
+                                std::string s_tmp_path = exe_path.string() + toml::find<std::string>(toml_data["model"], "standard_model");
                                 if (std::filesystem::exists(s_tmp_path))
                                 {
-                                    cout << "MESSAGE model exists" << endl;
+                                    std::cout << "MESSAGE model exists" << std::endl;
                                     s_model_path = s_tmp_path;
-                                    cout << "MESSAGE model load path: " << s_model_path << endl;
+                                    std::cout << "MESSAGE model load path: " << s_model_path << std::endl;
                                     bChangeModule = true;
                                     g->set_rule(1);
                                 }
                                 else
                                 {
-                                    cout << "ERROR model not exists" << endl;
+                                    std::cout << "ERROR model not exists" << std::endl;
                                 }
                             }
                         }
                         else
-                            cout << "ERROR config file not exists" << endl;
+                            std::cout << "ERROR config file not exists" << std::endl;
                     }
                 }
                 else
-                    cout << "ERROR unsupport rule: " << value << endl;
+                    std::cout << "ERROR unsupport rule: " << value << std::endl;
 
                 if (bChangeModule)
                 {
                     if (std::filesystem::exists(s_model_path))
                     {
-                        cout << "MESSAGE model exists" << endl;
-                        cout << "MESSAGE game rule: " << g->get_rule() << endl;
+                        std::cout << "MESSAGE model exists" << std::endl;
+                        std::cout << "MESSAGE game rule: " << g->get_rule() << std::endl;
                         module = std::make_shared<NeuralNetwork>(s_model_path, NUM_MCT_SIMS);
                         if (nullptr != m)
                         {
                             delete m;
                             m = nullptr;
                         }
-                        m = new MCTS(module.get(), (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS), C_PUCT, (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS), C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+                        m = new MCTS(module.get(),
+                                     (unsigned int)(u_num_mct_threads != 0 ? u_num_mct_threads : NUM_MCT_THREADS),
+                                     C_PUCT,
+                                     (unsigned int)(u_num_mct_sims != 0 ? u_num_mct_sims : NUM_MCT_SIMS),
+                                     C_VIRTUAL_LOSS,
+                                     BOARD_SIZE * BOARD_SIZE);
                     }
                     else
                     {
-                        cout << "ERROR model not exists" << endl;
+                        std::cout << "ERROR model not exists" << std::endl;
                         continue;
                     }
                 }
             }
             else if (key == "folder")
             {
-                string t;
-                cin >> t;
+                std::string t;
+                std::cin >> t;
             }
             else
             {
-                cout << "ERROR unsupport key: " << key << endl;
+                std::cout << "ERROR unsupport key: " << key << std::endl;
             }
         }
         else if (command == "ABOUT")
-            cout << "name=\"Z2I\", version=\"0.2\", author=\"Joker2770\", country=\"CHN\"" << endl;
+            std::cout << "name=\"Z2I\", version=\"0.2\", author=\"Joker2770\", country=\"CHN\"" << std::endl;
         else if (command == "END")
             break;
         else
-            cout << "UNKNOWN unsupport command!" << endl;
+            std::cout << "UNKNOWN unsupport command!" << std::endl;
     }
 
     if (nullptr != m)

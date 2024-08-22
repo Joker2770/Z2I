@@ -32,11 +32,9 @@ SOFTWARE.
 #include <fstream>
 #include <sstream>
 
-using namespace std;
-
 void generate_data_for_train(int current_weight, int start_batch_id)
 {
-    string path = "./weights/" + to_string(current_weight) + ".onnx";
+    std::string path = "./weights/" + std::to_string(current_weight) + ".onnx";
 
     std::shared_ptr<NeuralNetwork> model = std::make_shared<NeuralNetwork>(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
     SelfPlay *sp = new SelfPlay(model.get());
@@ -59,7 +57,7 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
     // std::cout << episode << " th game!!" << std::endl;
     while (game_state.first == 0)
     {
-        int res = (step + a_first) % 2 ? ma.get_best_action(g.get()) : mb.get_best_action(g.get());
+        int res = ((step + a_first) % 2) ? ma.get_best_action(g.get()) : mb.get_best_action(g.get());
         ma.update_with_move(res);
         mb.update_with_move(res);
         g->execute_move(res);
@@ -68,23 +66,23 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
         game_state = g->get_game_status();
         step++;
     }
-    cout << "eval: total step num = " << step << endl;
+    std::cout << "eval: total step num = " << step << std::endl;
 
     if ((game_state.second == BLACK && a_first) || (game_state.second == WHITE && !a_first))
     {
-        cout << "winner = a" << endl;
+        std::cout << "winner = a" << std::endl;
         win_table[0]++;
     }
     else if ((game_state.second == BLACK && !a_first) || (game_state.second == WHITE && a_first))
     {
-        cout << "winner = b" << endl;
+        std::cout << "winner = b" << std::endl;
         win_table[1]++;
     }
     else if (game_state.second == 0)
         win_table[2]++;
 }
 
-vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int a_sims, unsigned int b_sims)
+std::vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int a_sims, unsigned int b_sims)
 {
     int win_table[3] = {0, 0, 0};
     std::unique_ptr<ThreadPool> thread_pool(new ThreadPool(game_num));
@@ -93,24 +91,24 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
 
     if (weight_a >= 0)
     {
-        string path = "./weights/" + to_string(weight_a) + ".onnx";
+        std::string path = "./weights/" + std::to_string(weight_a) + ".onnx";
         nn_a = std::make_shared<NeuralNetwork>(path, game_num * a_sims);
-        cout << "NeuralNetwork A load: " << weight_a << endl;
+        std::cout << "NeuralNetwork A load: " << weight_a << std::endl;
     }
     else
     {
-        cout << "NeuralNetwork A applies random policy!" << endl;
+        std::cout << "NeuralNetwork A applies random policy!" << std::endl;
     }
 
     if (weight_b >= 0)
     {
-        string path = "./weights/" + to_string(weight_b) + ".onnx";
+        std::string path = "./weights/" + std::to_string(weight_b) + ".onnx";
         nn_b = std::make_shared<NeuralNetwork>(path, game_num * b_sims);
-        cout << "NeuralNetwork B load: " << weight_b << endl;
+        std::cout << "NeuralNetwork B load: " << weight_b << std::endl;
     }
     else
     {
-        cout << "NeuralNetwork B applies random policy!" << endl;
+        std::cout << "NeuralNetwork B applies random policy!" << std::endl;
     }
 
     std::vector<std::future<void>> futures;
@@ -125,14 +123,14 @@ vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int
         futures[i].wait();
         if (nn_a != nullptr)
         {
-            nn_a->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
+            nn_a->set_batch_size(std::max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
         }
         if (nn_b != nullptr)
         {
-            nn_b->set_batch_size(max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
+            nn_b->set_batch_size(std::max((unsigned)1, (game_num - i) * NUM_MCT_THREADS));
         }
     }
-    // cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << endl;
+    // std::cout << "win_table = " << win_table[0] << win_table[1] << win_table [2] << std::endl;
 
     return {win_table[0], win_table[1], win_table[2]};
 }
@@ -141,43 +139,43 @@ int main(int argc, char *argv[])
 {
     if (strcmp(argv[1], "prepare") == 0)
     {
-        cout << "Prepare for training." << endl;
+        std::cout << "Prepare for training." << std::endl;
         // system("mkdir weights");
 #ifdef _WIN32
         system("mkdir .\\weights");
         system("mkdir .\\data");
 #elif __linux__
         auto ret = system("mkdir ./weights");
-        // cout <<ret <<endl;
+        // std::cout <<ret << std::endl;
         ret = system("mkdir ./data");
 #endif
-        ofstream weight_logger_writer("current_and_best_weight.txt");
+        std::ofstream weight_logger_writer("current_and_best_weight.txt");
         weight_logger_writer << 0 << " " << 0;
         weight_logger_writer.close();
 
-        ofstream random_mcts_logger_writer("random_mcts_number.txt");
+        std::ofstream random_mcts_logger_writer("random_mcts_number.txt");
         random_mcts_logger_writer << NUM_MCT_SIMS;
         random_mcts_logger_writer.close();
 
-        cout << "Next: Generate initial weight by python." << endl;
+        std::cout << "Next: Generate initial weight by python." << std::endl;
         // system("python ..\\python\\learner.py");
     }
     else if (strcmp(argv[1], "generate") == 0)
     {
-        cout << "generate " << atoi(argv[2]) << "-th batch." << endl;
+        std::cout << "generate " << atoi(argv[2]) << "-th batch." << std::endl;
         int current_weight;
 
-        ifstream logger_reader("current_and_best_weight.txt");
+        std::ifstream logger_reader("current_and_best_weight.txt");
         logger_reader >> current_weight;
         // logger_reader >> best_weight;
         if (current_weight < 0)
         {
-            cout << "LOAD error,check current_and_best_weight.txt" << endl;
+            std::cout << "LOAD error,check current_and_best_weight.txt" << std::endl;
             return -1;
         }
         // logger_reader >> temp[1];
         logger_reader.close();
-        cout << "Generating... current_weight = " << current_weight << " start batch id: " << argv[2] << endl;
+        std::cout << "Generating... current_weight = " << current_weight << " start batch id: " << argv[2] << std::endl;
         generate_data_for_train(current_weight, atoi(argv[2]) * NUM_TRAIN_THREADS);
     }
     else if (strcmp(argv[1], "eval_with_winner") == 0)
@@ -185,10 +183,10 @@ int main(int argc, char *argv[])
         int current_weight;
         int best_weight;
 
-        ifstream weight_logger_reader("current_and_best_weight.txt");
+        std::ifstream weight_logger_reader("current_and_best_weight.txt");
         weight_logger_reader >> current_weight;
         weight_logger_reader >> best_weight;
-        cout << "Evaluating... current_weight = " << current_weight << " and best_weight = " << best_weight << endl;
+        std::cout << "Evaluating... current_weight = " << current_weight << " and best_weight = " << best_weight << std::endl;
 
         int game_num = atoi(argv[2]);
 
@@ -197,19 +195,28 @@ int main(int argc, char *argv[])
 #else
         auto result = eval(current_weight, best_weight, game_num, (unsigned int)(NUM_MCT_SIMS / 16 + 1), (unsigned int)(NUM_MCT_SIMS / 16 + 1));
 #endif
-        string result_log_info = to_string(current_weight) + "-th weight win: " + to_string(result[0]) + "  " + to_string(best_weight) + "-th weight win: " + to_string(result[1]) + "  tie: " + to_string(result[2]) + "\n";
+        std::string result_log_info = std::to_string(current_weight) +
+                                 "-th weight win: " +
+                                 std::to_string(result[0]) +
+                                 "  " +
+                                 std::to_string(best_weight) +
+                                 "-th weight win: " +
+                                 std::to_string(result[1]) +
+                                 "  tie: " +
+                                 std::to_string(result[2]) +
+                                 "\n";
 
         double win_ratio = result[0] / (result[1] + 0.01);
         if (win_ratio > 1.2)
         {
-            result_log_info += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
-            ofstream weight_logger_writer("current_and_best_weight.txt");
+            result_log_info += "new best weight: " + std::to_string(current_weight) + " generated!!!!\n";
+            std::ofstream weight_logger_writer("current_and_best_weight.txt");
             weight_logger_writer << current_weight << " " << current_weight;
             weight_logger_writer.close();
         }
-        cout << result_log_info;
+        std::cout << result_log_info;
 
-        ofstream detail_logger_writer("logger.txt", ios::app);
+        std::ofstream detail_logger_writer("logger.txt", std::ios::app);
         // detail_logger_writer << result_log_info << result_log_info2;
         detail_logger_writer << result_log_info;
         detail_logger_writer.close();
@@ -218,47 +225,58 @@ int main(int argc, char *argv[])
     {
         int current_weight;
 
-        ifstream weight_logger_reader("current_and_best_weight.txt");
+        std::ifstream weight_logger_reader("current_and_best_weight.txt");
         weight_logger_reader >> current_weight;
         // weight_logger_reader >> best_weight;
 
         int game_num = atoi(argv[2]);
 
         unsigned int random_mcts_simulation;
-        ifstream random_mcts_logger_reader("random_mcts_number.txt");
+        std::ifstream random_mcts_logger_reader("random_mcts_number.txt");
         random_mcts_logger_reader >> random_mcts_simulation;
 
         unsigned int nn_mcts_simulation = NUM_MCT_SIMS / 16 + 1; // can not be too small !!
 
-        vector<int> result_random_mcts = eval(current_weight, -1, game_num, nn_mcts_simulation, random_mcts_simulation);
+        std::vector<int> result_random_mcts = eval(current_weight, -1, game_num, nn_mcts_simulation, random_mcts_simulation);
 
-        string result_log_info2 = to_string(current_weight) + "-th weight with mcts [" + to_string(nn_mcts_simulation) + "] win: " + to_string(result_random_mcts[0]) + "  Random mcts [" + to_string(random_mcts_simulation) + "] win: " + to_string(result_random_mcts[1]) + "  tie: " + to_string(result_random_mcts[2]) + "\n";
+        std::string result_log_info2 = std::to_string(current_weight) +
+                                  "-th weight with mcts [" +
+                                  std::to_string(nn_mcts_simulation) +
+                                  "] win: " +
+                                  std::to_string(result_random_mcts[0]) +
+                                  "  Random mcts [" +
+                                  std::to_string(random_mcts_simulation) +
+                                  "] win: " +
+                                  std::to_string(result_random_mcts[1]) +
+                                  "  tie: " +
+                                  std::to_string(result_random_mcts[2]) +
+                                  "\n";
         if (result_random_mcts[0] == game_num)
         {
             if (random_mcts_simulation < 8000)
             {
                 random_mcts_simulation += 100;
-                result_log_info2 += "add random mcts number to: " + to_string(random_mcts_simulation) + "\n";
-                ofstream random_mcts_logger_writer("random_mcts_number.txt");
+                result_log_info2 += "add random mcts number to: " + std::to_string(random_mcts_simulation) + "\n";
+                std::ofstream random_mcts_logger_writer("random_mcts_number.txt");
                 random_mcts_logger_writer << random_mcts_simulation;
                 random_mcts_logger_writer.close();
             }
 
             ///////////////
-            result_log_info2 += "new best weight: " + to_string(current_weight) + " generated!!!!\n";
-            ofstream weight_logger_writer("current_and_best_weight.txt");
+            result_log_info2 += "new best weight: " + std::to_string(current_weight) + " generated!!!!\n";
+            std::ofstream weight_logger_writer("current_and_best_weight.txt");
             weight_logger_writer << current_weight << " " << current_weight;
             weight_logger_writer.close();
             //////////////
         }
-        cout << result_log_info2;
+        std::cout << result_log_info2;
 
-        ofstream detail_logger_writer("logger.txt", ios::app);
+        std::ofstream detail_logger_writer("logger.txt", std::ios::app);
         detail_logger_writer << result_log_info2;
         detail_logger_writer.close();
     }
     else
     {
-        cout << "Do nothing...check your input!!" << endl;
+        std::cout << "Do nothing...check your input!!" << std::endl;
     }
 }
