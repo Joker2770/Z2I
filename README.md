@@ -34,9 +34,9 @@ gcc (Linux) or visual studio 19 (windows)
 
 cmake 3.13+
 
-pytorch (tested on 2.20)
+torch (tested on 2.5.1+cu124)
 
-onnxruntime-gpu (tested on 1.18)
+onnxruntime-gpu (tested on 1.20.1)
 
 ## Installation
 
@@ -45,7 +45,7 @@ and `pip install` all the dependent packages such as pytorch
 
 train.sh: convert `/data/miniconda3/bin/python` to `python` or `python3` or your own python intepreter path
 
-Download onnxruntime: <https://github.com/microsoft/onnxruntime/releases/tag/v1.18.1>
+Download onnxruntime: <https://github.com/microsoft/onnxruntime/releases/tag/v1.20.1>
 
 CMakefiles.txt: convert the onnxruntime path to your own path
 
@@ -61,7 +61,7 @@ cmake ..    # (or 'cmake -A x64 ..')
 cmake --build . --config Release   # (or open .sln file through visual Studio 19 and generate for win10)
 ```
 
-or build with xmake toolchain(In this way, `onnruntime-1.11.1` will be installed with xrepo).
+or build with xmake toolchain(In this way, `onnruntime-1.20.1` will be installed with xrepo).
 
 ```shell
 git clone --recursive https://github.com/Joker2770/Z2I.git
