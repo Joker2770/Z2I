@@ -96,6 +96,8 @@ fn main() -> Result<(), Box<dyn Error>>{
             } else {
 
             }
+        } else if 0 == v_str_3.len() {
+            println!("Go on!");
         } else {
             panic!("Parameters error!!!");
         }
