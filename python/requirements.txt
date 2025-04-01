@@ -1,4 +1,4 @@
 numpy
-torch==2.5.1
+torch
 onnx
 onnxruntime
