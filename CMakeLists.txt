@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 3.13)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread -Wl,-rpath=./:./lib")
-    set(ONNXRUNTIME_ROOTDIR "/media/yangjintao/Data1/packages/onnxruntime-linux-x64-gpu-1.20.1")
+    set(ONNXRUNTIME_ROOTDIR "/media/yangjintao/Data1/packages/onnxruntime-linux-x64-gpu-1.22.1")
 else()
-    set(ONNXRUNTIME_ROOTDIR "D:/Linker/onnxruntime-win-x64-gpu-1.18.1")
+    set(ONNXRUNTIME_ROOTDIR "D:/Linker/onnxruntime-win-x64-gpu-1.22.1")
 endif()
 
 # tensorrt_provider_factory.h contains old APIs of the tensorrt execution provider
