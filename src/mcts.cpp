@@ -51,40 +51,7 @@ TreeNode::TreeNode(TreeNode *parent, double p_sa, unsigned int action_size)
       q_sa(0),
       p_sa(p_sa) {}
 
-TreeNode::TreeNode(
-    const TreeNode &node)
-{ // because automic<>, define copy function
-  // struct
-  this->parent = node.parent;
-  this->children = node.children;
-  this->is_leaf = node.is_leaf;
-
-  this->n_visited.store(node.n_visited.load());
-  this->p_sa = node.p_sa;
-  this->q_sa = node.q_sa;
-
-  this->virtual_loss.store(node.virtual_loss.load());
-}
-
-TreeNode &TreeNode::operator=(const TreeNode &node)
-{
-  if (this == &node)
-  {
-    return *this;
-  }
-
-  // struct
-  this->parent = node.parent;
-  this->children = node.children;
-  this->is_leaf = node.is_leaf;
-
-  this->n_visited.store(node.n_visited.load());
-  this->p_sa = node.p_sa;
-  this->q_sa = node.q_sa;
-  this->virtual_loss.store(node.virtual_loss.load());
-
-  return *this;
-}
+// Copy operations are deleted in header to avoid shallow copy of children
 
 // TODO：try random select?
 unsigned int TreeNode::select(double c_puct, double c_virtual_loss)

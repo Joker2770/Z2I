@@ -43,10 +43,10 @@ public:
   friend class MCTS;
 
   TreeNode();
-  TreeNode(const TreeNode &node);
+  TreeNode(const TreeNode &node) = delete; // disable shallow copy to avoid double-free
   TreeNode(TreeNode *parent, double p_sa, unsigned action_size);
 
-  TreeNode &operator=(const TreeNode &p);
+  TreeNode &operator=(const TreeNode &p) = delete; // disable assignment
 
   unsigned int select(double c_puct, double c_virtual_loss);
   void expand(const std::vector<double> &action_priors);
