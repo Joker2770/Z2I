@@ -30,6 +30,7 @@ SOFTWARE.
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <sstream>
 
 void generate_data_for_train(int current_weight, int start_batch_id)
@@ -37,14 +38,9 @@ void generate_data_for_train(int current_weight, int start_batch_id)
     std::string path = "./weights/" + std::to_string(current_weight) + ".onnx";
 
     std::shared_ptr<NeuralNetwork> model = std::make_shared<NeuralNetwork>(path, NUM_MCT_THREADS * NUM_MCT_SIMS);
-    SelfPlay *sp = new SelfPlay(model.get());
+    std::shared_ptr<SelfPlay> sp = std::make_shared<SelfPlay>(model.get());
 
-    if (nullptr != sp)
-    {
-        sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
-        delete sp;
-        sp = nullptr;
-    }
+    sp->self_play_for_train(NUM_TRAIN_THREADS, start_batch_id);
 }
 
 void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_table, bool do_render, const unsigned int a_mct_sims, const unsigned int b_mct_sims)
