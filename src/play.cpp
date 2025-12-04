@@ -31,6 +31,7 @@ SOFTWARE.
 
 #include <iostream>
 #include <fstream>
+#include <memory>
 #include <sstream>
 
 SelfPlay::SelfPlay(NeuralNetwork *nn) : /* p_buffer(new p_buff_type()),*/
@@ -44,7 +45,7 @@ SelfPlay::SelfPlay(NeuralNetwork *nn) : /* p_buffer(new p_buff_type()),*/
 void SelfPlay::play(unsigned int saved_id)
 {
     auto g = std::make_shared<Gomoku>(BOARD_SIZE, N_IN_ROW, BLACK);
-    MCTS *mcts = new MCTS(nn, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+    std::shared_ptr<MCTS> mcts = std::make_shared<MCTS>(nn, NUM_MCT_THREADS, C_PUCT, NUM_MCT_SIMS, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
     std::pair<int, int> game_state;
     game_state = g->get_game_status();
     std::cout << "game rule: " << g->get_rule() << std::endl;
@@ -147,12 +148,6 @@ void SelfPlay::play(unsigned int saved_id)
     bestand.write(reinterpret_cast<char *>(&last_move_buffer[0]), step * sizeof(int));
 
     bestand.close();
-
-    if (nullptr != mcts)
-    {
-        delete mcts;
-        mcts = nullptr;
-    }
 
     // just validation
     // ifstream inlezen;

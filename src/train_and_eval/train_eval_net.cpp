@@ -45,8 +45,8 @@ void generate_data_for_train(int current_weight, int start_batch_id)
 
 void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_table, bool do_render, const unsigned int a_mct_sims, const unsigned int b_mct_sims)
 {
-    MCTS *ma = new MCTS(a, NUM_MCT_THREADS, C_PUCT, a_mct_sims, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
-    MCTS *mb = new MCTS(b, NUM_MCT_THREADS, C_PUCT, b_mct_sims, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+    std::shared_ptr<MCTS> ma = std::make_shared<MCTS>(a, NUM_MCT_THREADS, C_PUCT, a_mct_sims, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
+    std::shared_ptr<MCTS> mb = std::make_shared<MCTS>(b, NUM_MCT_THREADS, C_PUCT, b_mct_sims, C_VIRTUAL_LOSS, BOARD_SIZE * BOARD_SIZE);
     int step = 0;
     auto g = std::make_shared<Gomoku>(BOARD_SIZE, N_IN_ROW, BLACK);
     std::pair<int, int> game_state = g->get_game_status();
@@ -76,15 +76,6 @@ void play_for_eval(NeuralNetwork *a, NeuralNetwork *b, bool a_first, int *win_ta
     }
     else if (game_state.second == 0)
         win_table[2]++;
-
-    if (nullptr != ma) {
-      delete ma;
-      ma = nullptr;
-    }
-    if (nullptr != mb) {
-      delete mb;
-      mb = nullptr;
-    }
 }
 
 std::vector<int> eval(int weight_a, int weight_b, unsigned int game_num, unsigned int a_sims, unsigned int b_sims)
