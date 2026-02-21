@@ -23,16 +23,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include <onnxruntime_cxx_api.h>
 #include <assert.h>
-#include <vector>
-#include <iostream>
 #include <codecvt>
+#include <iostream>
+#include <onnxruntime_cxx_api.h>
+#include <string>
+#include <vector>
 // #ifdef HAVE_TENSORRT_PROVIDER_FACTORY_H
 // #include <tensorrt_provider_factory.h>
 // #include <tensorrt_provider_options.h>
 
-// std::unique_ptr<OrtTensorRTProviderOptionsV2> get_default_trt_provider_options() {
+// std::unique_ptr<OrtTensorRTProviderOptionsV2>
+// get_default_trt_provider_options() {
 //   auto tensorrt_options = std::make_unique<OrtTensorRTProviderOptionsV2>();
 //   tensorrt_options->device_id = 0;
 //   tensorrt_options->has_user_compute_stream = 0;
@@ -57,8 +59,7 @@ SOFTWARE.
 // }
 // #endif
 
-void run_ort_trt()
-{
+void run_ort_trt() {
   Ort::Env env(ORT_LOGGING_LEVEL_WARNING, "test");
   // const auto& api = Ort::GetApi();
   // OrtTensorRTProviderOptionsV2* tensorrt_options;
@@ -67,12 +68,13 @@ void run_ort_trt()
   Ort::SessionOptions session_options;
   // session_options->SetIntraOpNumThreads(4);
 
-  session_options.SetGraphOptimizationLevel(GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
+  session_options.SetGraphOptimizationLevel(
+      GraphOptimizationLevel::ORT_ENABLE_EXTENDED);
 
 #ifdef USE_CUDA
-  void enable_cuda(OrtSessionOptions * session_options)
-  {
-    ORT_ABORT_ON_ERROR(OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0));
+  void enable_cuda(OrtSessionOptions * session_options) {
+    ORT_ABORT_ON_ERROR(
+        OrtSessionOptionsAppendExecutionProvider_CUDA(session_options, 0));
   }
 #endif
 
@@ -81,11 +83,13 @@ void run_ort_trt()
   std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
   // auto s = MultiByteToWideChar(model_path_s);
   const wchar_t *model_path = converter.from_bytes(model_path_s).c_str();
-  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
+  auto sh = std::make_shared<Ort::Session>(
+      Ort::Session(env, model_path, session_options));
 #else
-  string model_path_s = "/data/AlphaZero-Onnx/python/mymodel.onnx";
+  std::string model_path_s = "/data/AlphaZero-Onnx/python/mymodel.onnx";
   const char *model_path = model_path_s.c_str();
-  auto sh = std::make_shared<Ort::Session>(Ort::Session(env, model_path, session_options));
+  auto sh = std::make_shared<Ort::Session>(
+      Ort::Session(env, model_path, session_options));
 #endif
 
   // #ifdef _WIN32
@@ -97,20 +101,24 @@ void run_ort_trt()
   // #endif
 
   //*****************************************************************************************
-  // It's not suggested to directly new OrtTensorRTProviderOptionsV2 to get provider options
+  // It's not suggested to directly new OrtTensorRTProviderOptionsV2 to get
+  // provider options
   //*****************************************************************************************
   //
   // auto tensorrt_options = get_default_trt_provider_options();
   // session_options.AppendExecutionProvider_TensorRT_V2(*tensorrt_options.get());
 
   //**************************************************************************************************************************
-  // It's suggested to use CreateTensorRTProviderOptions() to get provider options
-  // since ORT takes care of valid options for you
+  // It's suggested to use CreateTensorRTProviderOptions() to get provider
+  // options since ORT takes care of valid options for you
   //**************************************************************************************************************************
 
   // api.CreateTensorRTProviderOptions(&tensorrt_options);
-  // std::unique_ptr<OrtTensorRTProviderOptionsV2, decltype(api.ReleaseTensorRTProviderOptions)> rel_trt_options(tensorrt_options, api.ReleaseTensorRTProviderOptions);
-  // api.SessionOptionsAppendExecutionProvider_TensorRT_V2(static_cast<OrtSessionOptions*>(session_options), rel_trt_options.get());
+  // std::unique_ptr<OrtTensorRTProviderOptionsV2,
+  // decltype(api.ReleaseTensorRTProviderOptions)>
+  // rel_trt_options(tensorrt_options, api.ReleaseTensorRTProviderOptions);
+  // api.SessionOptionsAppendExecutionProvider_TensorRT_V2(static_cast<OrtSessionOptions*>(session_options),
+  // rel_trt_options.get());
 
   // printf("Runing ORT TRT EP with default provider options\n");
 
@@ -124,18 +132,23 @@ void run_ort_trt()
   // print number of model input nodes
   size_t num_input_nodes = sh->GetInputCount();
   std::vector<const char *> input_node_names(num_input_nodes);
-  std::vector<int64_t> input_node_dims; // simplify... this model has only 1 input node {1, 2, 15, 15}.
-                                        // Otherwise need vector<vector<>>
+  std::vector<int64_t>
+      input_node_dims; // simplify... this model has only 1 input node {1, 2,
+                       // 15, 15}. Otherwise need vector<vector<>>
 
   printf("Number of inputs = %zu\n", num_input_nodes);
 
+  // print input node names
+  std::vector<std::string> input_name = sh->GetInputNames();
+
   // iterate over all input nodes
-  for (int i = 0; i < num_input_nodes; i++)
-  {
-    // print input node names
-    char *input_name = sh->GetInputName(i, allocator);
-    printf("Input %d : name = %s\n", i, input_name);
-    input_node_names[i] = input_name;
+  for (int i = 0; i < num_input_nodes; i++) {
+    // // print input node names
+    // char *input_name = sh->GetInputName(i, allocator);
+    // printf("Input %d : name = %s\n", i, input_name);
+    // input_node_names[i] = input_name;
+
+    input_node_names[i] = input_name.at(i).data();
 
     // print input node types
     Ort::TypeInfo type_info = sh->GetInputTypeInfo(i);
@@ -151,8 +164,9 @@ void run_ort_trt()
       printf("Input %d : dim %zu = %lld\n", i, j, input_node_dims[j]);
   }
 
-  size_t input_tensor_size = 3 * 15 * 15; // simplify ... using known dim values to calculate size
-                                          // use OrtGetTensorShapeElementCount() to get official size!
+  size_t input_tensor_size =
+      3 * 15 * 15; // simplify ... using known dim values to calculate size
+                   // use OrtGetTensorShapeElementCount() to get official size!
 
   std::vector<float> input_tensor_values(input_tensor_size);
   std::vector<const char *> output_node_names = {"V", "P"};
@@ -162,13 +176,18 @@ void run_ort_trt()
     input_tensor_values[i] = (float)i / (input_tensor_size + 1);
 
   // create input tensor object from data values
-  auto memory_info = Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
+  auto memory_info =
+      Ort::MemoryInfo::CreateCpu(OrtArenaAllocator, OrtMemTypeDefault);
   input_node_dims[0] = 1;
-  Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, input_tensor_values.data(), input_tensor_size, input_node_dims.data(), 4);
+  Ort::Value input_tensor = Ort::Value::CreateTensor<float>(
+      memory_info, input_tensor_values.data(), input_tensor_size,
+      input_node_dims.data(), 4);
   assert(input_tensor.IsTensor());
 
   // score model & input tensor, get back output tensor
-  auto output_tensors = sh->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
+  auto output_tensors =
+      sh->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor,
+              1, output_node_names.data(), 2);
   assert(output_tensors.size() == 2 && output_tensors[1].IsTensor());
 
   // Get pointer to output tensor float values
@@ -191,13 +210,13 @@ void run_ort_trt()
 
   // release buffers allocated by ORT alloctor
   for (const char *node_name : input_node_names)
-    allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
+    allocator.Free(
+        const_cast<void *>(reinterpret_cast<const void *>(node_name)));
 
   printf("Done!\n");
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   run_ort_trt();
   // cout<< "hello"<<endl;
   return 0;
