@@ -45,7 +45,7 @@ and `pip install` all the dependent packages such as pytorch
 
 train.sh: convert `/data/miniconda3/bin/python` to `python` or `python3` or your own python intepreter path
 
-Download onnxruntime: <https://github.com/microsoft/onnxruntime/releases/tag/v1.20.1>
+Download onnxruntime: <https://github.com/microsoft/onnxruntime/releases/tag/v1.22.1>
 
 CMakefiles.txt: convert the onnxruntime path to your own path
 
