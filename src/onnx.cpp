@@ -146,8 +146,8 @@ NeuralNetwork::NeuralNetwork(const std::string &model_path, const unsigned int b
 		_inputName = shared_session->GetInputName(i, allocator);
 		input_node_names.push_back(_inputName);
 #else
-		_inputName = std::move(shared_session->GetInputNameAllocated(i, allocator));
-		input_node_names.push_back(_inputName.get());
+    auto allocated_name = shared_session->GetInputNameAllocated(i, allocator);
+    input_node_names[i] = strdup(allocated_name.get()); // 需要持久化存储
 #endif
 
     // print input node types
@@ -196,8 +196,11 @@ NeuralNetwork::~NeuralNetwork()
   this->running = false;
   this->loop->join();
   // release buffers allocated by ORT alloctor
-  for (const char *node_name : input_node_names)
-    allocator.Free(const_cast<void *>(reinterpret_cast<const void *>(node_name)));
+  // for(const char* node_name : input_node_names) # 废弃
+  //   allocator.Free(const_cast<void*>(reinterpret_cast<const void*>(node_name)));
+  for (const char *node_name : input_node_names) {
+    free(const_cast<char *>(node_name));
+  }
 
   if (nullptr != this->shared_session)
     this->shared_session.reset();
@@ -256,33 +259,6 @@ std::vector<float> NeuralNetwork::transorm_board_to_Tensor(const board_type &boa
     }
   }
   return input_tensor_values;
-
-  // std::vector<int> board0;
-  // std::vector<int> state0;
-  // std::vector<int> state1;
-  // for (unsigned int i = 0; i < BOARD_SIZE; i++) {
-  //     board0.insert(board0.end(), board[i].begin(), board[i].end());
-  // }
-
-  // torch::Tensor temp =
-  //     torch::from_blob(&board0[0], { 1, 1, BOARD_SIZE, BOARD_SIZE }, torch::dtype(torch::kInt32));
-
-  // torch::Tensor state0 = temp.gt(0).toType(torch::kFloat32);
-  // torch::Tensor state1 = temp.lt(0).toType(torch::kFloat32);
-
-  // if (cur_player == -1) {
-  //     std::swap(state0, state1);
-  // }
-
-  // torch::Tensor state2 =
-  //     torch::zeros({ 1, 1, BOARD_SIZE, BOARD_SIZE }, torch::dtype(torch::kFloat32));
-
-  // if (last_move != -1) {
-  //     state2[0][0][last_move / BOARD_SIZE][last_move % BOARD_SIZE] = 1;
-  // }
-
-  // torch::Tensor states = torch::cat({ state0, state1 }, 1);
-  //  return cat({ state0, state1, state2 }, 1);
 }
 
 std::vector<float> NeuralNetwork::transorm_gomoku_to_Tensor(const Gomoku *gomoku)
@@ -350,7 +326,17 @@ void NeuralNetwork::infer()
   Ort::Value input_tensor = Ort::Value::CreateTensor<float>(memory_info, state_all.data(), input_tensor_size, this->input_node_dims.data(), 4);
   assert(input_tensor.IsTensor());
 
-  auto output_tensors = shared_session->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
+  //auto output_tensors = shared_session->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
+  std::vector<Ort::Value> output_tensors;
+  // output_tensors = shared_session->Run(Ort::RunOptions{nullptr}, input_node_names.data(), &input_tensor, 1, output_node_names.data(), 2);
+  try {
+    output_tensors =
+        shared_session->Run(Ort::RunOptions{nullptr}, input_node_names.data(),
+                            &input_tensor, 1, output_node_names.data(), 2);
+  } catch (const Ort::Exception &e) {
+    std::cerr << "ONNX Runtime Error: " << e.what() << std::endl;
+    throw;
+  }
 
   assert(output_tensors.size() == 2 && output_tensors[0].IsTensor() && output_tensors[1].IsTensor());
 
@@ -383,43 +369,6 @@ void NeuralNetwork::infer()
 
     promises[i].set_value(std::move(temp));
   }
-
-  // #ifdef USE_GPU
-  //     TS inputs{ cat(states, 0).to(at::kCUDA) };
-  // #else
-  //   TS inputs{ cat(states, 0) };
-  // #endif
-
-  // #ifdef JIT_MODE
-  //     auto result = this->module->forward(inputs).toTuple();
-  //     torch::Tensor p_batch = result->elements()[0]
-  //         .toTensor()
-  //         .exp()
-  //         .toType(torch::kFloat32)
-  //         .to(at::kCPU);
-  //     torch::Tensor v_batch =
-  //         result->elements()[1].toTensor().toType(torch::kFloat32).to(at::kCPU);
-  // #else
-  //     auto result = this->module->forward(inputs);
-  //     //std::cout << y.requires_grad() << std::endl; // prints `false`
-
-  //     Tensor p_batch = result.first.exp().toType(kFloat32).to(at::kCPU);
-  //     Tensor v_batch = result.second.toType(kFloat32).to(at::kCPU);
-  // #endif
-
-  //   // set promise value
-  //   for (unsigned int i = 0; i < promises.size(); i++) {
-  //     torch::Tensor p = p_batch[i];
-  //     torch::Tensor v = v_batch[i];
-
-  //     std::vector<double> prob(static_cast<float*>(p.data_ptr()),
-  //                              static_cast<float*>(p.data_ptr()) + p.size(0));
-  //     std::vector<double> value{v.item<float>()};
-
-  //     return_type temp{std::move(prob), std::move(value)};
-
-  //     promises[i].set_value(std::move(temp));
-  //   }
 }
 
 bool NeuralNetwork::set_batch_size(unsigned int u_batch_size)
