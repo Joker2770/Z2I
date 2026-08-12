@@ -509,7 +509,7 @@ void MCTS::simulate(std::shared_ptr<Gomoku> game)
   {
     // end
     auto winner = status.second;
-    value = (winner == 0 ? 0 : (winner == game->get_current_color() ? 1 : -1));
+    value = (winner == 0 ? 0 : 1);
   }
 
   // value(parent -> node) = -value
