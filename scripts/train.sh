@@ -1,6 +1,7 @@
 #!/bin/bash
 n=1
 batch_num=1
+game_num=10
 do_prepare=1
 if [ $do_prepare == 1 ]
 then
@@ -15,7 +16,8 @@ do
 	for ((i=0;i<$batch_num;i++));do
 		{
 		# sleep 3;echo 1>>aa && echo "done!"
-		exec ./train_net.sh generate $i
+		let p=i*$game_num
+		exec ./train_net.sh generate $p
 		}
 	done
 	wait
